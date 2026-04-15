@@ -1,6 +1,6 @@
 # Pearl-style Causal Inference Seminar
 
-パール流因果推論のゼミ発表資料および再現用コードを管理するリポジトリです。
+パール流因果推論のゼミ発表資料および再現用コードを管理するリポジトリです.
 
 ## 発表資料 (Main Materials)
 
