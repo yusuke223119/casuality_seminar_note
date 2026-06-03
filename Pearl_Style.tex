@@ -688,7 +688,7 @@ $X_1, \dots, X_n$ について，構造方程式の右辺の変数から左辺�
           \draw[->] (X) -- (Z);
           \draw[->] (W) -- (Z);
       \end{tikzpicture}
-      \caption{有効グラフ}
+      \caption{有向グラフ}
   \end{minipage}
   \begin{minipage}{0.45\textwidth}
       \centering
@@ -1012,12 +1012,12 @@ $V = \{X_1, \dots, X_n\}$, $E \subset V \times V$, $G = (V, E)$ は DAG であ�
       P(Y_1, \dots, Y_n) &= P(Y_1) \cdot P(Y_2 \mid Y_1) \cdots P(Y_n \mid Y_1, \dots, Y_{n-1}) \\
       &= \prod_{i=1}^{n} P(Y_i \mid Y_1, \dots, Y_{i-1})
   \end{align}
-  ここで、$Y_1, \dots, Y_n$ はトポロジカルソートされているため$\{Y_1, \dots, Y_{i-1}\} \subset nd(Y_i)$ が成り立つ.
-  ゆえに、局所マルコフ性より、
+  ここで，$Y_1, \dots, Y_n$ はトポロジカルソートされているため$\{Y_1, \dots, Y_{i-1}\} \subset nd(Y_i)$ が成り立つ.
+  ゆえに，局所マルコフ性より，
   \begin{equation}
       P(Y_i \mid Y_1, \dots Y_{i-1}) = P(Y_i \mid pa(Y_i))
   \end{equation}
-  が成り立つ.したがって、
+  が成り立つ.したがって，
   \begin{align}
     P(Y_1, \dots, Y_n) &= \prod_{i=1}^{n} P(Y_i \mid Y_1, \dots, Y_{i-1}) \\
      &= \prod_{i=1}^{n} P(Y_i \mid pa(Y_i))
@@ -1221,12 +1221,12 @@ $V = \{X_1, \dots, X_n\}$, $E \subset V \times V$, $G = (V, E)$ は DAG であ�
   まず $C$ が $D(X_i), D(X_j)$ の少なくとも一方に含まれことを証明しよう.
 
   $C \not\subseteq D(X_i)$かつ$C \not\subseteq D(X_j)$ と仮定する.
-  このとき、$X_c^{(1)} \notin D(X_i)$ かつ $X_c^{(2)} \notin D(X_j)$ となる元 $X_c^{(i)}, X_c^{(j)} \in C$ が存在する.
-  $C$はクリークであるから、$X_c^{(1)}$と$X_c^{(2)}$の間に辺が存在する.
-  ゆえに、$D^{c}(X_j)=C(X_i)$から$X_c^{(2)} \in C(X_i)$であり、連結成分の定義より$X_c^{(1)} \in C(X_i)$.これは、$X_i^{(1)} \in D(X_i)$ に矛盾する.
-  次に、$C$ が $D(X_i), D(X_j)$ の両方に含まれないことを確認しよう.
-  $D(X_i) \cap D(X_j) = S$と$C \notin S$より、$C$ は $D(X_i), D(X_j)$ の両方に含まることはない.
-  以上により、$C$ は $D(X_i), D(X_j)$ のいずれか一方の部分集合であることが示された.
+  このとき，$X_c^{(1)} \notin D(X_i)$ かつ $X_c^{(2)} \notin D(X_j)$ となる元 $X_c^{(i)}, X_c^{(j)} \in C$ が存在する.
+  $C$はクリークであるから，$X_c^{(1)}$と$X_c^{(2)}$の間に辺が存在する.
+  ゆえに，$D^{c}(X_j)=C(X_i)$から$X_c^{(2)} \in C(X_i)$であり，連結成分の定義より$X_c^{(1)} \in C(X_i)$.これは，$X_i^{(1)} \in D(X_i)$ に矛盾する.
+  次に，$C$ が $D(X_i), D(X_j)$ の両方に含まれないことを確認しよう.
+  $D(X_i) \cap D(X_j) = S$と$C \notin S$より，$C$ は $D(X_i), D(X_j)$ の両方に含まることはない.
+  以上により，$C$ は $D(X_i), D(X_j)$ のいずれか一方の部分集合であることが示された.
   
   ここで，
   \begin{equation*}
@@ -1314,7 +1314,7 @@ $V = \{X_1, \dots, X_n\}$, $E \subset V \times V$, $G = (V, E)$ は DAG であ�
       \item 有向グラフ $G$ で $(X_i, X_k) \in E$ かつ $(X_j, X_k) \in E$ ならば，$G^m$ において $X_i$ と $X_j$ に辺を引く.
   \end{enumerate}
   とくに3の条件で引かれた辺を\textbf{モラルエッジ}という.
-  また、有向グラフ$G$のモラルグラフ$G^m$を考えることを$G$を\textbf{モラル化}するという.
+  また，有向グラフ$G$のモラルグラフ$G^m$を考えることを$G$を\textbf{モラル化}するという.
 \end{defn}
 
 \begin{figure}[h]
@@ -1383,7 +1383,7 @@ $V = \{X_1, \dots, X_n\}$, $E \subset V \times V$, $G = (V, E)$ は DAG であ�
   が成り立つ.
 \end{proof}
 
-定理 4.16 の本質は，同時確率 $P(X_1, \dots, X_n)$ が分解できることにある.これにより，より小さい $S$ によって，$X_i$ と $X_j$ の条件付き独立性が証明される.
+定理~\ref{thm:MoralMarkov}の本質は，同時確率 $P(X_1, \dots, X_n)$ が分解できることにある.これにより，より小さい $S$ によって，$X_i$ と $X_j$ の条件付き独立性が証明される.
 
 \begin{cor}[label={cor:Markov}]{}
   頂点集合 $V = \{X_1, \dots, X_n\}$ のベイジアンネットワーク $G = (V, E)$ が与えられているとする.また，$X_i, X_j \in V$ と $S \subseteq V$ は互いに排反であるとする.
@@ -1467,7 +1467,7 @@ $V = \{X_1, \dots, X_n\}$, $E \subset V \times V$, $G = (V, E)$ は DAG であ�
   背理法を用いる.
   頂点集合 $S$ が $X_i, X_j$ を有向分離しないとき，
   つまり $X_i, X_j$ の道 $p = \{Y_k\}_{k=1}^m$ が存在して，$p$ は $S$ によってブロックされていない.
-  $p$に合流点が存在しなければ，$p$ の任意の頂点は $S$ に含まれず、$S$は$X_i$と$X_j$を分離しない．
+  $p$に合流点が存在しなければ，$p$ の任意の頂点は $S$ に含まれず，$S$は$X_i$と$X_j$を分離しない．
 
   このとき，$p$ の任意の合流点 $\gamma$ について，$\gamma$ または $\gamma$ の子孫が $S$ に含まれる.
   ゆえに，$\gamma \in An(S)$.
@@ -1499,36 +1499,46 @@ $V = \{X_1, \dots, X_n\}$, $E \subset V \times V$, $G = (V, E)$ は DAG であ�
 \section{介入・因果効果}
 
 \begin{defn}{構造的因果モデル}
-  $X_1, \dots, X_n$ を確率変数、$V = \{X_1, \dots, X_n\}$ を頂点集合とした DAG $G = (V, E)$ を考える。
-  各 $X_i$ が可測関数 $f_i$ と誤差変数 $\varepsilon_i$ を用いて、
-  $ X_i = f_i(pa(X_i), \varepsilon_i) $
-  と記述されるとする。このとき、$G$ を\textbf{構造的因果モデル}という。
-  ただし、誤差変数 $\varepsilon_i$ は外生的、つまり DAG $G' = (V \cup \{\varepsilon_1, \dots, \varepsilon_n\}, E \cup (\bigcup_{k=1}^n \{(\varepsilon_k, X_k)\})) $ とおいたときに、
+  $X_1, \dots, X_n$ を確率変数，$V = \{X_1, \dots, X_n\}$ を頂点集合とした DAG $G = (V, E)$ を考える.
+  各 $X_i$ が可測関数 $f_i$ と誤差変数 $\varepsilon_i$ を用いて，
+  \begin{equation}
+    X_i = f_i(pa(X_i), \varepsilon_i)
+  \end{equation}
+  と記述されるとする.このとき，$G$ を\textbf{構造的因果モデル}という.
+  ただし，誤差変数 $\varepsilon_i$ は外生的，つまり DAG $G' = (V \cup \{\varepsilon_1, \dots, \varepsilon_n\}, E \cup (\bigcup_{k=1}^n \{(\varepsilon_k, X_k)\})) $ とおいたときに，
   \begin{enumerate}
-      \item 各 $i$ について、$pa(\varepsilon_i) = \emptyset$
-      \item $i \neq j$ ならば、$\varepsilon_i \perp \varepsilon_j$
-      \item $X_j \in nd(X_i)$ ならば、$\varepsilon_i \perp X_j$
+      \item 各 $i$ について，$pa(\varepsilon_i) = \emptyset$
+      \item $i \neq j$ ならば，$\varepsilon_i \perp \varepsilon_j$
+      \item $X_j \in nd(X_i)$ ならば，$\varepsilon_i \perp X_j$
   \end{enumerate}
-  を仮定する。
+  を仮定する.
 \end{defn}
 
-\begin{prop}{}
-  構造的因果モデルはベイジアンネットワークである。
+\begin{prop}[label={prop:SCM_is_BN}]{}
+  構造的因果モデルはベイジアンネットワークである.
 \end{prop}
 
 \begin{proof}
-  まず、$V' = \{X_1, \dots, X_n, \varepsilon_1, \dots, \varepsilon_n\}$ とした DAG $G'$ を考える。このとき、$\varepsilon_1, \dots, \varepsilon_n$ は親を持たず、各 $i$ について $X_i$ は $\varepsilon_i$ の子であることに注意する。
+  まず，$V' = \{X_1, \dots, X_n, \varepsilon_1, \dots, \varepsilon_n\}$ とした DAG $G'$ を考える.このとき，$\varepsilon_1, \dots, \varepsilon_n$ は親を持たず，各 $i$ について $X_i$ は $\varepsilon_i$ の子であることに注意する.
 
-  ここで、任意の $X_i$ とその非子孫 $nd(X_i)$ の任意の要素 $U$ について、
-  $ X_i \perp U \mid pa(X_i), \varepsilon_i $
-  が成り立つ。ここで $pa(X_i)$ はグラフ $G$ における親であることに注意する。
-  実際に、
-  $ X_i = f_i(pa(X_i), \varepsilon_i) $
-  であるため、$X_i \mid pa(X_i), \varepsilon_i$ は定数（決定論的に決まる）である。ゆえに、
-  $ X_i \perp U \mid pa(X_i), \varepsilon_i $
-  したがって、$G'$ は局所マルコフ性を持ち、ベイジアンネットワークである。$pa(\varepsilon_i) = \emptyset$ に注意して、
-  $ P(X_1, \dots, X_n, \varepsilon_1, \dots, \varepsilon_n) = \prod_{i=1}^n P(X_i \mid pa(X_i), \varepsilon_i) P(\varepsilon_i) $
-  さて、今 $X_1, \dots, X_n$ をトポロジカルソートして、$\varepsilon$ の番号と対応させたものとする。
+  ここで，任意の $X_i$ とその非子孫 $nd(X_i)$ の任意の要素 $U$ について，
+  \begin{equation}
+    X_i \perp U \mid pa(X_i), \varepsilon_i
+  \end{equation}
+  が成り立つ.ここで $pa(X_i)$ はグラフ $G$ における親であることに注意する.
+  実際に，
+  \begin{equation}
+    X_i = f_i(pa(X_i), \varepsilon_i) 
+  \end{equation}
+  であるため，$X_i \mid pa(X_i), \varepsilon_i$ は定数（決定論的に決まる）である.ゆえに，
+  \begin{equation}
+    X_i \perp U \mid pa(X_i), \varepsilon_i 
+  \end{equation}
+  したがって，$G'$ は局所マルコフ性を持ち，ベイジアンネットワークである.$pa(\varepsilon_i) = \emptyset$ に注意して，
+  \begin{equation}
+    P(X_1, \dots, X_n, \varepsilon_1, \dots, \varepsilon_n) = \prod_{i=1}^n P(X_i \mid pa(X_i), \varepsilon_i) P(\varepsilon_i)
+  \end{equation}
+  さて，今 $X_1, \dots, X_n$ をトポロジカルソートして，$\varepsilon$ の番号と対応させたものとする.
   \begin{align}
     P(X_1, \dots, X_n) &= \sum_{\varepsilon_1, \dots, \varepsilon_n} P(X_1, \dots, X_n, \varepsilon_1, \dots, \varepsilon_n) \\
     &= \sum_{\varepsilon_1, \dots, \varepsilon_n} \prod_{i=1}^n P(X_i \mid pa(X_i), \varepsilon_i) P(\varepsilon_i) \\
@@ -1537,32 +1547,47 @@ $V = \{X_1, \dots, X_n\}$, $E \subset V \times V$, $G = (V, E)$ は DAG であ�
     &= \dots \\
     &= \prod_{i=1}^n P(X_i \mid pa(X_i))
   \end{align}
-  となり、$G$ はベイジアンネットワークの定義を満たす。
+  となり，$G$ はベイジアンネットワークの定義を満たす.
 \end{proof}
 
+\begin{defn}{矢線の削除}
+  DAG $G=(V,E)$ と $X_i \in V$ を考える.
+  
+  $X_i$ に入る矢線をすべて消去した DAG を $G_{\overline{X_i}}$，
+  $X_i$ から出る矢線をすべて消去した DAG を $G_{\underline{X_i}}$ と書く.
+  
+  より一般に，$X_{i_1}, \dots, X_{i_l} \in V$ について，
+  $X_{i_1}, \dots, X_{i_j}$ に入る矢線をすべて消去し，
+  $X_{i_{j+1}}, \dots, X_{i_l}$ から出る矢線をすべて消去した DAG を
+  \[
+    G_{\overline{X_{i_1} \dots X_{i_j}} \underline{X_{i_{j+1}} \dots X_{i_l}}}
+  \]
+  と書く.
+\end{defn}
+
 \begin{defn}{介入}
-  DAG $G=(V,E)$, $V=\{X_1, \dots, X_n\}$ で、$G$ は構造的因果モデル、すなわち、各 $j \in \{1, \dots, n\}$ について、$X_j$ の親 $pa(X_j)$ と誤差変数 $\varepsilon_j$, 関数 $f_j$ を用いて、
+  DAG $G=(V,E)$, $V=\{X_1, \dots, X_n\}$ で，$G$ は構造的因果モデル，すなわち，各 $j \in \{1, \dots, n\}$ について，$X_j$ の親 $pa(X_j)$ と誤差変数 $\varepsilon_j$, 関数 $f_j$ を用いて，
   \begin{equation}
     X_j = f_j(pa(X_j), \varepsilon_j)
   \end{equation}
-  と記述されるとする。このとき、ある $i$ について、定数 $x_i$ を用いて、
+  と記述されるとする.このとき，ある $i$ について，定数 $x_i$ を用いて，
   \begin{equation}
     X_i = x_i
   \end{equation}
-  と書き換える。この新しいメカニズムによって記述される構造的因果モデル $G_{\overline{X_i}}$ に基づく確率を
+  と書き換える.この新しいメカニズムによって記述される構造的因果モデル $G_{\overline{X_i}}$ に基づく確率を
   \[
     P(X_1, \dots, X_n \mid do(X_i = x_i))
   \]
-  で表し、この操作を $X_i$ についての介入という。
+  で表し，この操作を $X_i$ についての介入という.
 \end{defn}
 
-さて、この介入後の分布 $P(X_1, \dots, X_n \mid do(X_i = x_i))$ はベイジアンネットワークであることが保証されているから、同時確率は次のように分解できる。
+さて，この介入後の分布 $P(X_1, \dots, X_n \mid do(X_i = x_i))$ は定理~\ref{prop:SCM_is_BN}から $G$ におけるベイジアンネットワークであることが保証されているため，同時確率は次のように分解できる.
 \begin{align*}
   P(X_1, \dots, X_n \mid do(X_i = x_i)) &= \prod_{j=1}^n P(X_j \mid pa(X_j)) \\
   &= \prod_{j=1, j \neq i}^n P(X_j \mid pa(X_j)) \cdot P(X_i \mid pa(X_i))
 \end{align*}
-ここで、
-$X_i = x_i$より、$X_i \perp pa(X_i)$ であって、
+ここで，
+$X_i = x_i$より，$X_i \perp pa(X_i)$ であって，
 \begin{align}
   P(X_i \mid pa(X_i)) = P(X_i) = \delta(x_i) = 
   \begin{cases} 
@@ -1570,7 +1595,7 @@ $X_i = x_i$より、$X_i \perp pa(X_i)$ であって、
     0 & (X_i \neq x_i) 
   \end{cases}
 \end{align}
-となるから、
+となるから，
 \begin{align}
   P(X_1, \dots, X_n \mid do(X_i = x_i)) &= \prod_{j=1, j \neq i}^n P(X_j \mid pa(X_j)) \cdot \delta(x_i) \\
   &= 
@@ -1579,15 +1604,16 @@ $X_i = x_i$より、$X_i \perp pa(X_i)$ であって、
     0 & (X_i \neq x_i) 
   \end{cases}
 \end{align}
-と書ける。
-介入前と介入後の構造的因果モデルにおける確率変数は異なる確率変数であることに注意する。
-なお、$X_i$ の非子孫については、生成過程に影響を与えず、同一の確率変数と考えてよい。
+と書ける.ゆえに，$P(X_1, \dots, X_n \mid do(X_i = x_i))$ は $G_{\overline{X_i}}$ におけるベイジアンネットワークであることが分かる.
 
-では $G$ と $G_{\overline{X_i}}$ をグラフとして比較してみよう。
-$G_{\overline{X_i}}$ は、$X_i$ と $pa(X_i)$ が独立、つまり、グラフ上において、$pa(X_i)$ から $X_i$ への矢線をすべて排除した形になる。
+ここで，介入前と介入後の構造的因果モデルにおける確率変数は異なる確率変数であることに注意する.
+なお，$X_i$ の非子孫については，生成過程に影響を与えず，同一の確率変数と考えてよい.
+
+では $G$ と $G_{\overline{X_i}}$ をグラフとして比較してみよう.
+$G_{\overline{X_i}}$ は，$X_i$ と $pa(X_i)$ が独立，つまり，グラフ上において，$pa(X_i)$ から $X_i$ への矢線をすべて排除した形になる.
 
 \begin{exm}{}
-  次のDAGから生成される構造的因果モデルを考える。
+  次のDAGから生成される構造的因果モデルを考える.
   \begin{figure}[H]
     \centering
     \begin{tikzpicture}[node distance=1.5cm, every node/.style={draw=none, inner sep=2pt}]
@@ -1625,40 +1651,40 @@ $G_{\overline{X_i}}$ は、$X_i$ と $pa(X_i)$ が独立、つまり、グラフ
     \end{tikzpicture}
 \end{figure}
   介入 $do(X_1 = x_1)$ を行った $G_{\overline{X_1}}$ を考える.
-  $G$ と $G_{\overline{X_1}}$ を比較すれば、$X_2 \to X_1$ の矢線が消えていることが分かる。つまり、$G_{\overline{X_1}}$ の分布においては、$X_1$ と $X_4$ に共通の祖先は存在せず、交絡は存在しないことが分かる。
+  $G$ と $G_{\overline{X_1}}$ を比較すれば，$X_2 \to X_1$ の矢線が消えていることが分かる.つまり，$G_{\overline{X_1}}$ の分布においては，$X_1$ と $X_4$ に共通の祖先は存在せず，交絡は存在しないことが分かる.
 \end{exm}
 
-次に因果効果の定義を与えよう。
+次に因果効果の定義を与えよう.
 \begin{defn}{平均因果効果}
-  DAG $G=(V,E)$ は構造的因果モデルとする。このとき、$Y, X \in V$ について、$X=x_1$ から $X=x_2$ に介入したときの $Y$ への平均因果効果を
+  DAG $G=(V,E)$ は構造的因果モデルとする.このとき，$Y, X \in V$ について，$X=x_1$ から $X=x_2$ に介入したときの $Y$ への平均因果効果を
   \begin{equation}
     E[Y \mid do(X=x_1)] - E[Y \mid do(X=x_2)]
   \end{equation}
-  で定義する。ただし、
+  で定義する.ただし，
   \begin{equation}
-    E[Y \mid do(X=x)] = \sum_Y Y P(Y \mid do(X=x))
+    E[Y \mid do(X=x)] = \sum_y Y P(Y \mid do(X=x))
   \end{equation}
-  である。とくに、$X$ が二値 $\{0, 1\}$ をとる確率変数であるとき、
+  である.とくに，$X$ が二値 $\{0, 1\}$ をとる確率変数であるとき，
   \begin{equation}
     E[Y \mid do(X=1)] - E[Y \mid do(X=0)]
   \end{equation}
-  を平均処置効果（ATE）という。
+  を平均処置効果（ATE）という.
 \end{defn}
 
 \begin{defn}{同時介入}
-  DAG $G=(V,E)$, $V=\{X_1, \dots, X_n\}$ で、$G$ は構造的因果モデル、すなわち、各 $j \in \{1, \dots, n\}$ について、$X_j$ の親 $pa(X_j)$ と誤差変数 $\varepsilon_j$, 関数 $f_j$ を用いて、
+  DAG $G=(V,E)$, $V=\{X_1, \dots, X_n\}$ で，$G$ は構造的因果モデル，すなわち，各 $j \in \{1, \dots, n\}$ について，$X_j$ の親 $pa(X_j)$ と誤差変数 $\varepsilon_j$, 関数 $f_j$ を用いて，
   \begin{equation}
     X_j = f_j(pa(X_j), \varepsilon_j)
   \end{equation}
-  と記述されるとする。このとき、ある $i_1, \dots, i_k$ について、定数 $x_{i_1}, \dots, x_{i_k}$ を用いて、
+  と記述されるとする.このとき，ある $i_1, \dots, i_k$ について，定数 $x_{i_1}, \dots, x_{i_k}$ を用いて，
   \begin{equation}
     X_{i_1} = x_{i_1}, \dots, X_{i_k} = x_{i_k}
   \end{equation}
-  と書き換える。この新しいメカニズムによって記述される構造的因果モデルに基づく確率を
+  と書き換える.この新しいメカニズムによって記述される構造的因果モデルに基づく確率を
   \begin{equation}
     P(X_1, \dots, X_n \mid do(X_{i_1}=x_{i_1}), \dots, do(X_{i_k}=x_{i_k}))
   \end{equation}
-  で表し、この操作を $X_{i_1}, \dots, X_{i_k}$ についての同時介入という。このとき、同時確率は、
+  で表し，この操作を $X_{i_1}, \dots, X_{i_k}$ についての同時介入という.このとき，同時確率は，
   \begin{align}
     &P(X_1, \dots, X_n \mid do(X_{i_1}=x_{i_1}), \dots, do(X_{i_k}=x_{i_k})) \notag \\
     &= \begin{cases} 
@@ -1666,15 +1692,15 @@ $G_{\overline{X_i}}$ は、$X_i$ と $pa(X_i)$ が独立、つまり、グラフ
       0 & (\text{otherwise}) 
     \end{cases}
   \end{align}
-  となる。
+  となる.
 \end{defn}
 
 \begin{defn}{変数としての介入}
-  DAG $G=(V,E)$, $V=\{X_1, \dots, X_n\}$ で、$G$ は構造的因果モデル、すなわち、各 $j \in \{1, \dots, n\}$ について、$X_j$ の親 $pa(X_j)$ と誤差変数 $\varepsilon_j$, 関数 $f_j$ を用いて、
+  DAG $G=(V,E)$, $V=\{X_1, \dots, X_n\}$ で，$G$ は構造的因果モデル，すなわち，各 $j \in \{1, \dots, n\}$ について，$X_j$ の親 $pa(X_j)$ と誤差変数 $\varepsilon_j$, 関数 $f_j$ を用いて，
   \begin{equation}
     X_j = f_j(pa(X_j), \varepsilon_j)
   \end{equation}
-  と記述されるとする。このとき、$\{idle, x_i\}$ の値をとる外生変数 $F_i$ を用いて、
+  と記述されるとする.このとき，$\{idle, x_i\}$ の値をとる外生変数 $F_i$ を用いて，
   \begin{align}
     X_i &= \hat{f}_i(pa(X_i), \varepsilon_i, F_i) \notag \\
     &= \begin{cases} 
@@ -1682,74 +1708,397 @@ $G_{\overline{X_i}}$ は、$X_i$ と $pa(X_i)$ が独立、つまり、グラフ
       f_i(pa(X_i), \varepsilon_i) & (F_i = idle) 
     \end{cases}
   \end{align}
-  と書き換える。$V' = \{X_1, \dots, X_n, F_i\}$, $E' = E \cup \{(F_i, X_i)\}$ としたときに、$G' = (V', E')$ は構造的因果モデルであり、この $G'$ を\textbf{拡張ネットワーク}という。
+  と書き換える.$V' = \{X_1, \dots, X_n, F_i\}$, $E' = E \cup \{(F_i, X_i)\}$ としたときに，$G' = (V', E')$ は構造的因果モデルであり，この $G'$ を\textbf{拡張ネットワーク}という.
 \end{defn}
 
-なお、同時介入についても拡張ネットワークは同様に定義できる。
+なお，同時介入についても拡張ネットワークは同様に定義できる.
 
-$G'$ は定義から、$F_i = idle$ であれば $G$ に、$F_i = x_i$ であれば $G_{\overline{X_i}}$ に等しくなる。つまり、
+$G'$ は定義から，$F_i = idle$ であれば $G$ に，$F_i = x_i$ であれば $G_{\overline{X_i}}$ に等しくなる.つまり，
 \begin{equation}
   P(X_1, \dots, X_n \mid do(X_i = x_i)) = P(X_1, \dots, X_n \mid F_i = x_i)
 \end{equation}
-となる。
-我々が観測できるのは $G$ に基づく分布 $P(X_1, \dots, X_n)$ であるが、介入効果を知りたいときは、$G_{\overline{X_i}}$ に基づく分布 $P(X_1, \dots, X_n \mid do(X_i = x_i))$ を観察によって得られる分布 $P(X_1, \dots, X_n)$ やその周辺分布で書き下す必要がある。
-次のバックドア基準は、その十分条件を与える。
+となる.
+我々が観測できるのは $G$ に基づく分布 $P(X_1, \dots, X_n)$ であるが，介入効果を知りたいときは，$G_{\overline{X_i}}$ に基づく分布 $P(X_1, \dots, X_n \mid do(X_i = x_i))$ を観察によって得られる分布 $P(X_1, \dots, X_n)$ やその周辺分布で書き下す必要がある.
+次のバックドア基準は，その十分条件を与える.
 
 \begin{prop}{バックドア基準}
-  確率変数 $X_1, \dots, X_n$、頂点集合 $V = \{X_1, \dots, X_n\}$、DAG $G = (V, E)$ で $G$ は構造的因果モデルとする。
-  $Y, X \in V$ について、$X$ と $Y$ の道であり、$X$ への矢線がある道を\textbf{バックドアパス}という。
-  $V$ の部分集合 $Z$ がすべてのバックドアパスをブロックするとき、$Z$ はバックドア基準を満たすという。このとき、
+  確率変数 $X_1, \dots, X_n$，頂点集合 $V = \{X_1, \dots, X_n\}$，DAG $G = (V, E)$ で $G$ は構造的因果モデルとする.
+  $Y, X \in V$ について，$X$ と $Y$ の道であり，$X$ への矢線がある道を\textbf{バックドアパス}という.
+  $V$ の部分集合 $Z$ がすべてのバックドアパスをブロックするとき，$Z$ は\textbf{バックドア基準}を満たすという.このとき，
   \begin{equation}
-    P(Y \mid do(X=x)) = \sum_z P(Y \mid X=x, Z) P(Z)
+    P(Y \mid do(X=x)) = \sum_z P(Y \mid X=x, Z=z) P(Z=z)
   \end{equation}
-  が成り立つ。
+  が成り立つ.この式を\textbf{バックドア調整公式}という.
 \end{prop}
 
 \begin{proof}
-  拡張ネットワーク $G' = (V', E'), V' = V \cup \{F_x\}, E' = E \cup \{(F_x, X)\}$ を考える。
-  さて、$F_x$ から $Y$ へのパスは $X$ を通るパスのみである。$X, Y$ のバックドアパスを含む場合、$Z$ によって、そうでない場合は $X$ で条件をつけることで、$F_x$ と $Y$ を有向分離できるため、定理~\ref{thm:global_markov}より、
+  拡張ネットワーク $G' = (V', E'), V' = V \cup \{F_X\}, E' = E \cup \{(F_X, X)\}$ を考える.
+  さて，$F_X$ から $Y$ へのパスは $X$ を通るパスのみである.$X, Y$ のバックドアパスを含む場合，$Z$ によって，そうでない場合は $X$ で条件をつけることで，$F_X$ と $Y$ を有向分離できるため，定理~\ref{thm:global_markov}より，
   \begin{equation}
-    F_x \perp Y \mid X, Z
+    F_X \perp Y \mid X, Z
   \end{equation}
-  が成り立つ。ため、
+  が成り立つ.ため，
   \begin{equation}
-    P(Y \mid F_x=x, X=x, Z) = P(Y \mid F_x=idle, X=x, Z)
+    P(Y \mid F_X=x, X=x, Z) = P(Y \mid F_X=idle, X=x, Z)
   \end{equation}
-  となり、
+  となり，
   \begin{equation}
     P(Y \mid do(X=x), Z) = P(Y \mid X=x, Z)
   \end{equation}
-  また、$Z$ は $X$ の子孫でないため、$F_x$ の子孫ではない。$F_x$ の親は空集合であるから局所マルコフ性により、
+  また，$Z$ は $X$ の子孫でないため，$F_X$ の子孫ではない.$F_X$ の親は空集合であるから局所マルコフ性により，
   \begin{equation}
-    Z \perp F_x
+    Z \perp F_X
   \end{equation}
-  となるため、
+  となるため，
   \begin{equation}
-    P(Z \mid do(X=x)) = P(Z \mid F_x=x) = P(Z)
+    P(Z \mid do(X=x)) = P(Z \mid F_X=x) = P(Z)
   \end{equation}
-  以上により、
+  以上により，
   \begin{align}
-    P(Y \mid do(X=x)) &= P(Y \mid F_x=x) \notag \\
-    &= \sum_z P(Y \mid F_x=x, Z) P(Z \mid F_x=x) \notag \\
-    &= \sum_z P(Y \mid X=x, Z) P(Z)
+    P(Y \mid do(X=x)) &= P(Y \mid F_X=x)  \\
+    &= \sum_z P(Y \mid F_X=x, Z=z) P(Z=z \mid F_X=x)  \\
+    &= \sum_z P(Y \mid X=x, Z=z) P(Z=z)
   \end{align}
 \end{proof}
 
 \begin{exm}{IPW推定}
-  バックドア基準は $Y \mid do(X=x)$ という介入の分布を、$P(Y \mid X=x, Z)P(Z)$ という観察データを用いた分布で書き下すことを可能にする。ここで、$Y \mid do(X=x)$ の平均を求めてみよう。
+  バックドア基準は $Y \mid do(X=x)$ という介入の分布を，$P(Y \mid X=x, Z),P(Z)$ という観察データを用いた分布で書き下すことを可能にする.ここで，$Z$はバックドア基準を満たすとして$Y \mid do(X=x)$ の平均を求めてみよう.
   \begin{align}
-    E[Y \mid do(X=x)] &= \sum_y y P(Y \mid do(X=x)) \notag \\
-    &= \sum_y y \sum_z P(Y \mid X=x, Z) P(Z) \notag \\
-    &= \sum_y \sum_z y \cdot \frac{P(Y, X=x, Z)}{P(X=x, Z)} \cdot P(Z) \notag \\
-    &= \sum_x \sum_y \sum_z y \cdot \frac{I(X=x) \cdot P(Y, X, Z)}{P(X=x \mid Z)} \notag \\
-    &= E\left[ \frac{Y I(X=x)}{P(X=x \mid Z)} \right]
+    E[Y \mid do(X=x)] &= \sum_y y P(Y=y \mid do(X=x))  \\
+    &= \sum_y y \sum_z P(Y=y \mid X=x, Z=z) P(Z=z)  \\
+    &= \sum_y \sum_z y \frac{P(Y=y, X=x, Z=z)}{P(X=x, Z=z)}P(Z=z)  \\
+    &= \sum_z \sum_y y \frac{P(Y=y, X=x, Z=z)}{P(X=x \mid Z=z)}  \\
+    &= \sum_{x'} \sum_z \sum_y y \frac{I(x'=x)P(Y=y, X=x', Z=z)}{P(X=x' \mid Z=z)}  \\
+    &= E\left[\frac{YI(X=x)}{P(X \mid Z)}\right]
   \end{align}
-  分母の $P(X=x \mid Z)$ は傾向スコアと呼ばれ、$e(Z)$ で表す。今、標本 $(x_1, y_1, z_1), \dots, (x_n, y_n, z_n)$ について、推定値
+  分母の $P(X \mid Z)$ は傾向スコアと呼ばれ，$e(Z)$ で表す.今，同分布から独立に抽出された標本 $(x_1, y_1, z_1), \dots, (x_n, y_n, z_n)$ について，推定量
   \begin{equation}
     \frac{1}{n} \sum_{i=1}^n \frac{y_i I(x_i=x)}{e(z_i)}
   \end{equation}
-  は $E[Y \mid do(X=x)]$ の一致かつ不偏な推定値を与える。これは Rubin 流でよく知られた \textbf{IPW推定法}である。
+  は $E[Y \mid do(X=x)]$ の一致かつ不偏な推定値を与える.これは Rubin 流でよく知られた \textbf{IPW推定法}である.
 \end{exm}
+
+\newpage
+\begin{exm}{回帰係数の解釈性}
+  $E[Y \mid do(X=x)]$の期待値を今一度書き直してみよう.
+  \begin{align}
+    E[Y \mid do(X=x)] &= \sum_y y P(Y=y \mid do(X=x)) \\
+    &= \sum_y y \sum_z P(Y=y \mid X=x, Z=z) P(Z=z) \\
+    &= \sum_y \sum_z y P(Y=y \mid X=x, Z=z) P(Z=z) \\
+    &= \sum_z \sum_y y P(Y=y \mid X=x, Z=z) P(Z=z) \\
+    &= \sum_z E[Y \mid X=x, Z=z] P(Z=z)
+  \end{align}
+  ここで， $Y$ を $X, Z$ を説明変数とした線形モデルを考える.
+  \begin{equation}
+    Y = \beta_{YX} X + \beta_{YZ}^{\top} Z + \varepsilon
+  \end{equation}
+  条件付き期待値を計算する.
+  \begin{align}
+    \sum_z E[Y \mid X=x, Z=z] P(Z=z) &= \sum_z (\beta_{YX} x + \beta_{YZ} z) P(Z=z) \\
+    &= \beta_{YX} x \cdot \sum_z P(Z=z) + \beta_{YZ} \sum_z z P(Z=z) \\
+    &= \beta_{YX} x + \beta_{YZ} E[Z]
+  \end{align}
+  このとき，平均因果効果は次のように求められる．
+  \begin{align}
+    E[Y \mid do(X=x_1)] - E[Y \mid do(X=x_2)] &= \beta_{YX} (x_1 - x_2)
+  \end{align}
+  とくに， $x_1 - x_2 = 1$ であれば，平均因果効果は $\beta_{YX}$ そのものである．
+  この議論において重要であるのは $Z$ がバックドア基準を満足する集合であったことである．
+  
+  1.2で見たシミュレーションをもう一度考えてみよう.以下にDAGと構造方程式を再掲する.
+  \begin{align}
+    &\varepsilon_X, \varepsilon_Y, \varepsilon_1, \dots, \varepsilon_6 \overset{\text{i.i.d.}}{\sim} N(0, 1) \\
+    X  &= 0.6Z_1 + 0.6Z_5 + \varepsilon_X \\
+    Y  &= X + 0.6Z_2 + 0.6Z_3 + 0.6Z_6 + \varepsilon_Y \\
+    Z_1 &= 0.6Z_2 + \varepsilon_1 \\
+    Z_2 &= \varepsilon_2 \\
+    Z_3 &= 0.5X + \varepsilon_3 \\
+    Z_4 &= 0.7X + 0.7Y + \varepsilon_4 \\
+    Z_5 &= \varepsilon_5 \\
+    Z_6 &= \varepsilon_6 
+  \end{align}
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+      node_var/.style={circle, draw=none, minimum size=1cm, font=\large\bfseries},
+      edge_path/.style={->, >=stealth, thick},
+      node distance=2.0cm and 2.0cm
+    ] 
+      \node[node_var] (X) {$X$};
+      \node[node_var, right=4.0cm of X] (Y) {$Y$};
+
+      \node[node_var, above right=1.0cm of X] (Z1) {$Z_1$};
+      \node[node_var, right=1.0cm of Z1] (Z2) {$Z_2$};
+
+      \node[node_var, below right=of X, yshift=1.0cm] (Z3) {$Z_3$};
+      \node[node_var, below right=of X] (Z4) {$Z_4$};
+
+      \node[node_var, left=1.0cm of X] (Z5) {$Z_5$};
+      \node[node_var, right=1.0cm of Y] (Z6) {$Z_6$};
+
+      \node[node_var, above left=of X, yshift=-1.0cm] (G) {$G$};
+
+      \draw[edge_path] (X) to (Y);
+      \draw[edge_path] (Z2) to (Z1);
+      \draw[edge_path] (Z1) to (X);
+      \draw[edge_path] (Z2) to (Y); 
+
+      \draw[edge_path] (X) to (Z3);
+      \draw[edge_path] (Z3) to (Y);
+
+      \draw[edge_path] (X) to (Z4); 
+      \draw[edge_path] (Y) to (Z4);
+
+      \draw[edge_path] (Z5) to (X);
+      \draw[edge_path] (Z6) to (Y);
+    \end{tikzpicture}
+    \caption{データの生成過程(再掲)}
+  \end{figure}
+  このとき、バックドア基準を満足する変数${Z_2, Z_6}$を説明変数として線形回帰を行う.
+  \begin{table}[H]
+    \centering
+    \caption{バックドア変数集合によるシミュレーション結果(n=10000)}
+    \begin{tabular}{lccc} 
+      \hline
+      変数 & $X$ & $Z_2$  & $Z_6$ \\ \hline
+      偏回帰係数 & 1.3004 & 0.5703 & 0.5983 \\ \hline
+    \end{tabular}
+  \end{table}
+  この結果は1.2で見たシミュレーションの結果(図\ref{fig:picture_2})と一致しており、$X$ の回帰係数が真の平均因果効果である$1.3$に近い値を与えていることが分かる.
+\end{exm}
+
+\begin{thm}{do計算（do-calculus）}
+  $G$ を構造的因果モデルとして，$V$ の互いに素な部分集合 $X, Y, Z, W$ を考える.
+  このとき，次の規則1，2，3が成り立つ.
+
+  \begin{description}
+    \item[規則1（観察の挿入・削除）] \hfill \\
+      $(Y \perp Z \mid X, W)_{G_{\overline{X}}}$ ならば，
+      \begin{equation}
+        P(Y \mid do(X=x), Z, W) = P(Y \mid do(X=x), W)
+      \end{equation}
+
+    \item[規則2（介入と観察の交換）] \hfill \\
+      $(Y \perp Z \mid X, W)_{G_{\overline{X}\underline{Z}}}$ ならば，
+      \begin{equation}
+        P(Y \mid do(X=x), do(Z=z), W) = P(Y \mid do(X=x), Z, W)
+      \end{equation}
+
+    \item[規則3（介入の挿入・削除）] \hfill \\
+      $(Y \perp Z \mid X, W)_{G_{\overline{X}, \overline{Z(W)}}}$ ならば，
+      \begin{equation}
+        P(Y \mid do(X=x), do(Z=z), W) = P(Y \mid do(X=x), W)
+      \end{equation}
+      ただし，$Z(W)$ は $Z$ に含まれる頂点のうち$W$に含まれる頂点の非子孫からなる集合である.
+  \end{description}
+\end{thm}
+
+\begin{proof}
+  \noindent[規則1]
+  $F_x$ の定義により，
+  \begin{align}
+    P(Y \mid do(X=x), Z, W) &= P(Y \mid F_x=x, Z, W) \\
+    &= P(Y \mid F_x=x, X=x, Z, W)
+  \end{align}
+  $(Y \perp Z \mid X, W)_{G_{\bar{X}}}$ より， $Y \perp Z \mid X, W, F_x=x$ が成り立つ．ゆえに，
+  \begin{align}
+    P(Y \mid Z, F_x=x, X=x, W) &= P(Y \mid F_x=x, X=x, W) \\
+    &= P(Y \mid F_x=x, W) \\
+    &= P(Y \mid do(X=x), W)
+  \end{align}
+  が成り立つ．
+
+  \noindent[規則2] $(Y \perp Z \mid X, W)_{G_{\bar{X}\underline{Z}}}$ から，
+  \begin{equation}
+    (Y \perp F_z \mid Z, W, X)_{G_{\bar{X}}}
+  \end{equation}
+  が成り立つことを確認する．
+  $G_{\bar{X}}$ 上で $Y$ と $F_z$ が $\{Z, W, X\}$ により有向分離されていることを確認する．
+  $F_z$ と $Y$ の任意の道 $p$ は頂点 $Z$ を含む．
+  \begin{itemize}
+    \item $Z$ が $p$ 上の合流点であるとき，
+    $p$ は $Z$ から $Y$ へのバックドアパスを含むが $(Y \perp Z \mid X, W)_{G_{\bar{X}\underline{Z}}}$ より， $G_{\bar{X}}$ 上で， $Z$ から $Y$ へのバックドアパスは， $X, W$ によりブロックされている．
+    \item $Z$ が $p$ 上の非合流点であるとき，
+    $p$ は $Z$ により，ブロックされている．
+  \end{itemize}
+  ゆえに，
+  \begin{equation}
+    (Y \perp F_z \mid Z, W, X)_{G_{\bar{X}}}
+  \end{equation}
+  したがって，
+  \begin{align}
+    P(Y \mid do(X=x), do(Z=z), W) &= P(Y \mid F_x=x, F_z=z, W) \\
+    &= P(Y \mid F_x=x, X=x, F_z=z, Z=z, W) \\
+    &= P(Y \mid F_x=x, X=x, Z=z, W) \\
+    &= P(Y \mid do(X=x), Z=z, W)
+  \end{align}
+
+  \noindent[規則3] $(Y \perp Z \mid X, W)_{G_{\bar{X}, \overline{Z(W)}}}$ が成り立つことを確認する．
+  $G_{\bar{X}}$ において， $\{X, W\}$ が $Y$ と $F_z$ を有向分離することを確認する．
+  
+  \noindent \textbf{(i) $Y$ と $F_z$ のパス $p$ が $Z$ から矢線が出るパスを含むとき:}
+  このパスは，$G_{\bar{X}, \overline{Z(W)}}$ に含まれる．
+  ここで $(Y \perp Z \mid X, W)_{G_{\bar{X}, \overline{Z(W)}}}$ より，$p$ は $G_{\bar{X}}$ で $\{X, W\}$ によって有向分離されることが分かる．
+
+  \noindent \textbf{(ii) $Y$ と $F_z$ のパス $p$ が $Z$ へのバックドアパスを含む場合:}
+  $X$ は $G_{\bar{X}}$ で $Z$ の子孫になり得ない．
+  \begin{itemize}
+    \item \textbf{(a) $W$ が $G_{\bar{X}}$ で $Z$ の子孫である場合:}
+
+    パス $p$ は $G_{\bar{X}, \overline{Z(W)}}$ に存在するパスであるが， $(Y \perp Z \mid X, W)_{G_{\bar{X}, \overline{Z(W)}}}$ より，$p$ は $\{X, W\}$ によってブロックされている．
+
+    \item \textbf{(b) $W$ が $G_{\bar{X}}$ で $Z$ の非子孫である場合:}
+
+    $Z$ は $p$ の合流点であるため，$p$ は $\{X, W\}$ によってブロックされている．
+  \end{itemize}
+  以上により，
+  \begin{equation}
+    (Y \perp F_z \mid X, W)_{G_{\bar{X}}}
+  \end{equation}
+  が成り立つ．したがって，
+  \begin{align}
+    P(Y \mid do(X=x), do(Z=z), W) &= P(Y \mid F_x=x, W, F_z=z) \\
+    &= P(Y \mid F_x=x, X=x, W, F_z=z) \\
+    &= P(Y \mid F_x=x, W, F_z=idle) \\
+    &= P(Y \mid do(X=x), W)
+  \end{align}
+\end{proof}
+
+\begin{prop}{フロントドア基準}
+  $X, Y \in V$ について，$Z \subset V$ が次の (i), (ii), (iii) を満足するとき，$Z$ はフロントドア基準を満足するという．
+  \begin{enumerate}
+    \item $Z$ は $X$ から $Y$ への有向道をブロックする．
+    \item $X$ と任意の $Z$ の元の $X$ へのバックドアパスはすべて空集合でブロックされる．
+    \item $Z$ と $Y$ のパスで $Z$ へのバックドアパスはすべて $X$ でブロックされる．
+  \end{enumerate}
+  このとき，次のフロントドア調整公式が成り立つ．
+  \begin{equation}
+    P(Y \mid do(X=x)) = \sum_z P(Z=z \mid X=x) \sum_{x'} P(Y \mid X=x', Z=z) P(X=x')
+  \end{equation}
+\end{prop}
+
+\begin{proof}
+  \begin{align}
+    P(Y \mid do(X=x)) &= \sum_z P(Y, Z=z \mid do(X=x)) \\
+    &= \sum_z P(Y \mid Z=z, do(X=x)) P(Z=z \mid do(X=x))
+  \end{align}
+  さて， (ii) から，グラフは $(X \perp Z)_{G_{\underline{X}}}$ であるため，規則2より，
+  \begin{align}
+    P(Z \mid do(X=x)) &= P(Z \mid X=x) \\
+    P(Z=z \mid do(X=x)) &= P(Z=z \mid X=x)
+  \end{align}
+  (iii) から， $(Z \perp Y \mid X)_{G_{\underline{Z}}}$ であり，当然 $(Z \perp Y \mid X)_{G_{\overline{X}\underline{Z}}}$ であるから，規則2より，
+  \begin{equation}
+    P(Y \mid Z=z, do(X=x)) = P(Y \mid do(Z=z), do(X=x))
+  \end{equation}
+  (i) から， $(X \perp Y \mid Z)_{G_{\overline{X}\overline{Z}}}$ が成り立ったため，規則3より，
+  \begin{equation}
+    P(Y \mid do(Z=z), do(X=x)) = P(Y \mid do(Z=z))
+  \end{equation}
+  ここで， (iii) から， $Y$ と $Z$ のパスのうち，$Z$ へのバックドアパスを $X$ がすべてブロックしているため，バックドア調整公式を用いて次のように書ける.
+  \begin{equation}
+    P(Y \mid do(Z=z)) = \sum_{x'} P(Y \mid X=x', Z=z) P(X=x')
+  \end{equation}
+  以上により，
+  \begin{align}
+    P(Y \mid do(X=x)) &= \sum_z P(Y \mid Z=z, do(X=x)) P(Z=z \mid do(X=x)) \\
+    &= \sum_z P(Y \mid do(Z=z)) \cdot P(Z=z \mid X=x) \\
+    &= \sum_z P(Z=z \mid X=x) \sum_{x'} P(Y \mid X=x', Z=z) P(X=x')
+  \end{align}
+  が成り立つ．
+\end{proof}
+
+\begin{exm}{喫煙と肺がん}
+  喫煙と肺がんの因果関係は医学界，統計学会で大論争を引きおこした.
+  当時の医学データでは，喫煙者と肺がん患者には高い正の相関があることが知られていた.
+  この問題について R.A.Fisher は，「相関は因果を意味しない」と言い，「たばこを好む遺伝子が肺がんを引きおこす」という未観測の交絡の可能性を指摘した．
+  
+  この未観測の交絡因子の問題について，フロントドア基準を用いることで，因果関係を識別できると考えらえている．
+  喫煙の有無 $X$，肺がんの患者であること $Y$，未観測の遺伝子 $U$，さらに，肺へのタールの蓄積 $C$ が次のような関係にあると考えられる．
+
+  \begin{center}
+    \begin{tikzpicture}[node distance=1.5cm, auto, >=latex, thick]
+      \node (U) {$U$};
+      \node (X) [below left=of U] {$X$};
+      \node (C) [right=of X] {$C$};
+      \node (Y) [below right=of U] {$Y$};
+      
+      \draw[->] (U) to (X);
+      \draw[->] (U) to (Y);
+      \draw[->] (X) to (C);
+      \draw[->] (C) to (Y);
+    \end{tikzpicture}
+  \end{center}
+
+  これは，次の2つを仮定している．
+  \begin{itemize}
+    \item $X$（喫煙）から $Y$（肺がん）への影響は， $C$（タールの蓄積）を通してのみ起こる．
+    \item $U$（遺伝子）と $C$（タールの蓄積）は $U$ は生まれつき決まるため， $C \to U$ の因果はなく，一方でタールが肺に蓄積する遺伝子も考えづらく，$U \to C$ の因果もない．
+  \end{itemize}
+
+  この $C$ は $X, Y$ についてのフロントドア基準を満たす．
+  \begin{enumerate}
+    \item $X \to C \to Y$
+    $X$ から $Y$ への有向道であり， $\{C\}$ でブロックされる．
+    \item $X \leftarrow U \to Y \leftarrow C$ がバックドアパスであるが， $Y$ が合流点となっておりブロックされている．
+    \item $C \leftarrow X \leftarrow U \to Y$ がバックドアパスであるが， $\{X\}$ により，このパスはブロックされる．
+  \end{enumerate}
+  ゆえにフロントドア調整公式を用いて介入後分布は識別可能である.
+\end{exm}
+
+フロントドア基準を満たすような $Z$ を見つければ，介入後分布は未観測の原因の存在に関わらず，識別可能である．
+では，一般に識別不能である DAG は存在するだろうか．
+
+\begin{exm}{操作変数}
+  観測されている $X, Y, Z$ と未観測の $U$ が次の DAG に従うとする．
+  \begin{center}
+    \begin{tikzpicture}[node distance=1.5cm, auto, >=latex, thick]
+      \node (U) {$U$};
+      \node (X) [below left=of U] {$X$};
+      \node (Z) [left=of X] {$Z$};
+      \node (Y) [below right=of U] {$Y$};
+      
+      \draw[->] (U) to (X);
+      \draw[->] (U) to (Y);
+      \draw[->] (Z) to (X);
+      \draw[->] (X) to (Y);
+    \end{tikzpicture}
+  \end{center}
+  このとき，$P(Y \mid do(X=x))$ は識別不能であることが知られている．
+  しかし，変数間に線形性を仮定すると，平均因果効果が導出できることが知られている．
+  
+  実際，
+  $\varepsilon_Z, \varepsilon_X, \varepsilon_Y, \varepsilon_U$ は独立で平均 0，分散 1 とする．
+  $X, Y, Z, U$ は 次の構造方程式で生成される
+  \begin{align}
+    Z &= \varepsilon_Z \\
+    U &= \varepsilon_U \\
+    X &= \beta_{XZ} Z + \beta_{XU} U + \varepsilon_X \\
+    Y &= \beta_{YX} X + \beta_{YU} U + \varepsilon_Y
+  \end{align}
+  今知りたいのは，$X$ から $Y$ への直接効果 $\beta_{YX}$ である．もちろん，今， $U$ は未観測であるから，利用できる値は相関
+  \begin{equation}
+    E[XY], E[XZ], E[YZ]
+  \end{equation}
+  のみである．ここで相関は総合効果と交絡効果に分解できたことを思い出そう．
+  これを用いれば，
+  \begin{align}
+    E[XZ] &= \beta_{XZ} \\
+    E[YZ] &= \beta_{XZ}\beta_{YX}
+  \end{align}
+  とできるため，
+  \begin{equation}
+    \beta_{YX} = \frac{\beta_{XZ}\beta_{YX}}{\beta_{XZ}} = \frac{E[YZ]}{E[XZ]}
+  \end{equation}
+  と求められる．この方法を操作変数法といい，この $Z$ を $X$ と $Y$ の操作変数という．
+\end{exm}
+
+識別可能性については、次の定理が知られている．
+
+\begin{thm}{完全性定理}
+  構造的因果モデル $G$ と，頂点 $X, Y \in V$ を考える．
+  介入後分布 $P(Y \mid do(X=x))$ が識別可能であることの必要十分条件は， $do$ 計算法を有限回用いることで介入後分布を観察可能な分布で書き下せることである．
+\end{thm}
 
 \newpage
 \begin{thebibliography}{9}
