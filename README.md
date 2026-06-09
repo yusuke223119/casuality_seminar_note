@@ -20,3 +20,4 @@
 - 宮川雅巳著，『グラフィカルモデル』，朝倉書店，1997.
 - S. L. Lauritzen, A. P. Dawid, B. N. Larsen, and H. G. Leimer, “Independence properties of directed
   Markov fields,” Networks, Vol. 20, No. 5, pp. 491–505, 1990.
+- I. Shpitser and J. Pearl, ``Identification of Joint Causal Effects in the Graphs with Confounded Joint Effects,'' in \textit{Proceedings of the 21st National Conference on Artificial Intelligence (AAAI-06)}, 2006, pp. 1219--1226.
