@@ -1578,10 +1578,10 @@ $V = \{X_1, \dots, X_n\}$, $E \subset V \times V$, $G = (V, E)$ は DAG であ�
   \[
     P(X_1, \dots, X_n \mid do(X_i = x_i))
   \]
-  で表し，この操作を $X_i$ についての介入という.
+  で表し，この操作を $X_i$ についての\textbf{介入}という.また，この確率を\textbf{介入後分布}という.
 \end{defn}
 
-さて，この介入後の分布 $P(X_1, \dots, X_n \mid do(X_i = x_i))$ は定理~\ref{prop:SCM_is_BN}から $G$ におけるベイジアンネットワークであることが保証されているため，同時確率は次のように分解できる.
+さて，この介入後分布 $P(X_1, \dots, X_n \mid do(X_i = x_i))$ は定理~\ref{prop:SCM_is_BN}から $G$ におけるベイジアンネットワークであることが保証されているため，同時確率は次のように分解できる.
 \begin{align*}
   P(X_1, \dots, X_n \mid do(X_i = x_i)) &= \prod_{j=1}^n P(X_j \mid pa(X_j)) \\
   &= \prod_{j=1, j \neq i}^n P(X_j \mid pa(X_j)) \cdot P(X_i \mid pa(X_i))
@@ -1718,8 +1718,10 @@ $G'$ は定義から，$F_i = idle$ であれば $G$ に，$F_i = x_i$ であれ
   P(X_1, \dots, X_n \mid do(X_i = x_i)) = P(X_1, \dots, X_n \mid F_i = x_i)
 \end{equation}
 となる.
-我々が観測できるのは $G$ に基づく分布 $P(X_1, \dots, X_n)$ であるが，介入効果を知りたいときは，$G_{\overline{X_i}}$ に基づく分布 $P(X_1, \dots, X_n \mid do(X_i = x_i))$ を観察によって得られる分布 $P(X_1, \dots, X_n)$ やその周辺分布で書き下す必要がある.
-次のバックドア基準は，その十分条件を与える.
+
+さて，我々が観測できるのは $G$ に基づく分布 $P(X_1, \dots, X_n)$ のみである.つまり，介入効果を知りたいときは，介入後分布 $P(X_1, \dots, X_n \mid do(X_i = x_i))$ を観察によって得られる分布 $P(X_1, \dots, X_n)$ やその周辺分布で書き下す必要がある.
+もし $P(X_1, \dots, X_n)$ から $P(X_1, \dots, X_n \mid do(X_i = x_i))$ を書き下すことができるとき，$P(X_1, \dots, X_n \mid do(X_i = x_i))$ は\textbf{識別可能}であるという.
+次のバックドア基準は，識別可能であることの十分条件を与える.
 
 \begin{prop}{バックドア基準}
   確率変数 $X_1, \dots, X_n$，頂点集合 $V = \{X_1, \dots, X_n\}$，DAG $G = (V, E)$ で $G$ は構造的因果モデルとする.
@@ -1768,10 +1770,10 @@ $G'$ は定義から，$F_i = idle$ であれば $G$ に，$F_i = x_i$ であれ
     &= \sum_y y \sum_z P(Y=y \mid X=x, Z=z) P(Z=z)  \\
     &= \sum_y \sum_z y \frac{P(Y=y, X=x, Z=z)}{P(X=x, Z=z)}P(Z=z)  \\
     &= \sum_z \sum_y y \frac{P(Y=y, X=x, Z=z)}{P(X=x \mid Z=z)}  \\
-    &= \sum_{x'} \sum_z \sum_y y \frac{I(x'=x)P(Y=y, X=x', Z=z)}{P(X=x' \mid Z=z)}  \\
-    &= E\left[\frac{YI(X=x)}{P(X \mid Z)}\right]
+    &= \sum_{x'} \sum_z \sum_y y \frac{I(x'=x)P(Y=y, X=x, Z=z)}{P(X=x' \mid Z=z)}  \\
+    &= E\left[\frac{YI(X=x)}{P(X=x \mid Z)}\right]
   \end{align}
-  分母の $P(X \mid Z)$ は傾向スコアと呼ばれ，$e(Z)$ で表す.今，同分布から独立に抽出された標本 $(x_1, y_1, z_1), \dots, (x_n, y_n, z_n)$ について，推定量
+  分母の $P(X=x \mid Z)$ は傾向スコアと呼ばれ，$e(Z)$ で表す.今，同分布から独立に抽出された標本 $(x_1, y_1, z_1), \dots, (x_n, y_n, z_n)$ について，推定量
   \begin{equation}
     \frac{1}{n} \sum_{i=1}^n \frac{y_i I(x_i=x)}{e(z_i)}
   \end{equation}
@@ -1867,25 +1869,29 @@ $G'$ は定義から，$F_i = idle$ であれば $G$ に，$F_i = x_i$ であれ
   この結果は1.2で見たシミュレーションの結果(図\ref{fig:picture_2})と一致しており、$X$ の回帰係数が真の平均因果効果である$1.3$に近い値を与えていることが分かる.
 \end{exm}
 
-\begin{thm}{do計算（do-calculus）}
+バックドア基準は，必要な変数がすべて観測されている場合には，介入後分布は識別可能であることを保証する.
+一方で必要な変数が観測されていない場合であっても，介入後分布が識別可能である場合がある.
+次の\textbf{do計算法}は未観測の変数が存在する場合に，介入後分布の識別可能性を判定するための有用な計算規則である.
+
+\begin{thm}{do計算法（do-calculus）}
   $G$ を構造的因果モデルとして，$V$ の互いに素な部分集合 $X, Y, Z, W$ を考える.
   このとき，次の規則1，2，3が成り立つ.
 
   \begin{description}
     \item[規則1（観察の挿入・削除）] \hfill \\
-      $(Y \perp Z \mid X, W)_{G_{\overline{X}}}$ ならば，
+      $G_{\overline{X}}$上で$Y$と$Z$を${X,W}$が有向分離するならば，
       \begin{equation}
         P(Y \mid do(X=x), Z, W) = P(Y \mid do(X=x), W)
       \end{equation}
 
     \item[規則2（介入と観察の交換）] \hfill \\
-      $(Y \perp Z \mid X, W)_{G_{\overline{X}\underline{Z}}}$ ならば，
+      $G_{\overline{X}\underline{Z}}$上で$Y$と$Z$を${X,W}$が有向分離するならば，
       \begin{equation}
         P(Y \mid do(X=x), do(Z=z), W) = P(Y \mid do(X=x), Z, W)
       \end{equation}
 
     \item[規則3（介入の挿入・削除）] \hfill \\
-      $(Y \perp Z \mid X, W)_{G_{\overline{X}, \overline{Z(W)}}}$ ならば，
+      $G_{\overline{X}, \overline{Z(W)}}$上で$Y$と$Z$を${X,W}$が有向分離するならば，
       \begin{equation}
         P(Y \mid do(X=x), do(Z=z), W) = P(Y \mid do(X=x), W)
       \end{equation}
@@ -1894,27 +1900,28 @@ $G'$ は定義から，$F_i = idle$ であれば $G$ に，$F_i = x_i$ であれ
 \end{thm}
 
 \begin{proof}
-  \noindent[規則1]
-  $F_x$ の定義により，
+  \begin{enumerate}[label={\textbf{[規則\arabic*]}}, leftmargin=*]
+  \item
+  $F_X$ の定義により，
   \begin{align}
-    P(Y \mid do(X=x), Z, W) &= P(Y \mid F_x=x, Z, W) \\
-    &= P(Y \mid F_x=x, X=x, Z, W)
+    P(Y \mid do(X=x), Z, W) &= P(Y \mid F_X=x, Z, W) \\
+    &= P(Y \mid F_X=x, X=x, Z, W)
   \end{align}
-  $(Y \perp Z \mid X, W)_{G_{\bar{X}}}$ より， $Y \perp Z \mid X, W, F_x=x$ が成り立つ．ゆえに，
+  $(Y \perp Z \mid X, W)_{G_{\bar{X}}}$ より， $Y \perp Z \mid X, W, F_X=x$ が成り立つ．ゆえに，
   \begin{align}
-    P(Y \mid Z, F_x=x, X=x, W) &= P(Y \mid F_x=x, X=x, W) \\
-    &= P(Y \mid F_x=x, W) \\
+    P(Y \mid Z, F_X=x, X=x, W) &= P(Y \mid F_X=x, X=x, W) \\
+    &= P(Y \mid F_X=x, W) \\
     &= P(Y \mid do(X=x), W)
   \end{align}
   が成り立つ．
 
-  \noindent[規則2] $(Y \perp Z \mid X, W)_{G_{\bar{X}\underline{Z}}}$ から，
+  \item $(Y \perp Z \mid X, W)_{G_{\bar{X}\underline{Z}}}$ から，
   \begin{equation}
-    (Y \perp F_z \mid Z, W, X)_{G_{\bar{X}}}
+    (Y \perp F_Z \mid Z, W, X)_{G_{\bar{X}}}
   \end{equation}
   が成り立つことを確認する．
-  $G_{\bar{X}}$ 上で $Y$ と $F_z$ が $\{Z, W, X\}$ により有向分離されていることを確認する．
-  $F_z$ と $Y$ の任意の道 $p$ は頂点 $Z$ を含む．
+  $G_{\bar{X}}$ 上で $Y$ と $F_Z$ が $\{Z, W, X\}$ により有向分離されていることを確認する．
+  $F_Z$ と $Y$ の任意の道 $p$ は頂点 $Z$ を含む．
   \begin{itemize}
     \item $Z$ が $p$ 上の合流点であるとき，
     $p$ は $Z$ から $Y$ へのバックドアパスを含むが $(Y \perp Z \mid X, W)_{G_{\bar{X}\underline{Z}}}$ より， $G_{\bar{X}}$ 上で， $Z$ から $Y$ へのバックドアパスは， $X, W$ によりブロックされている．
@@ -1923,24 +1930,24 @@ $G'$ は定義から，$F_i = idle$ であれば $G$ に，$F_i = x_i$ であれ
   \end{itemize}
   ゆえに，
   \begin{equation}
-    (Y \perp F_z \mid Z, W, X)_{G_{\bar{X}}}
+    (Y \perp F_Z \mid Z, W, X)_{G_{\bar{X}}}
   \end{equation}
   したがって，
   \begin{align}
-    P(Y \mid do(X=x), do(Z=z), W) &= P(Y \mid F_x=x, F_z=z, W) \\
-    &= P(Y \mid F_x=x, X=x, F_z=z, Z=z, W) \\
-    &= P(Y \mid F_x=x, X=x, Z=z, W) \\
+    P(Y \mid do(X=x), do(Z=z), W) &= P(Y \mid F_X=x, F_Z=z, W) \\
+    &= P(Y \mid F_X=x, X=x, F_Z=z, Z=z, W) \\
+    &= P(Y \mid F_X=x, X=x, Z=z, W) \\
     &= P(Y \mid do(X=x), Z=z, W)
   \end{align}
 
-  \noindent[規則3] $(Y \perp Z \mid X, W)_{G_{\bar{X}, \overline{Z(W)}}}$ が成り立つことを確認する．
-  $G_{\bar{X}}$ において， $\{X, W\}$ が $Y$ と $F_z$ を有向分離することを確認する．
+  \item $(Y \perp Z \mid X, W)_{G_{\bar{X}, \overline{Z(W)}}}$ が成り立つことを確認する．
+  $G_{\bar{X}}$ において， $\{X, W\}$ が $Y$ と $F_Z$ を有向分離することを確認する．
   
-  \noindent \textbf{(i) $Y$ と $F_z$ のパス $p$ が $Z$ から矢線が出るパスを含むとき:}
+  \noindent \textbf{(i) $Y$ と $F_Z$ のパス $p$ が $Z$ から矢線が出るパスを含むとき:}
   このパスは，$G_{\bar{X}, \overline{Z(W)}}$ に含まれる．
   ここで $(Y \perp Z \mid X, W)_{G_{\bar{X}, \overline{Z(W)}}}$ より，$p$ は $G_{\bar{X}}$ で $\{X, W\}$ によって有向分離されることが分かる．
 
-  \noindent \textbf{(ii) $Y$ と $F_z$ のパス $p$ が $Z$ へのバックドアパスを含む場合:}
+  \noindent \textbf{(ii) $Y$ と $F_Z$ のパス $p$ が $Z$ に矢線が入るパスを含むとき:}
   $X$ は $G_{\bar{X}}$ で $Z$ の子孫になり得ない．
   \begin{itemize}
     \item \textbf{(a) $W$ が $G_{\bar{X}}$ で $Z$ の子孫である場合:}
@@ -1953,16 +1960,19 @@ $G'$ は定義から，$F_i = idle$ であれば $G$ に，$F_i = x_i$ であれ
   \end{itemize}
   以上により，
   \begin{equation}
-    (Y \perp F_z \mid X, W)_{G_{\bar{X}}}
+    (Y \perp F_Z \mid X, W)_{G_{\bar{X}}}
   \end{equation}
   が成り立つ．したがって，
   \begin{align}
-    P(Y \mid do(X=x), do(Z=z), W) &= P(Y \mid F_x=x, W, F_z=z) \\
-    &= P(Y \mid F_x=x, X=x, W, F_z=z) \\
-    &= P(Y \mid F_x=x, W, F_z=idle) \\
+    P(Y \mid do(X=x), do(Z=z), W) &= P(Y \mid F_X=x, W, F_Z=z) \\
+    &= P(Y \mid F_X=x, X=x, W, F_Z=z) \\
+    &= P(Y \mid F_X=x, W, F_Z=idle) \\
     &= P(Y \mid do(X=x), W)
   \end{align}
+  \end{enumerate}
 \end{proof}
+
+do計算法により次のフロントドア基準が導かれる.
 
 \begin{prop}{フロントドア基準}
   $X, Y \in V$ について，$Z \subset V$ が次の (i), (ii), (iii) を満足するとき，$Z$ はフロントドア基準を満足するという．
@@ -2009,26 +2019,28 @@ $G'$ は定義から，$F_i = idle$ であれば $G$ に，$F_i = x_i$ であれ
 \end{proof}
 
 \begin{exm}{喫煙と肺がん}
-  喫煙と肺がんの因果関係は医学界，統計学会で大論争を引きおこした.
-  当時の医学データでは，喫煙者と肺がん患者には高い正の相関があることが知られていた.
-  この問題について R.A.Fisher は，「相関は因果を意味しない」と言い，「たばこを好む遺伝子が肺がんを引きおこす」という未観測の交絡の可能性を指摘した．
-  
+  喫煙と肺がんの因果関係は、かつて医学界および統計学界で大きな論争を引き起こした。
+  当時の観測データからは、喫煙と肺がんの間に強い正の相関があることが知られていた。
+  しかし、R.A. Fisherは、タバコを好む性質と肺がんの罹りやすさの双方を支配する「未観測の共通遺伝子」という交絡因子が存在する可能性を指摘し、喫煙そのものの因果効果を否定しようとした。
+
   この未観測の交絡因子の問題について，フロントドア基準を用いることで，因果関係を識別できると考えらえている．
   喫煙の有無 $X$，肺がんの患者であること $Y$，未観測の遺伝子 $U$，さらに，肺へのタールの蓄積 $C$ が次のような関係にあると考えられる．
 
-  \begin{center}
+  \begin{figure}[H]
+    \centering
     \begin{tikzpicture}[node distance=1.5cm, auto, >=latex, thick]
-      \node (U) {$U$};
-      \node (X) [below left=of U] {$X$};
-      \node (C) [right=of X] {$C$};
-      \node (Y) [below right=of U] {$Y$};
+      \node (U) {$U$(未観測の交絡因子)};
+      \node (X) [below left=of U] {$X$(喫煙)};
+      \node (C) [right=of X] {$C$(タールの蓄積)};
+      \node (Y) [below right=of U] {$Y$(肺がん)};
       
       \draw[->] (U) to (X);
       \draw[->] (U) to (Y);
       \draw[->] (X) to (C);
       \draw[->] (C) to (Y);
     \end{tikzpicture}
-  \end{center}
+    \caption{喫煙と肺がんの因果関係}
+  \end{figure}
 
   これは，次の2つを仮定している．
   \begin{itemize}
@@ -2038,10 +2050,10 @@ $G'$ は定義から，$F_i = idle$ であれば $G$ に，$F_i = x_i$ であれ
 
   この $C$ は $X, Y$ についてのフロントドア基準を満たす．
   \begin{enumerate}
-    \item $X \to C \to Y$
+    \item $X \to C \to Y$:
     $X$ から $Y$ への有向道であり， $\{C\}$ でブロックされる．
-    \item $X \leftarrow U \to Y \leftarrow C$ がバックドアパスであるが， $Y$ が合流点となっておりブロックされている．
-    \item $C \leftarrow X \leftarrow U \to Y$ がバックドアパスであるが， $\{X\}$ により，このパスはブロックされる．
+    \item $X \leftarrow U \to Y \leftarrow C$: バックドアパスであるが， $Y$ が合流点となっておりブロックされている．
+    \item $C \leftarrow X \leftarrow U \to Y$:バックドアパスであるが， $\{X\}$ により，このパスはブロックされる．
   \end{enumerate}
   ゆえにフロントドア調整公式を用いて介入後分布は識別可能である.
 \end{exm}
@@ -2051,7 +2063,8 @@ $G'$ は定義から，$F_i = idle$ であれば $G$ に，$F_i = x_i$ であれ
 
 \begin{exm}{操作変数}
   観測されている $X, Y, Z$ と未観測の $U$ が次の DAG に従うとする．
-  \begin{center}
+  \begin{figure}[H]
+    \centering
     \begin{tikzpicture}[node distance=1.5cm, auto, >=latex, thick]
       \node (U) {$U$};
       \node (X) [below left=of U] {$X$};
@@ -2063,7 +2076,8 @@ $G'$ は定義から，$F_i = idle$ であれば $G$ に，$F_i = x_i$ であれ
       \draw[->] (Z) to (X);
       \draw[->] (X) to (Y);
     \end{tikzpicture}
-  \end{center}
+    \caption{操作変数法}
+  \end{figure}
   このとき，$P(Y \mid do(X=x))$ は識別不能であることが知られている．
   しかし，変数間に線形性を仮定すると，平均因果効果が導出できることが知られている．
   
@@ -2100,20 +2114,28 @@ $G'$ は定義から，$F_i = idle$ であれば $G$ に，$F_i = x_i$ であれ
   介入後分布 $P(Y \mid do(X=x))$ が識別可能であることの必要十分条件は， $do$ 計算法を有限回用いることで介入後分布を観察可能な分布で書き下せることである．
 \end{thm}
 
+\begin{proof}
+  参考文献\cite{shpitser2006}を参照せよ．なお，参考文献\cite{shpitser2006}では，任意のグラフの識別可能性を判定するアルゴリズム(IDアルゴリズム)も提案されている．
+\end{proof}
+
 \newpage
 \begin{thebibliography}{9}
+  \bibitem{Pearl2009}
+  J. Pearl著，黒木学訳，『統計的因果推論 ―モデル・推論・推測―』，共立出版，2009.
 
-\bibitem{Pearl2009}
-J. Pearl著，黒木学訳，『統計的因果推論 ―モデル・推論・推測―』，共立出版，2009.
+  \bibitem{Miyakawa2004}
+  宮川雅巳著，『統計的因果推論 ―回帰分析の新しい枠組み―』，朝倉書店，2004.
 
-\bibitem{Miyakawa2004}
-宮川雅巳著，『統計的因果推論 ―回帰分析の新しい枠組み―』，朝倉書店，2004.
+  \bibitem{Miyakawa1998}
+  宮川雅巳著，『グラフィカルモデル』，朝倉書店，1997.
 
-\bibitem{Miyakawa1998}
-宮川雅巳著，『グラフィカルモデル』，朝倉書店，1997.
+  \bibitem{Lauritzen1990Networks}
+  S. L. Lauritzen, A. P. Dawid, B. N. Larsen, and H. G. Leimer, ``Independence properties of directed Markov fields,'' \textit{Networks}, Vol.~20, No.~5, pp.~491--505, 1990.
 
-\bibitem{Lauritzen1990Networks}
-S. L. Lauritzen, A. P. Dawid, B. N. Larsen, and H. G. Leimer, ``Independence properties of directed Markov fields,'' \textit{Networks}, Vol.~20, No.~5, pp.~491--505, 1990.
+  \bibitem{shpitser2006}
+  I. Shpitser and J. Pearl, ``Identification of Joint Causal Effects in the Graphs with Confounded Joint Effects,'' in \textit{Proceedings of the 21st National Conference on Artificial Intelligence (AAAI-06)}, 2006, pp. 1219--1226.
 
+  \bibitem{stolley1991}
+  P. D. Stolley, ``When genius errs: R.A. Fisher and the lung cancer controversy,'' \textit{American Journal of Epidemiology}, vol. 133, no. 5, pp. 416--425, 1991.
 \end{thebibliography}
 \end{document}
