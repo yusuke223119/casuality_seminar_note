@@ -2119,6 +2119,264 @@ do計算法により次のフロントドア基準が導かれる.
 \end{proof}
 
 \newpage
+
+\section{反事実}
+本章ではポテンシャルアウトカムを用いて因果推論を考察する.
+これは起こりえなかったこと，反事実を扱う枠組みであり，Pearl流とRubin流との統合以上の意味を持つ.
+
+\begin{defn}{ポテンシャルアウトカム}
+  $G = (V, E)$, $V = \{X_1, \dots, X_n\}$ を DAG として，各 $X_i$ は外生変数 $\varepsilon_1, \dots, \varepsilon_n$ を用いて，
+  \begin{equation}
+    X_i = f_i(pa(X_i), \varepsilon_i)
+  \end{equation}
+  で生成されるとする．今 $X, Y \in V$ について，新しいグラフ $G_{\bar{X}}$ と，新しいメカニズム
+  \begin{equation}
+    X = x
+  \end{equation}
+  を考える．このとき，$G_{\bar{X}}$ 上の $Y$ を\textbf{ポテンシャルアウトカム}といい， $U = (\varepsilon_1, \dots, \varepsilon_n)$ として，
+  \begin{equation}
+    Y_x(U)
+  \end{equation}
+  で表す．
+\end{defn}
+
+さて，これは，介入後分布 $P(X_1, \dots, X_n \mid do(X=x))$ における $Y$ である．ゆえに，当然
+\begin{equation}
+  E[Y_x(U)] = E[Y \mid do(X=x)]
+\end{equation}
+が成り立つ．
+ポテンシャルアウトカムは，$X=x$ であったならば $Y$ がとったであろう値という反事実的な量である．これは，必ずしも実際に観察される量ではない．しかし，次の場合は，ポテンシャルアウトカムが実際に観察される．
+
+\begin{prop}{一致性}
+  構造的因果モデル $G = (V, E)$ と， $X, Y \in V$ について，ポテンシャルアウトカム $Y_x(U)$ を考える．ただし， $U = (\varepsilon_1, \dots, \varepsilon_n)$ である．このとき，任意の $U=u$ となる $u$ について，
+  \begin{equation}
+    X(u) = x \Rightarrow Y(u) = Y_x(u)
+  \end{equation}
+  が成り立つ．
+\end{prop}
+
+\begin{proof}
+  頂点 $X_1, \dots, X_n$ は $U$ の関数であるから， $U=u$ となる $u$ について，
+  \begin{equation}
+    X_i(u) = f_i(u)
+  \end{equation}
+  とくに，
+  \begin{equation}
+    X(u) = f_X(u) = x
+  \end{equation}
+  である．一方，介入後の $X_1, \dots, X_n$ においては，
+  \begin{align}
+    X_i(u) &= f_i(u) \quad (X_i \neq X) \\
+    X(u) &= x
+  \end{align}
+  であり，すべての $X_i(u)$ で，介入の前後で同一の値をとる．したがって，
+  \begin{equation}
+    Y(u) = Y_x(u)
+  \end{equation}
+  が成り立つ．
+\end{proof}
+
+一致性は，$u$ を固定した場合に，$X=x$ が観察された $Y$ は $Y_x$ に等しいという，当然の帰結を与える．
+とくに，$X$ が $\{0, 1\}$ の二値をとる場合，より分かりやすい（Rubin流でもおなじみの）表現が得られる．
+
+\begin{cor}{スイッチング方程式}
+  構造的因果モデル $G = (V, E)$ と， $U = (\varepsilon_1, \dots, \varepsilon_n)$ として， $X, Y \in V$ についてポテンシャルアウトカム $Y_x(U)$ を考える．
+  とくに， $X = \{0, 1\}$ の二値のみをとる場合，次が成り立つ．
+\begin{equation}
+    Y(U) = X(U) Y_1(U) + (1 - X(U)) Y_0(U)
+  \end{equation}
+\end{cor}
+
+\begin{proof}
+  $U=u$ となる $u$ を任意にとる．
+  \begin{align}
+    X(u) = 1 &\text{ ならば } Y(u) = Y_1(u) \\
+    X(u) = 0 &\text{ ならば } Y(u) = Y_0(u)
+  \end{align}
+  であるから，
+  \begin{equation}
+    Y(u) = X(u) Y_1(u) + (1 - X(u)) Y_0(u)
+  \end{equation}
+  が成り立つ．今， $u$ は任意であったから，
+  \begin{equation}
+    Y(U) = X(U) Y_1(U) + (1 - X(U)) Y_0(U)
+  \end{equation}
+  が成り立つ．
+\end{proof}
+
+これは，因果推論の根本問題そのものである． $X$ は写像であるから， 0 と 1 を同時にとることはなく、また， $Y_1(u)$ と $Y_0(u)$ を同時に観察されない．そして、我々が観察できるポテンシャルアウトカムは， $X(u)=x$ が観察されたときの $Y_x(u)$ であって， $Y_x(u)$ そのものではない．
+
+$X$ と $Y_x$ が独立である（RCT）とき，
+\begin{equation}
+  P(Y_x(u) \mid X(u)=x) = P(Y_x(u))
+\end{equation}
+となるため，容易に $P(Y_x(u))$ のデータを観察できる．しかし、現実的に RCT の仮定は厳しくて，一般的に少し緩い仮定を置く．それが次の強く無視できる割当て条件（SITA）である．
+
+\begin{defn}{強く無視できる割当て}
+  確率変数 $X$ とポテンシャルアウトカム $Y_x$ が確率変数の集合 $Z$ を与えたときに条件付き独立、つまり，
+  \begin{equation}
+    X \perp Y_x \mid Z
+  \end{equation}
+  が成り立つとき， $X$ は\textbf{強く無視できる割当て条件}を満足するという．
+\end{defn}
+
+さて， 1.3節で見たように，強く無視できる割当て条件は Rubin 流の中心的な仮定であるが，どの変数を用いれば条件付き独立性が担保されるか，明らかではない．そこでツインネットワークという道具を導入して，条件付き独立性をグラフィカルに判定しよう．
+
+\begin{defn}{ツインネットワーク}
+  $G = (V, E)$, $V = \{X_1, \dots, X_n\}$ を DAG 各 $X_i$ について，外生変数 $\varepsilon_1, \dots, \varepsilon_n$ を用いて，
+  \begin{equation}
+    X_i = f_i(pa(X_i), \varepsilon_i)
+  \end{equation}
+  で生成されるとする． $U = \{\varepsilon_1, \dots, \varepsilon_n\}$ とする．ここで， $X_k \in V$ として，グラフ $G_{\bar{X_k}}$ で新しく，
+  \begin{align}
+    X_i &= f_i(pa(X_i), \varepsilon_i) \\
+    X_k &= x_k
+  \end{align}
+  として生成される確率変数を $X_1^*, \dots, X_n^*$ と書く．
+  ここで， $nd(X_k^*)$ は， $nd(X_k)$ の対応する添字の確率変数と同一の確率変数である．
+  
+  よって， $G_{\bar{X_k}}$ において，頂点集合 $V^*$ を，
+  \begin{equation}
+    V^* = nd(X_k) \cup de(X_k^*)
+  \end{equation}
+  としても確率分布を変えない．ここで，
+  \begin{align}
+    F &= E \cup \{ (X_i^*, X_j^*) \in E^* \mid X_i^* \in de(X_k^*) \text{ または } X_j^* \in de(X_k^*) \} \\
+    &\quad \cup \{ (\varepsilon_i, X_i) \mid X_i \in V \text{ または } X_i \in de(X_k^*) \setminus \{X_k^*\} \}
+  \end{align}
+  とおいたときに，有向グラフ
+  \begin{equation}
+    G^* = (V \cup de(X_k^*) \cup U, F)
+  \end{equation}
+  を\textbf{ツインネットワーク}という．
+\end{defn}
+
+\begin{exm}{}
+  以下に，誤差項を加えたDAGと，対応するツインネットワークの例を示す．
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[
+      node_var/.style={circle, draw=none, minimum size=1cm, font=\large\bfseries},
+      edge_path/.style={->, >=stealth, thick},
+      node distance=2.0cm and 2.0cm
+    ] 
+        \node (W) {$W$};
+        \node (eW) [right=of W] {$\varepsilon_W$};
+        \node (X) [above=of W] {$X$};
+        \node (eX) [right=of X] {$\varepsilon_X$};
+        \node (Y) [below=of W] {$Y$};
+        \node (eY) [right=of Y] {$\varepsilon_Y$};
+        \node (Z) [left=of W, xshift=-0.3cm] {$Z$};
+        \node (eZ) [left=of Z] {$\varepsilon_Z$};
+
+        \draw[->] (eX) to (X);
+        \draw[->] (eW) to (W);
+        \draw[->] (eY) to (Y);
+        \draw[->] (eZ) to (Z);
+        \draw[->] (Z) to (X);
+        \draw[->] (Z) to (Y);
+        \draw[->] (X) to (W);
+        \draw[->] (W) to (Y);
+    \end{tikzpicture}
+    \caption{構造的因果モデル}
+  \end{figure}
+
+    \begin{figure}[H]
+      \centering
+      \begin{tikzpicture}[
+        node_var/.style={circle, draw=none, minimum size=1cm, font=\large\bfseries},
+        edge_path/.style={->, >=stealth, thick},
+        node distance=2.0cm and 2.0cm
+      ] 
+        \node (W2) {$W$};
+        \node (eW2) [right=of W2] {$\varepsilon_W$};
+        \node (X2) [above=of W2] {$X$};
+        \node (eX2) [right=of X2] {$\varepsilon_X$};
+        \node (Y2) [below=of W2] {$Y$};
+        \node (eY2) [right=of Y2] {$\varepsilon_Y$};
+        \node (Z2) [left=of W2, xshift=-0.3cm, yshift=-3.0cm] {$Z$};
+        \node (eZ2) [left=of Z2] {$\varepsilon_Z$};
+
+        % スター付きの頂点
+        \node (XW) [right=of eW2] {$W^*$};
+        \node (XX) [above=of XW] {$X^*$};
+        \node (XY) [below=of XW] {$Y^*$};
+
+        \draw[->] (eX2) to (X2);
+        \draw[->] (eW2) to (W2);
+        \draw[->] (eY2) to (Y2);
+        \draw[->] (eZ2) to (Z2);
+        \draw[->] (Z2) to (X2);
+        \draw[->] (Z2) to (Y2);
+        \draw[->] (X2) to (W2);
+        \draw[->] (W2) to (Y2);
+
+        % スター側への接続
+        \draw[->] (XX) to (XW);
+        \draw[->] (XW) to (XY);
+        \draw[->] (eW2) to (XW);
+        \draw[->] (eY2) to (XY);
+        \draw[->] (Z2) to (Y2);
+        \draw[->] (Z2) to (XY);
+    \end{tikzpicture}
+    \caption{ツインネットワーク}
+  \end{figure}
+\end{exm}
+
+\begin{prop}{}
+  ツインネットワークは，ベイジアンネットワークである．
+\end{prop}
+
+\begin{proof}
+  局所マルコフ性を証明すればよい．
+  $X \in V \cup de(X_k^*)$ を任意にとる．
+  可測関数 $f_X$ を用いて，
+  \begin{equation}
+    X = f_X(pa(X))
+  \end{equation}
+  であるから，任意の $W \in V \cup de(X_k^*) \cup U$ について，
+  \begin{equation}
+    X \perp W \mid pa(X)
+  \end{equation}
+  が成り立つ．なぜなら， $X$ は $pa(X)$ を与えたときに定数であるため，任意の確率変数と独立である．
+  
+  一方， $\varepsilon_i \in U$ を任意にとる． $\varepsilon_i$ は外生的であるため，$G$ 上における $nd(X_i)$ と $G_{\bar{X_k}}$ 上における $nd(X_i^*)$ の任意の元と独立である．
+  $G^*$ における $\varepsilon_i$ の非子孫は， $nd(X_i) \cup nd(X_i^*)$ であって， $\varepsilon_i$ それらと独立であるから，任意の $V \cup de(X_k^*) \cup U$ の元について局所マルコフ性が成り立ち，ツインネットワークは，ベイジアンネットワークである．
+\end{proof}
+
+\begin{prop}{}
+  DAG $G = (V, E)$, $V = \{X_1, \dots, X_n\}$, $X, Y \in V$ として， $Z$ は $X$ に入る矢線を含むパスについてバックドア基準を満たすとする．このとき，
+  \begin{equation}
+    X \perp Y_x(U) \mid Z
+  \end{equation}
+  が成り立つ．
+\end{prop}
+
+\begin{proof}
+  \textbf{$Y$ が $X$ の子孫でないとき:}
+  $Y_x = Y$ より， $X \perp Y \mid Z$ を示せばよい．
+  $X$ に入る矢線を含む $X$ と $Y$ のパスはすべて $Z$ でブロックされる．
+  一方，$Y$ が $X$ の子孫でないため $X$ から $Y$ への有向道が存在しない．
+  よって， $X$ から出る矢線を含む $X$ と $Y$ のパスはすべて空集合でブロックされ， $Z$ は $X$ の子孫を含まず， $X$ から出る矢線を含む $X$ と $Y$ のパスは，必ず $Z$ に含まれない合流点をもつ.
+  よって $X$ と $Y$ は $Z$ によって有向分離されて
+  \[
+    X \perp Y_x \mid Z
+  \]
+  が証明される.
+  \textbf{$Y$ が $X$ の子孫であるとき:}
+  ツインネットワーク $G^*$ を考える.
+\end{proof}
+
+ここまでで主要なRubin流の仮定をPearl流の考え方で整理することができた.
+しかしポテンシャルアウトカムは流派の壁を越えて重要な概念である.
+次の\textbf{因果の梯子}はJudea Pearl先生が提唱した因果推論の問題を整理する概念である.
+
+\noindent \textbf{\underline{因果の梯子}}
+
+
+
+
+\newpage
 \begin{thebibliography}{9}
   \bibitem{Pearl2009}
   J. Pearl著，黒木学訳，『統計的因果推論 ―モデル・推論・推測―』，共立出版，2009.
@@ -2128,6 +2386,9 @@ do計算法により次のフロントドア基準が導かれる.
 
   \bibitem{Miyakawa1998}
   宮川雅巳著，『グラフィカルモデル』，朝倉書店，1997.
+
+  \bibitem{PearlMackenzie2022}
+  J. Pearl, D. Mackenzie著，夏目大訳，『因果推論の科学 「なぜ？」の問いにどう答えるか』，文藝春秋，2022.
 
   \bibitem{Lauritzen1990Networks}
   S. L. Lauritzen, A. P. Dawid, B. N. Larsen, and H. G. Leimer, ``Independence properties of directed Markov fields,'' \textit{Networks}, Vol.~20, No.~5, pp.~491--505, 1990.
