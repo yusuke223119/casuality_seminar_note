@@ -1726,7 +1726,13 @@ $G'$ は定義から，$F_i = idle$ であれば $G$ に，$F_i = x_i$ であれ
 \begin{prop}{バックドア基準}
   確率変数 $X_1, \dots, X_n$，頂点集合 $V = \{X_1, \dots, X_n\}$，DAG $G = (V, E)$ で $G$ は構造的因果モデルとする.
   $Y, X \in V$ について，$X$ と $Y$ の道であり，$X$ への矢線がある道を\textbf{バックドアパス}という.
-  $V$ の部分集合 $Z$ がすべてのバックドアパスをブロックするとき，$Z$ は\textbf{バックドア基準}を満たすという.このとき，
+  $V$ の部分集合 $Z$ が次の1,2を満足するとき，$Z$ は\textbf{バックドア基準}を満たすという.
+
+  \begin{enumerate}
+  \item すべてのバックドアパスをブロックする
+  \item $Z$は$X$の子孫を含まない
+  \end{enumerate}
+  このとき，
   \begin{equation}
     P(Y \mid do(X=x)) = \sum_z P(Y \mid X=x, Z=z) P(Z=z)
   \end{equation}
@@ -2147,7 +2153,7 @@ do計算法により次のフロントドア基準が導かれる.
 が成り立つ．
 ポテンシャルアウトカムは，$X=x$ であったならば $Y$ がとったであろう値という反事実的な量である．これは，必ずしも実際に観察される量ではない．しかし，次の場合は，ポテンシャルアウトカムが実際に観察される．
 
-\begin{prop}{一致性}
+\begin{prop}[label={prop:corresponding}]{一致性}
   構造的因果モデル $G = (V, E)$ と， $X, Y \in V$ について，ポテンシャルアウトカム $Y_x(U)$ を考える．ただし， $U = (\varepsilon_1, \dots, \varepsilon_n)$ である．このとき，任意の $U=u$ となる $u$ について，
   \begin{equation}
     X(u) = x \Rightarrow Y(u) = Y_x(u)
@@ -2334,7 +2340,7 @@ $X$ と $Y_x$ が独立である（RCT）とき，
   \begin{equation}
     X = f_X(pa(X))
   \end{equation}
-  であるから，任意の $W \in V \cup de(X_k^*) \cup U$ について，
+  である.ただし$pa(X)$は$G^*$上での親である.よって任意の $W \in V \cup de(X_k^*) \cup U$ について，
   \begin{equation}
     X \perp W \mid pa(X)
   \end{equation}
@@ -2344,34 +2350,284 @@ $X$ と $Y_x$ が独立である（RCT）とき，
   $G^*$ における $\varepsilon_i$ の非子孫は， $nd(X_i) \cup nd(X_i^*)$ であって， $\varepsilon_i$ それらと独立であるから，任意の $V \cup de(X_k^*) \cup U$ の元について局所マルコフ性が成り立ち，ツインネットワークは，ベイジアンネットワークである．
 \end{proof}
 
-\begin{prop}{}
-  DAG $G = (V, E)$, $V = \{X_1, \dots, X_n\}$, $X, Y \in V$ として， $Z$ は $X$ に入る矢線を含むパスについてバックドア基準を満たすとする．このとき，
+\begin{thm}{}
+  DAG $G = (V, E)$, $V = \{X_1, \dots, X_n\}$, $X, Y \in V$ として，
+  $Z$ は $X$ に入る矢線を含むパスについてバックドア基準を満たすとする．このとき，
   \begin{equation}
     X \perp Y_x(U) \mid Z
+  \end{equation}
+  が成り立つ．
+\end{thm}
+
+\begin{proof}
+  \textbf{$Y$ が $X$ の子孫でないとき:}
+  $Y_x = Y$ より，$X \perp Y \mid Z$ を示せばよい．
+  $X$ に入る矢線を含む $X$ と $Y$ のパスはすべて $Z$ でブロックされる．
+  一方，$X$ から $Y$ への有向道が存在しない．よって，$X$ から出る矢線を含む $X$ と $Y$ のパスはすべて空集合でブロックされ，$Z$ は $X$ の子孫を含まず，$X$ から出る矢線を含む $X$ と $Y$ のパスは，必ず，$Z$ に含まれない合流点を持つ．よって，$X$ と $Y$ は $Z$ によって有向分離されて，
+  \begin{equation}
+    X \perp Y_x \mid Z
+  \end{equation}
+  が証明される．
+
+  \textbf{$Y$ が $X$ の子孫であるとき:}
+  ツインネットワーク $G^*$ を考える．
+  ここで，$G^* = (V^*, F)$，$V^* = V \cup de(X^*) \cup U$ として，
+  \begin{equation}
+    S = V^* \setminus \{de(X) \cup de(X^*)\}
+  \end{equation}
+  とおく．さて，$S$ の任意の元は $X$ または $X^*$ の子孫ではないため，$de(X)$, $de(X^*)$ の元から $S$ の元への矢線は存在しない．
+  ゆえに，$de(X)$ の元と $de(X^*)$ の元のパスは，少なくとも $S$ の元から $de(X)$ の元，$de(X^*)$ の元に入る矢線を含まなければならない．
+  \begin{equation}
+    de(X) \leftarrow S - \dots - S \rightarrow de(X^*)
+  \end{equation}
+  さて，$p$ を $X$ と $Y_x = Y^*$ を結ぶパスとする．
+ 
+  \begin{enumerate}[label={(\roman*)}, leftmargin=*]
+    \item $p$ が $de(X) \leftarrow S \rightarrow de(X)$ の経路を含むとき，
+    $Y_x \in de(X^*)$ より，
+    \begin{equation}
+      de(X) \leftarrow S \rightarrow de(X) \leftarrow S
+    \end{equation}
+    の経路を含む必要がある．
+    ここで $de(X)$ は有向道のみを持つグラフであるから，少なくとも一つの合流点を持つ．
+    \begin{equation}
+      S_1 \rightarrow \underbrace{X_1 \rightarrow \dots \rightarrow X_k}_{de(X)} \leftarrow S
+    \end{equation}
+    さらに，この合流点は $X$ の子孫であるから，$Z$ に含まれない．つまり，この道は $Z$ でブロックされる．
+
+    \item $p$ が $de(X^*) \leftarrow S \rightarrow de(X^*)$ の経路を含むとき，
+    (ⅰ) と同様に考えれば，この道は $Z$ でブロックされる．
+
+    \item $p$ が $X \rightarrow de(X) \leftarrow S \rightarrow de(X^*) \rightarrow Y_x$ であるとき，
+    $p$ は $X$ の子孫に合流点を持つ．
+    \begin{equation}
+      X \rightarrow \underbrace{X_1 \rightarrow \dots \rightarrow X_k}_{de(X)} \leftarrow S
+    \end{equation}
+    よって，この道は $Z$ でブロックされる．
+
+    \item $p$ が $X \leftarrow S \rightarrow de(X^*) \rightarrow Y_x$ であるとき，
+    この経路に含まれる $de(X^*)$ の要素を $X_1^*, \dots, X_k^*$ とおく．さて，$G^*$ の定義により，グラフ $G$ には，$X$ と $Y$ の経路，
+    \begin{equation}
+      X \leftarrow S \rightarrow \underbrace{X_1 \rightarrow \dots \rightarrow X_k}_{de(X)} \rightarrow Y
+    \end{equation}
+    が存在する．これは $X$ に入る矢印を含む，$X$ と $Y$ のバックドアパスであるために，$Z$ によってブロックされる．ここで，$X_1, \dots, X_k, Y$ は $X$ の子孫であるため，$Z$ に含まれない．したがって，経路
+    \begin{equation}
+      X \leftarrow S \rightarrow \underbrace{X_1^* \rightarrow \dots \rightarrow X_k^*}_{de(X^*)} \rightarrow Y
+    \end{equation}
+    も同じ集合 $Z$ によってブロックされる． 
+  \end{enumerate}
+
+  以上により，いずれのパスも $Z$ によってブロックされており，$X$ と $Y_x$ は $Z$ によって有向分離されているため，定理~\ref{thm:global_markov} より，
+  \begin{equation}
+    X \perp Y_x \mid Z
+  \end{equation}
+  が成り立つ．
+\end{proof}
+
+\subsubsection*{因果の梯子}
+
+因果の梯子は物事の因果関係を理解する能力を3つの段階に分けて分類した，思考のフレームワークである．
+Judea Pearlが提唱し，解きたい問いがどの段階の能力を必要とするか分類することができる．
+
+\noindent\textbf{第1段：関連付け}
+\begin{itemize}
+    \item 何ができるか：見ること，観察すること
+    \item 発する問い：$X$を見たら何がわかるか．$X$を見たときに，$Y$に対する信念はどう変わるか．
+    \item 数学的表現：$P(Y \mid X)$
+\end{itemize}
+
+\noindent\textbf{第2段：介入}
+\begin{itemize}
+    \item 何ができるか：行動すること，介入すること
+    \item 発する問い：$X$をすればどうなるか. $X$に介入すれば，$Y$はどう変わるか．
+    \item 数学的表現：$P(Y \mid do(X=x))$
+\end{itemize}
+
+\noindent\textbf{第3段：反事実}
+\begin{itemize}
+    \item 何ができるか：想像すること，過去を振り返ること．
+    \item 発する問い：もしこうしていれば，どうなったか. $X$が起きなかったらどうなったか．
+    \item 数学的表現：$P(Y_x=y \mid X=x', Y=y')$
+\end{itemize}
+
+次の反事実についての確率は因果の梯子の第3段を記述する確率である．
+
+\begin{defn}{必要性・十分性・必要十分性}
+  $X, Y$ をともに二値 $\{0, 1\}$ をとる確率変数，$Y_x$ をポテンシャルアウトカムとする．
+  \begin{enumerate}[label={(\roman*)}, leftmargin=*]
+  \item PN
+  \begin{equation}
+    PN = P(Y_0=0 \mid Y=1, X=1)
+  \end{equation}
+  この PN を必要性の確率という．
+  \item PS
+  \begin{equation}
+    PS = P(Y_1=1 \mid Y=0, X=0)
+  \end{equation}
+  この PS を十分性の確率という．
+  \item PNS
+  \begin{equation}
+    PNS = P(Y_1=1, Y_0=0)
+  \end{equation}
+  この PNS を必要十分性の確率という． 
+  \end{enumerate}
+\end{defn}
+
+\begin{prop}{}
+  \begin{equation}
+    PNS = P(Y=1, X=1) \cdot PN + P(Y=0, X=0) \cdot PS
   \end{equation}
   が成り立つ．
 \end{prop}
 
 \begin{proof}
-  \textbf{$Y$ が $X$ の子孫でないとき:}
-  $Y_x = Y$ より， $X \perp Y \mid Z$ を示せばよい．
-  $X$ に入る矢線を含む $X$ と $Y$ のパスはすべて $Z$ でブロックされる．
-  一方，$Y$ が $X$ の子孫でないため $X$ から $Y$ への有向道が存在しない．
-  よって， $X$ から出る矢線を含む $X$ と $Y$ のパスはすべて空集合でブロックされ， $Z$ は $X$ の子孫を含まず， $X$ から出る矢線を含む $X$ と $Y$ のパスは，必ず $Z$ に含まれない合流点をもつ.
-  よって $X$ と $Y$ は $Z$ によって有向分離されて
-  \[
-    X \perp Y_x \mid Z
-  \]
-  が証明される.
-  \textbf{$Y$ が $X$ の子孫であるとき:}
-  ツインネットワーク $G^*$ を考える.
+  一致性により，
+  \begin{align}
+    P(Y=1, X=1) \cdot PN &= P(Y_0=0, Y=1 \mid X=1) P(X=1) \\
+    &= P(Y_0=0, Y_1=1, X=1)
+  \end{align}
+  \begin{align}
+    P(Y=0, X=0) \cdot PS &= P(Y_1=1, Y=0 \mid X=0) P(X=0) \\
+    &= P(Y_1=1, Y_0=0, X=0)
+  \end{align}
+  したがって，
+  \begin{align}
+    PNS &= P(Y_0=0, Y_1=1) \\
+    &= P(Y_0=0, Y_1=1, X=1) + P(Y_0=0, Y_1=1, X=0) \\
+    &= P(Y=1, X=1) \cdot PN + P(Y=0, X=0) \cdot PS
+  \end{align}
+  を得る．
 \end{proof}
 
-ここまでで主要なRubin流の仮定をPearl流の考え方で整理することができた.
-しかしポテンシャルアウトカムは流派の壁を越えて重要な概念である.
-次の\textbf{因果の梯子}はJudea Pearl先生が提唱した因果推論の問題を整理する概念である.
+\begin{prop}[label={prop:Pearl-Tian}]{Pearl-Tian Bound}
+  $X, Y$ をともに二値 $\{0, 1\}$ をとる確率変数，$Y_x$ をポテンシャルアウトカムとする．
+  必要性の確率 $PN$ について次の不等式が成り立つ．
+  \begin{equation}
+    \max \left\{ 0, \frac{P(Y=1) - P(Y_0=1)}{P(X=1, Y=1)} \right\} \leq PN \leq \min \left\{ 1, \frac{P(Y_0=0) - P(X=0, Y=0)}{P(X=1, Y=1)} \right\}
+  \end{equation}
+\end{prop}
 
-\noindent \textbf{\underline{因果の梯子}}
+\begin{proof}
+  \begin{align}
+    P(Y_0=0) &= P(Y_0=0, Y=1, X=1) + P(Y_0=0, Y=1, X=0) \\
+    &\quad + P(Y_0=0, Y=0, X=1) + P(Y_0=0, Y=0, X=0) \\
+    &= P(Y_0=0 \mid Y=1, X=1)P(Y=1, X=1) \\
+    &\quad + P(Y_0=0 \mid Y=1, X=0)P(Y=1, X=0) \\
+    &\quad + P(Y_0=0 \mid Y=0, X=1)P(Y=0, X=1) \\
+    &\quad + P(Y_0=0 \mid Y=0, X=0)P(Y=0, X=0)
+  \end{align}
+  ここで命題~\ref{prop:corresponding}より，
+  \begin{align}
+    P(Y_0=0 \mid Y=1, X=0) &= 0 \\
+    P(Y_0=0 \mid Y=0, X=0) &= 1
+  \end{align}
+  であるため，
+  \begin{align}
+    P(Y_0=0) &= P(Y_0=0 \mid Y=1, X=1)P(Y=1, X=1) \\
+    &\quad + P(Y_0=0, Y=0, X=1) + P(Y=0, X=0)
+  \end{align}
+  となる．ゆえに，
+  \begin{equation}
+    PN = \frac{P(Y_0=0) - P(Y_0=0 \mid Y=0, X=1)P(Y=0, X=1) - P(Y=0, X=0)}{P(Y=1, X=1)}
+  \end{equation}
+  が導かれる．ここで
+  \begin{equation}
+    0 \leq P(Y_0=0 \mid Y=0, X=1) \leq 1
+  \end{equation}
+  より，$P(Y_0=0 \mid Y=0, X=1)=1, P(Y_0=0 \mid Y=0, X=1)=0$をそれぞれ代入することで，以下の不等式を得る.
+  \begin{align}
+    PN &\geq \frac{P(Y_0=0) - P(Y=0, X=1) - P(Y=0, X=0)}{P(Y=1, X=1)} \\
+    &= \frac{P(Y_0=0) - P(Y=0)}{P(Y=1, X=1)} \\
+    &= \frac{(1 - P(Y_0=1)) - (1 - P(Y=1))}{P(Y=1, X=1)} \\
+    &= \frac{P(Y=1) - P(Y_0=1)}{P(Y=1, X=1)} \\
+    PN &\leq \frac{P(Y_0=0) - P(Y=0, X=0)}{P(Y=1, X=1)}
+  \end{align}
+  さらに $0 \leq PN \leq 1$ も考慮すれば求める不等式を得る．
+\end{proof}
+
+より一般的に，反事実の確率は，線形計画問題に帰着できる．
+$i, j, k \in \{0, 1\}$ として，
+\begin{equation}
+  p_{ijk} = P(Y_0=i, Y_1=j, X=k)
+\end{equation}
+とおく．ここで，介入と観察を何らかの方法で推定できたとしよう．このとき，一致性により，
+\begin{equation}
+  P(Y_0=i, Y_1=j, X=k) = P(Y_0=i, Y_1=j, X=k, Y=Y_k)
+\end{equation}
+であることに注意すると，$p_{ijk}$についての制約は次で書ける．
+
+\begin{itemize}
+  \item{\textbf{観察についての制約}}
+  \begin{align}
+    P(X=0, Y=0) &= P(Y_0=i, Y_1=j, X=0, Y=Y_0=0) \\
+    &= P(Y_0=0, Y_1=j, X=0) \\
+    &= p_{010} + p_{000}
+  \end{align}
+  \begin{align}
+    P(X=0, Y=1) &= p_{100} + p_{110} \\
+    P(X=1, Y=0) &= p_{001} + p_{101}
+  \end{align}
+
+  \item{\textbf{介入についての制約}}
+  \begin{align}
+    P(Y_0=0) &= p_{000} + p_{001} + p_{010} + p_{011} \\
+    P(Y_1=0) &= p_{010} + p_{011} + p_{110} + p_{111}
+  \end{align}
+
+  \item{\textbf{確率としての制約}}
+  \begin{equation}
+    \sum_{i,j,k=0}^1 p_{ijk} = 1, \quad p_{ijk} \geq 0
+  \end{equation}
+\end{itemize}
+
+この6本の線形等式制約と，すべての確率が0より大きいという不等式制約を実行可能領域 $\mathcal{F}$ とする．
+この定式化により，反事実の確率はそれぞれ，
+\begin{align}
+  PN &= \frac{P(Y_0=0, X=1, Y=1)}{P(X=1, Y=1)} \\
+  &= \frac{P(Y_0=0, Y_1=1, X=1)}{P(X=1, Y=1)} = \frac{p_{011}}{P(X=1, Y=1)}
+\end{align}
+\begin{equation}
+  PS = \frac{P(Y_1=1, X=0, Y=0)}{P(X=0, Y=0)} = \frac{p_{010}}{P(X=0, Y=0)}
+\end{equation}
+\begin{equation}
+  PNS = p_{010} + p_{011}
+\end{equation}
+と表せるため，それぞれ実行可能領域 $\mathcal{F}$ 上の制約付き最大値・最小値を計算すれば，PN, PS, PNSについての不等式を得る．
+これは，与えられた条件の中で最も狭い範囲の不等式である．
+実は，命題~\ref{prop:Pearl-Tian}のPearl-Tian BoundはPNの最もシャープな不等式である．
+
+\begin{thm}{Balk \& Pearl (1994)}
+  $X, Y$ をともに二値 $\{0, 1\}$ をとる確率変数，$Y_x$ をポテンシャルアウトカムとする．
+  PN, PS, PNSの最も狭い範囲の不等式は，次で与えられる．
+  \begin{equation}
+    \max \left\{ \begin{array}{c} 0 \\ P(Y_1=1) - P(Y_0=1) \\ P(Y=1) - P(Y_0=1) \\ P(Y_1=1) - P(Y=1) \end{array} \right\} \leq PNS \leq \min \left\{ \begin{array}{c} P(Y_1=1) \\ P(Y_0=0) \\ P(X=0, Y=0) + P(X=1, Y=1) \\ P(Y_1=1) - P(Y_0=1) + P(X=1, Y=0) + P(X=0, Y=1) \end{array} \right\}
+  \end{equation}
+  \begin{equation}
+    \max \left\{ \begin{array}{c} 0 \\ \frac{P(Y=1) - P(Y_0=1)}{P(X=1, Y=1)} \end{array} \right\} \leq PN \leq \min \left\{ \begin{array}{c} 1 \\ \frac{P(Y_0=0) - P(Y=0, X=0)}{P(Y=0, X=0)} \end{array} \right\}
+  \end{equation}
+  \begin{equation}
+    \max \left\{ \begin{array}{c} 0 \\ \frac{P(Y_1=1) - P(Y=1)}{P(Y=0, X=0)} \end{array} \right\} \leq PS \leq \min \left\{ \begin{array}{c} 1 \\ \frac{P(Y_1=1) - P(Y=1, X=1)}{P(X=0, Y=0)} \end{array} \right\}
+  \end{equation}
+\end{thm}
+
+\begin{proof}
+  参考文献\cite{TianPearl2000}を参照せよ.
+\end{proof}
+
+反事実の確率は，一般的に一点に識別することは出来ず，範囲で与えられる．
+しかし，次の仮定の下で識別可能であることが知られている．
+
+\begin{thm}{単調性}
+  $X, Y$ をともに二値 $\{0, 1\}$ をとる確率変数，$Y_x(U)$ をポテンシャルアウトカムとする．
+  ポテンシャルアウトカム $Y_1(U), Y_0(U)$ と任意の$U=u$について，
+  \begin{equation}
+    Y_1(u) \geq Y_0(u)
+  \end{equation}
+  が成り立つとき，
+  \begin{equation}
+    PNS = P(Y_1=1) - P(Y_0=1)
+  \end{equation}
+\end{thm}
 
 
 
@@ -2395,6 +2651,9 @@ $X$ と $Y_x$ が独立である（RCT）とき，
 
   \bibitem{shpitser2006}
   I. Shpitser and J. Pearl, ``Identification of Joint Causal Effects in the Graphs with Confounded Joint Effects,'' in \textit{Proceedings of the 21st National Conference on Artificial Intelligence (AAAI-06)}, 2006, pp. 1219--1226.
+
+  \bibitem{TianPearl2000}
+  J. Tian and J. Pearl, ``Probabilities of Causation: Bounds and Identification,'' \textit{Proceedings of the Sixteenth Conference on Uncertainty in Artificial Intelligence}, pp.~589--598, 2000.
 
   \bibitem{stolley1991}
   P. D. Stolley, ``When genius errs: R.A. Fisher and the lung cancer controversy,'' \textit{American Journal of Epidemiology}, vol. 133, no. 5, pp. 416--425, 1991.
