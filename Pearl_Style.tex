@@ -2618,19 +2618,992 @@ $i, j, k \in \{0, 1\}$ として，
 しかし，次の仮定の下で識別可能であることが知られている．
 
 \begin{thm}{単調性}
-  $X, Y$ をともに二値 $\{0, 1\}$ をとる確率変数，$Y_x(U)$ をポテンシャルアウトカムとする．
-  ポテンシャルアウトカム $Y_1(U), Y_0(U)$ と任意の$U=u$について，
-  \begin{equation}
-    Y_1(u) \geq Y_0(u)
-  \end{equation}
-  が成り立つとき，
-  \begin{equation}
-    PNS = P(Y_1=1) - P(Y_0=1)
-  \end{equation}
+  ポテンシャルアウトカム $Y_1(U),Y_0(U)$ が
+  \[
+    Y_1(u)\ge Y_0(u)
+  \]
+  を満たす（単調性が成り立つ）とする。このとき
+  \[
+    \mathrm{PNS} = P(Y_1=1)-P(Y_0=1)
+  \]
+  である。
+
+  さらに，
+  \begin{align*}
+    \mathrm{PN} &= \frac{P(X=0,Y=1)+P(X=1,Y=1)-P(Y_0=1)}{P(X=1,Y=1)} \\
+    \mathrm{PS} &= \frac{P(X=0,Y=0)+P(X=1,Y=0)-P(Y_1=0)}{P(X=0,Y=0)}
+  \end{align*}
+  が成り立つ。
 \end{thm}
 
+\begin{proof}
+  単調性より
+  \[
+    P(Y_1=0,Y_0=1)=0
+  \]
+  である。
+
+  したがって
+  \[
+    p_{101}=p_{100}=0
+  \]
+  となる。
+
+  よって，各確率は
+  \begin{align*}
+    P(X=0,Y=0) &= p_{010}+p_{000},\\
+    P(X=0,Y=1) & =p_{110},\\
+    P(X=1,Y=0) & =p_{001},\\
+    P(X=1,Y=1) &= p_{011}+p_{111},\\
+    P(Y_0=1) &= p_{110}+p_{111},\\
+    P(Y_1=0)&= p_{000}+p_{001}.
+  \end{align*}
+
+  これらをまとめると
+  \[
+    \begin{pmatrix}
+      P(X=0,Y=0)\\
+      P(X=0,Y=1)\\
+      P(X=1,Y=0)\\
+      P(X=1,Y=1)\\
+      P(Y_0=1)\\
+      P(Y_1=0)
+    \end{pmatrix}
+    =
+    \begin{pmatrix}
+      1&0&1&0&0&0\\
+      0&0&0&0&1&0\\
+      0&1&0&0&0&0\\
+      0&0&0&1&0&1\\
+      0&0&0&0&1&1\\
+      1&1&0&0&0&0
+    \end{pmatrix}
+    \begin{pmatrix}
+      p_{000}\\
+      p_{001}\\
+      p_{010}\\
+      p_{011}\\
+      p_{110}\\
+      p_{111}
+    \end{pmatrix}.
+  \]
+
+  係数行列の逆行列を計算すると
+  \[
+    \begin{pmatrix}
+      0&0&-1&0&0&1\\
+      0&0&1&0&0&0\\
+      1&0&1&0&0&-1\\
+      0&1&0&1&-1&0\\
+      0&1&0&0&0&0\\
+      0&-1&0&0&1&0
+    \end{pmatrix}
+  \]
+  となる。
+
+  したがって
+  \begin{align*}
+  p_{011} & =P(X=0,Y=1) + P(X=1,Y=1) - P(Y_0=1),\\
+  p_{010} &= P(X=0,Y=0) + P(X=1,Y=0) - P(Y_1=0)
+  \end{align*}
+
+  一方，
+  \[
+  \mathrm{PN}
+  =
+  \frac{p_{011}}{P(X=1,Y=1)},
+  \qquad
+  \mathrm{PS}
+  =
+  \frac{p_{010}}{P(X=0,Y=0)}
+  \]
+  より
+  \begin{align*}
+    \mathrm{PN} &= \frac{P(X=0,Y=1) + P(X=1,Y=1) - P(Y_0=1)}{P(X=1,Y=1)}\\
+    \mathrm{PS} &= \frac{P(X=0,Y=0) + P(X=1,Y=0) - P(Y_1=0)}{P(X=0,Y=0)}
+  \end{align*}
+  を得る。
+
+  さらに
+  \[
+    \mathrm{PNS} = p_{011}+p_{010}
+  \]
+  であるから，
+  \begin{align*}
+    \mathrm{PNS} &= P(X=0,Y=1) + P(X=0,Y=0) + P(X=1,Y=1) + P(X=1,Y=0) - P(Y_0=1) - P(Y_1=0)\\
+    &= 1 - P(Y_0=1) - P(Y_1=0)\\
+    &= P(Y_1=1)-P(Y_0=1)
+  \end{align*}
+\end{proof}
+
+\newpage
+
+\section{因果探索}
+
+第6章まではDAGが与えられている下での因果推論の理論を展開してきた。しかし，多くの場合DAGは未知である。本章ではデータからDAGを推定する手法について扱う。しかし，データからのDAGの探索は，後に述べる理由で困難であり，実務としては分析対象のドメイン知識に大きく依存する。
+
+\begin{prop}
+  頂点の数が $n$ のDAGの総数を $a_n$ とすると，
+  \[
+    \log_2 a_n=\Theta(n^2)
+  \]
+  が成り立つ。ただし，数列 $\{x_n\}$ について，$\Theta(n^2)$ とは，
+  \[
+    y_n=O(n^2),\quad
+    z_n=O(n^2)
+  \]
+  かつ，
+  \[
+    y_n\le x_n\le z_n
+  \]
+  となる数列 $\{y_n\},\{z_n\}$ が存在することである。
+\end{prop}
+
+\begin{proof}
+  グラフの個数は，考えられる隣接行列の個数を考えることと同等である。
+
+  上界を導出しよう。有向・無向に関係なく，考えられる隣接行列の総数は，対角以外の成分の $0,1$ の2通りを考えればよく，
+  \[
+    2^{n(n-1)}
+  \]
+  と求められる。
+
+  下界を導出しよう。今，頂点のトポロジカルな順序を固定したDAGのみを考えると，隣接行列は狭義三角行列に制限されるため，下三角成分の $0,1$ の2通りのみ考えればよく，
+  \[
+    2^{\frac{n(n-1)}{2}}
+  \]
+  と求められる。
+\end{proof}
+
+この命題の結果より，頂点の個数 $n$ についてDAGの総数は超指数的に増加することが分かる。したがって，計算機による全探索は実質的に不可能である。
+
+一方で，無限の計算資源があったとしても因果探索は困難である。
+
+\begin{defn}{マルコフ等価性}
+  $V=\{X_1,\ldots,X_n\}$ を頂点とするベイジアンネットワーク
+  $G_1,G_2$ と，任意の頂点 $X_i,X_j$ と
+  $S\subset V$ について，
+  \[
+    G_1\text{で }S\text{ は }X_i\text{ と }X_j\text{ を有向分離する}
+    \iff
+    G_2\text{で }S\text{ は }X_i\text{ と }X_j\text{ を有向分離する}
+  \]
+  が成り立つとき，$G_1$ と $G_2$ はマルコフ等価であるという。
+\end{defn}
+
+\begin{exm}{}
+  \begin{enumerate}
+    \item
+      次の2つのDAGはマルコフ等価である。
+      \[
+        X \to Y
+      \]
+      \[
+        Y \to X
+      \]
+
+    \item
+      次の3つのDAGは互いにマルコフ等価である。
+      \[
+        X\to Z\to Y,
+      \]
+      \[
+        X\leftarrow Z\leftarrow Y,
+      \]
+      \[
+        X\leftarrow Z\to Y
+      \]
+      実際，すべてのグラフで
+      \[
+        X \perp Y \mid Z
+      \]
+      が成り立つ。
+  \end{enumerate}
+\end{exm}
+
+このマルコフ等価性は因果探索の難しさを象徴する性質である。確率分布からは因果構造を特定することは難しい。そこで，マルコフ等価性を持つグラフの同値類であるマルコフ等価類を識別する手法が開発されてきた。
+
+\begin{defn}{マルコフ等価類}
+  頂点を
+  \[
+    V=\{X_1,\ldots,X_n\}
+  \]
+  とするDAG全体の集合を $\mathcal{D}$ とおく。
+
+  $\mathcal{D}$ 上の同値関係 $\sim$ を
+  \[
+    G_1\sim G_2
+    \iff
+    G_1\text{ と }G_2\text{ がマルコフ等価}
+  \]
+  により定義する。
+
+  このとき，商集合 $\mathcal{D}/\sim$ の元をマルコフ等価類という。代表元を $D$ とするとき，対応するマルコフ等価類を
+  \[
+    [D]
+  \]
+  と表す。
+\end{defn}
+
+\begin{defn}{CPDAG}
+  頂点を $V=\{X_1,\ldots,X_n\}$ とするDAG全体の集合 $\mathcal{D}$ について考える。
+  一つのマルコフ等価類 $[D]$ について，$[D]$ の元を
+  \[
+    D'=(V,E')
+  \]
+  とおく。
+
+  \[
+    D^*=
+    \left(
+      V,
+      \bigcup_{D'\in [D]} E'
+    \right)
+  \]
+  としたとき，$D^*$ をCPDAG（complete partial DAG）という。
+\end{defn}
+
+\begin{exm}{}
+  次の2つのDAG
+  \[
+    X_1\to X_2\leftarrow X_3\to X_4
+  \]
+  \[
+    X_1\to X_2\leftarrow X_3\leftarrow X_4
+  \]
+  はマルコフ等価であり，CPDAGは
+  \[
+    X_1\to X_2\leftarrow X_3 - X_4
+  \]
+  である。
+\end{exm}
+
+\begin{thm}{Verma-Pearlの定理}
+  頂点を $V$ とする2つのDAG $G_1,G_2$ がマルコフ等価であることの必要十分条件は，次の二つを同時に満たすことである。
+  \begin{enumerate}
+    \item
+      $G_1$ と $G_2$ のスケルトン構造が等しい。
+
+    \item
+      $G_1$ と $G_2$ は同一の $V$ 字合流点を持つ。
+  \end{enumerate}
+\end{thm}
+\begin{proof}
+  参考文献\cite{verma1990}を参照せよ。
+\end{proof}
+因果探索では，次の仮定が置かれることが多い。
+
+\begin{defn}{忠実性}
+  頂点を $V=\{X_1,\ldots,X_n\}$ とするDAGが忠実性を持つとは，
+  $X_i,X_j\in V$ と $S\subset V$ について，次が成り立つことである。
+  \[
+    X_i\perp X_j\mid S
+    \quad\Rightarrow\quad
+    S\text{ は }X_i\text{ と }X_j\text{ を有向分離する}
+  \]
+\end{defn}
+
+\begin{defn}{PCアルゴリズム}
+  頂点を $V=\{X_1,\ldots,X_n\}$ として，次の手順でグラフ $G_c$ を構成する。
+
+  \begin{enumerate}
+    \item
+      初期状態 $G$ はすべての頂点がつながった無向の完全グラフである。
+
+    \item
+      スケルトン構造の検出
+
+      $X_i,X_j$ の組について独立性検定を行い，独立と判定されれば，
+      $G$ から辺 $X_i-X_j$ を削除する。
+      これをすべての $i,j$ の組で行い，終了後に完成したグラフを
+      \[
+        G_0=(V,E_0)
+      \]
+      とおく。
+
+    \item
+      分離集合の検出とスケルトン構造の確定
+
+      \[
+        \mathrm{Adj}(X_i)
+        =
+        \{X_j\in V\setminus\{X_i\}\mid (X_i,X_j)\in E_0
+        \text{ または }(X_j,X_i)\in E_0\}
+      \]
+      とする。
+
+      $X_i,X_j$ を隣接している頂点，すなわち $X_j\in \mathrm{Adj}(X_i)$ とする。
+      $k\ge 1$ を整数とする。
+
+      $S$ を $\mathrm{Adj}(X_i)$ の要素数 $k$ の部分集合とする。ここで条件付き独立性
+      \[
+        X_i\perp X_j\mid S
+      \]
+      についての検定を行う。
+
+      もし独立と判定されれば，$S$ を
+      \[
+        \mathrm{Sep}(X_i,X_j)\subset 2^V
+      \]
+      に加え，さらに $G_0$ から辺
+      \[
+        X_i-X_j
+      \]
+      を削除する。
+
+      これをすべての $\mathrm{Adj}(X_i)$ の要素数 $k$ の部分集合について行う。
+      さらに，これを $k=1$ から順に行う。
+
+      そして，すべての隣接する頂点について $\mathrm{Sep}(X_i,X_j)$ の計算と辺の削除を行い，
+      グラフを $G_1$ に更新する。
+
+  \item
+    $V$ 字合流点の検出
+
+    $G_1$ において，$X_i$ と $X_j$，$X_j$ と $X_k$ が隣接し，
+    $X_i$ と $X_k$ が隣接していない $X_i,X_j,X_k$ の組を考える。
+
+    もし，
+    \[
+      \{X_j\}\notin \mathrm{Sep}(X_i,X_k)
+    \]
+    であれば，$X_j$ を合流点とするように矢線を引く。
+
+    これをすべての $X_i,X_j,X_k$ の組で行う。
+
+  \item
+    Meek則
+
+    次の $(R1),(R2),(R3)$ をすべての条件を満たす組にくり返し適用する。
+    $X,Y,Z,W\in G_1$ とする。
+
+    \begin{description}
+      \item[(R1)]
+        $X\to Y-Z$ かつ $X$ と $Z$ が非隣接のとき，
+        \[
+          Y-Z
+          \quad\text{を}\quad
+          Y\to Z
+          \quad\text{と書き直す。}
+        \]
+
+      \item[(R2)]
+        $X\to Y\to Z$ かつ $X-Z$ のとき，
+        \[
+          X-Z
+          \quad\text{を}\quad
+          X\to Z
+          \quad\text{と書き直す。}
+        \]
+
+      \item[(R3)]
+        $X-Y\to W,\ X-Z\to W,\ X-W$ かつ $Y$ と $Z$ が非隣接のとき，
+        \[
+          X-W
+          \quad\text{を}\quad
+          X\to W
+          \quad\text{と書き直す。}
+        \]
+    \end{description}
+
+    以上によって得られるグラフを $G_c$ として出力する。
+\end{enumerate}
+
+\[
+\begin{tikzpicture}[>=stealth, node distance=1.5cm]
+  \node (X1) at (0,1) {$X$};
+  \node (Y1) at (-1,0) {$Y$};
+  \node (Z1) at (1,0) {$Z$};
+
+  \draw[->] (X1) -- (Y1);
+  \draw[-] (Y1) -- (Z1);
+
+  \node at (2,0.5) {$\Rightarrow$};
+
+  \node (X2) at (4,1) {$X$};
+  \node (Y2) at (3,0) {$Y$};
+  \node (Z2) at (5,0) {$Z$};
+
+  \draw[->] (X2) -- (Y2);
+  \draw[->] (Y2) -- (Z2);
+\end{tikzpicture}
+\]
+
+\[
+\begin{tikzpicture}[>=stealth, node distance=1.5cm]
+  \node (X1) at (0,1) {$X$};
+  \node (Y1) at (-1,0) {$Y$};
+  \node (Z1) at (1,0) {$Z$};
+
+  \draw[->] (X1) -- (Y1);
+  \draw[->] (Y1) -- (Z1);
+  \draw[-] (X1) -- (Z1);
+
+  \node at (2,0.5) {$\Rightarrow$};
+
+  \node (X2) at (4,1) {$X$};
+  \node (Y2) at (3,0) {$Y$};
+  \node (Z2) at (5,0) {$Z$};
+
+  \draw[->] (X2) -- (Y2);
+  \draw[->] (Y2) -- (Z2);
+  \draw[->] (X2) -- (Z2);
+\end{tikzpicture}
+\]
+
+\[
+\begin{tikzpicture}[>=stealth, node distance=1.7cm]
+  \node (X1) at (0,1.5) {$X$};
+  \node (Y1) at (-1.2,0.4) {$Y$};
+  \node (Z1) at (1.2,0.4) {$Z$};
+  \node (W1) at (0,-1) {$W$};
+
+  \draw[-] (X1) -- (Y1);
+  \draw[-] (X1) -- (Z1);
+  \draw[-] (X1) -- (W1);
+  \draw[->] (Y1) -- (W1);
+  \draw[->] (Z1) -- (W1);
+
+  \node at (2,0.2) {$\Rightarrow$};
+
+  \node (X2) at (4,1.5) {$X$};
+  \node (Y2) at (2.8,0.4) {$Y$};
+  \node (Z2) at (5.2,0.4) {$Z$};
+  \node (W2) at (4,-1) {$W$};
+
+  \draw[-] (X2) -- (Y2);
+  \draw[-] (X2) -- (Z2);
+  \draw[->] (X2) -- (W2);
+  \draw[->] (Y2) -- (W2);
+  \draw[->] (Z2) -- (W2);
+\end{tikzpicture}
+\]
+\end{defn}
+
+\begin{exm}{}
+  次のDAGを考える。
+  \[
+    \begin{tikzpicture}[>=stealth, node distance=1.6cm]
+      \node (X1) at (0,1) {$X_1$};
+      \node (X2) at (0,-1) {$X_2$};
+      \node (X3) at (2,0) {$X_3$};
+      \node (X4) at (4,0) {$X_4$};
+
+      \draw[->] (X1) -- (X3);
+      \draw[->] (X2) -- (X3);
+      \draw[->] (X3) -- (X4);
+    \end{tikzpicture}
+  \]
+
+  このDAGを持つ $X_1,\ldots,X_4$ についてPCアルゴリズムを適用する。
+  以下，図で示す。
+
+  \[
+    \begin{tikzpicture}[>=stealth, node distance=1.7cm]
+      \node at (-0.8,0.8) {$1.$};
+
+      \node (X1) at (0,1) {$X_1$};
+      \node (X2) at (0,-1) {$X_2$};
+      \node (X3) at (2,-1) {$X_3$};
+      \node (X4) at (2,1) {$X_4$};
+
+      \draw[-] (X1) -- (X2);
+      \draw[-] (X1) -- (X3);
+      \draw[-] (X1) -- (X4);
+      \draw[-] (X2) -- (X3);
+      \draw[-] (X2) -- (X4);
+      \draw[-] (X3) -- (X4);
+    \end{tikzpicture}
+  \]
+
+  \[
+    \begin{tikzpicture}[>=stealth, node distance=1.7cm]
+      \node at (-0.8,0.8) {$2.$};
+
+      \node (X1) at (0,1) {$X_1$};
+      \node (X2) at (0,-1) {$X_2$};
+      \node (X3) at (2,-1) {$X_3$};
+      \node (X4) at (2,1) {$X_4$};
+
+      \draw[-] (X1) -- (X4);
+      \draw[-] (X1) -- (X3);
+      \draw[-] (X2) -- (X3);
+      \draw[-] (X2) -- (X4);
+      \draw[-] (X3) -- (X4);
+
+      \node at (1,-2) {$X_1\perp X_2$};
+    \end{tikzpicture}
+  \]
+
+  \[
+    \begin{tikzpicture}[>=stealth, node distance=1.7cm]
+      \node at (-0.8,0.8) {$3.$};
+
+      \node (X1) at (0,1) {$X_1$};
+      \node (X2) at (0,-1) {$X_2$};
+      \node (X3) at (2,-1) {$X_3$};
+      \node (X4) at (2,1) {$X_4$};
+
+      \draw[-] (X1) -- (X3);
+      \draw[-] (X2) -- (X3);
+      \draw[-] (X3) -- (X4);
+
+      \node at (1,-2) {$\mathrm{Sep}(X_1,X_4)=\{X_3\}$};
+      \node at (1,-2.6) {$\mathrm{Sep}(X_2,X_4)=\{X_3\}$};
+    \end{tikzpicture}
+  \]
+    \[
+    \begin{tikzpicture}[>=stealth, node distance=1.7cm]
+      \node at (-0.8,0.8) {$4.$};
+
+      \node (X1) at (0,1) {$X_1$};
+      \node (X2) at (0,-1) {$X_2$};
+      \node (X3) at (2,0) {$X_3$};
+      \node (X4) at (2,1) {$X_4$};
+
+      \draw[->] (X1) -- (X3);
+      \draw[->] (X2) -- (X3);
+      \draw[-] (X3) -- (X4);
+
+      \node at (1,-2) {$\{X_3\}\notin \mathrm{Sep}(X_1,X_2)$};
+    \end{tikzpicture}
+  \]
+
+  \[
+    \begin{tikzpicture}[>=stealth, node distance=1.7cm]
+      \node at (-0.8,0.8) {$5.$};
+
+      \node (X1) at (0,1) {$X_1$};
+      \node (X2) at (0,-1) {$X_2$};
+      \node (X3) at (2,0) {$X_3$};
+      \node (X4) at (2,1) {$X_4$};
+
+      \draw[->] (X1) -- (X3);
+      \draw[->] (X2) -- (X3);
+      \draw[->] (X3) -- (X4);
+    \end{tikzpicture}
+  \]
+
+  次のDAGを考える。
+  \[
+    X_1\to X_2\leftarrow X_3\to X_4
+  \]
+
+  このDAGを持つ $X_1,\ldots,X_4$ についてPCアルゴリズムを適用する。
+  以下，図で示す。
+
+  \[
+    \begin{tikzpicture}[>=stealth, node distance=1.7cm]
+      \node at (-0.8,0.8) {$1.$};
+
+      \node (X1) at (0,1) {$X_1$};
+      \node (X2) at (0,-1) {$X_2$};
+      \node (X3) at (2,-1) {$X_3$};
+      \node (X4) at (2,1) {$X_4$};
+
+      \draw[-] (X1) -- (X2);
+      \draw[-] (X1) -- (X3);
+      \draw[-] (X1) -- (X4);
+      \draw[-] (X2) -- (X3);
+      \draw[-] (X2) -- (X4);
+      \draw[-] (X3) -- (X4);
+    \end{tikzpicture}
+  \]
+
+  \[
+    \begin{tikzpicture}[>=stealth, node distance=1.7cm]
+      \node at (-0.8,0.8) {$2.$};
+
+      \node (X1) at (0,1) {$X_1$};
+      \node (X2) at (0,-1) {$X_2$};
+      \node (X3) at (2,-1) {$X_3$};
+      \node (X4) at (2,1) {$X_4$};
+
+      \draw[-] (X1) -- (X2);
+      \draw[-] (X2) -- (X3);
+      \draw[-] (X3) -- (X4);
+      \draw[-] (X2) -- (X4);
+
+      \node at (1,-2) {$X_1\perp X_3$};
+      \node at (1,-2.6) {$X_1\perp X_4$};
+    \end{tikzpicture}
+  \]
+
+    \[
+    \begin{tikzpicture}[>=stealth, node distance=1.7cm]
+      \node at (-0.8,0.8) {$3.$};
+
+      \node (X1) at (0,1) {$X_1$};
+      \node (X2) at (0,-1) {$X_2$};
+      \node (X3) at (2,-1) {$X_3$};
+      \node (X4) at (2,1) {$X_4$};
+
+      \draw[-] (X1) -- (X2);
+      \draw[-] (X2) -- (X3);
+      \draw[-] (X3) -- (X4);
+
+      \node at (1,-2) {$\mathrm{Sep}(X_2,X_4)=\{X_3\}$};
+    \end{tikzpicture}
+  \]
+
+  \[
+    \begin{tikzpicture}[>=stealth, node distance=1.7cm]
+      \node at (-0.8,0.8) {$4.$};
+
+      \node (X1) at (0,1) {$X_1$};
+      \node (X2) at (0,-1) {$X_2$};
+      \node (X3) at (2,-1) {$X_3$};
+      \node (X4) at (2,1) {$X_4$};
+
+      \draw[->] (X1) -- (X2);
+      \draw[<-] (X2) -- (X3);
+      \draw[-] (X3) -- (X4);
+
+      \node at (1,-2) {$\{X_2\}\notin \mathrm{Sep}(X_1,X_3)$};
+      \node at (1,-2.6) {$\{X_3\}\in \mathrm{Sep}(X_2,X_4)$};
+    \end{tikzpicture}
+  \]
+
+  このグラフは，マルコフ等価類におけるCPDAGである。実際，
+  \[
+    X_1\to X_2\leftarrow X_3\to X_4
+  \]
+  \[
+    X_1\to X_2\leftarrow X_3\leftarrow X_4
+  \]
+  はマルコフ等価であり，CPDAGは
+  \[
+    X_1\to X_2\leftarrow X_3 - X_4
+  \]
+  である。
+\end{exm}
 
 
+PCアルゴリズムは，1,2,3でスケルトン構造を確定し，
+4でV字合流点を確定させる。定理7.7より，
+この時点でマルコフ等価類は確定するが，矛盾のない
+構造を得るために，5のMeek則が適用される。
+
+なお，Meek則は次の定理が証明されている。
+
+\begin{thm}{}
+  Meek則は次の性質を持つ。
+
+  \begin{enumerate}
+    \item[(i) \textbf{健全性}] 
+    
+    Meek則によって決定される辺の向きは，
+    そのマルコフ等価類のすべてのDAGで
+    同じ向きとなる。
+
+    \item[(ii) \textbf{完全性}] 
+
+    $R_1\sim R_3$を適用し尽くすと，
+    それ以上論理的に辺の向きを決めることはできない。
+  \end{enumerate}
+\end{thm}
+\begin{proof}
+  参考文献\cite{meek1995}を参照せよ。
+\end{proof}
+
+\begin{defn}{GES}
+  頂点を$V$とするDAG全体の集合を$\mathcal D$とする。
+
+  このとき，スコア
+  \[
+    S:\mathcal D\longrightarrow\mathbb R
+  \]
+  が次の性質を満たすとする。
+
+  \begin{enumerate}
+    \item
+    $G_1,G_2\in\mathcal D$がマルコフ等価ならば
+    \[
+      S(G_1)=S(G_2).
+    \]
+
+    \item
+    （分解可能性）
+
+    ある関数$s$が存在して，任意のDAG
+    $G\in\mathcal D$について
+    \[
+      S(G)
+      =
+      \sum_{i=1}^{n}
+      s(X_i,\mathrm{pa}(X_i))
+    \]
+    が成り立つ。
+  \end{enumerate}
+
+  さて，(1)より，$S$は頂点を$V$とする
+  マルコフ等価類の集合$\mathcal C$から
+  $\mathbb R$への写像と見なせる。
+
+  このスコア$S$を用いて次の手順で探索する
+  アルゴリズムを
+  GES（Greedy Equivalence Search）
+  という。
+
+  \begin{enumerate}
+    \item
+    辺を全く持たない唯一のDAGに対応する
+    CPDAGを初期状態$G_0$とする。
+
+    \item
+    CPDAG $G_0$に辺を1本追加して得られる
+    CPDAG $G^+$のうち，
+    最もスコア$S(G^+)$が大きいものを選び，
+    $G_0$を更新する。
+
+    スコアの改善がなくなるまで
+    これを繰り返す。
+
+    \item
+    (2)で得られたCPDAGから
+    辺を1本削除して得られる
+    CPDAG $G^-$のうち，
+    最もスコア$S(G^-)$が大きいものを選び，
+    更新する。
+
+    スコアの改善がなくなるまで
+    これを繰り返す。
+  \end{enumerate}
+
+  最後に得られたグラフを出力する。
+
+  なお，GESにおける辺の追加・削除は，
+  CPDAGの制約の下で行われ，
+  その妥当性も検証する必要がある。
+  具体的な基準については省略する。
+
+  さて，GESはスコアが次の性質を満たせば，
+  大標本で真のCPDAGを出力することが
+  知られている。(参考文献\cite{chickering2003})
+\end{defn}
+
+\begin{defn}{局所一貫性}
+  $G$を任意のDAGとし，
+  $G'$を$G$に辺
+  $X_i\rightarrow X_j$
+  を1本追加して得られるDAGとする。
+
+  スコア$S$が局所一貫性を持つとは，
+  大標本極限において次の2条件を満たすことである。
+
+  ただし，
+  $\mathrm{pa}(X_j)$は
+  $G$における$X_j$の親集合とする。
+
+  \begin{enumerate}
+    \item
+    \[
+      X_j\not\!\perp X_i
+      \mid
+      \mathrm{pa}(X_j)
+      \quad\Longrightarrow\quad
+      S(G')>S(G).
+    \]
+
+    \item
+    \[
+      X_j\perp X_i
+      \mid
+      \mathrm{pa}(X_j)
+      \quad\Longrightarrow\quad
+      S(G')<S(G).
+    \]
+  \end{enumerate}
+
+  また，具体的にはBICについては，
+  (1),(2)および分解可能性を満たすことが
+  知られている。
+\end{defn}
+
+次にNOTEARSを紹介しよう。
+NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である。
+次の命題は離散と連続をつなぐ命題である。
+
+\begin{thm}{}
+  頂点集合を$V$とするグラフの重み付き隣接行列を
+  $W$とする。
+
+  $V$を頂点とするグラフがDAGであるための
+  必要十分条件は
+  \[
+    \operatorname{tr}\!\left(e^{W\circ W}\right)=n
+  \]
+  である。
+
+  ただし，
+  $n\times n$行列
+  $A=(a_{ij}),\,B=(b_{ij})$
+  に対して，
+  アダマール積を
+  \[
+    A\circ B=(a_{ij}b_{ij})
+  \]
+  と定義する。
+\end{thm}
+
+\begin{proof}
+  グラフがDAGであるための必要十分条件は，
+  重み付き隣接行列$W$について
+  \[
+    H=W\circ W
+  \]
+  とおいたとき，
+  任意の整数$k\ge1$について
+  \[
+    (H^k)_{ii}=0
+  \]
+  となることである。
+
+  実際，
+  \[
+    (H^k)_{ii}
+    =
+    \sum_{\ell_1,\ldots,\ell_{k-1}=1}^{n}
+    W_{i\ell_1}^{\,2}
+    W_{\ell_1\ell_2}^{\,2}
+    \cdots
+    W_{\ell_{k-1}i}^{\,2}.
+  \]
+
+  重み付き隣接行列の定義より，
+  隣接行列$A=(a_{ij})$を用いて
+  \[
+    W_{ij}=c_{ij}a_{ij}
+    \qquad(c_{ij}\neq0)
+  \]
+  と書ける。
+
+  よって
+  \[
+    \sum_{\ell_1,\ldots,\ell_{k-1}=1}^{n}
+    c_{i\ell_1}^{\,2}
+    c_{\ell_1\ell_2}^{\,2}
+    \cdots
+    c_{\ell_{k-1}i}^{\,2}
+    a_{i\ell_1}\cdots a_{\ell_{k-1}i}
+    =0.
+  \]
+
+  全ての$c_{ij}$について
+  $c_{ij}^2>0$であるから，
+  \[
+    \sum_{\ell_1,\ldots,\ell_{k-1}=1}^{n}
+    a_{i\ell_1}\cdots a_{\ell_{k-1}i}=0.
+  \]
+
+  これは
+  $A^k$の$(i,i)$成分である。
+
+  したがって
+  \[
+    (H^k)_{ii}=0
+    \iff
+    (A^k)_{ii}=0
+    \iff
+    \text{グラフはDAG}
+  \]
+  となる。
+
+  また，
+  \begin{align*}
+    \operatorname{tr}(e^{W\circ W})
+      &=\operatorname{tr}(e^H) \\
+      &=\operatorname{tr}
+      \left(
+      \sum_{k=0}^{\infty}
+      \frac{H^k}{k!}
+      \right) \\
+      &=\sum_{k=0}^{\infty}
+      \frac{\operatorname{tr}(H^k)}{k!} \\
+      &=n+
+      \sum_{k=1}^{\infty}
+      \frac{\operatorname{tr}(H^k)}{k!}.
+  \end{align*}
+
+  ここで
+  \[
+    \operatorname{tr}(e^H)-n
+    =
+    \sum_{k=1}^{\infty}
+    \frac{\operatorname{tr}(H^k)}{k!}
+    \ge0
+  \]
+  である。
+
+  よって
+  \[
+    \operatorname{tr}(e^H)=n
+    \iff
+    \operatorname{tr}(H^k)=0
+    \quad(\forall k\ge1)
+    \iff
+    (H^k)_{ii}=0
+    \quad(\forall i,\forall k\ge1).
+  \]
+
+  以上より
+  \[
+    \operatorname{tr}(e^{W\circ W})=n
+    \iff
+    \text{グラフはDAG}
+  \]
+  が従う。
+\end{proof}
+
+\begin{defn}{NOTEARS}
+  $V=\{X_1,\ldots,X_n\}$を頂点とする
+  グラフ$G$の重み付き隣接行列を
+  $W\in\mathbb{R}^{n\times n}$とする。
+
+  \[
+    h(W)
+    =
+    \operatorname{tr}
+    \!\left(
+      e^{W\circ W}
+    \right)-n
+  \]
+  とおく。
+
+  NOTEARSでは，
+  $W$の推定値を次の制約付き最適化問題の
+  解として求める。
+
+  \[
+    \begin{aligned}
+      \min_{W\in\mathbb{R}^{n\times n}}
+      \quad&
+      \frac{1}{2n}
+      \|X-WX\|_F^2
+      +
+      \lambda\|W\|_1 \\
+      \text{subject to}
+      \quad&
+      h(W)=0.
+    \end{aligned}
+  \]
+
+  ただし，
+  行列$A=(a_{ij})$について
+
+  \[
+    \|A\|_F
+    =
+    \sqrt{\sum_{i,j}a_{ij}^2},
+    \qquad
+    \|A\|_1
+    =
+    \sum_{i,j}|a_{ij}|
+  \]
+
+  はそれぞれFrobeniusノルム，
+  および$\ell_1$ノルムである。
+\end{defn}
 
 \newpage
 \begin{thebibliography}{9}
@@ -2657,5 +3630,38 @@ $i, j, k \in \{0, 1\}$ として，
 
   \bibitem{stolley1991}
   P. D. Stolley, ``When genius errs: R.A. Fisher and the lung cancer controversy,'' \textit{American Journal of Epidemiology}, vol. 133, no. 5, pp. 416--425, 1991.
+
+  \bibitem{verma1990}
+  T. Verma and J. Pearl,
+  ``Equivalence and Synthesis of Causal Models,''
+  in \textit{Proceedings of the Sixth Conference on Uncertainty in Artificial Intelligence (UAI)}, 1990, pp. 255--270.
+
+  \bibitem{spirtes2000}
+  P. Spirtes, C. Glymour, and R. Scheines,
+  \textit{Causation, Prediction, and Search},
+  2nd ed.,
+  MIT Press, 2000.
+
+  \bibitem{meek1995}
+  C. Meek,
+  ``Causal Inference and Causal Explanation with Background Knowledge,''
+  in \textit{Proceedings of the Eleventh Conference on Uncertainty in Artificial Intelligence (UAI)}, 1995, pp. 403--410.
+
+  \bibitem{chickering2002}
+  D. M. Chickering,
+  ``Optimal Structure Identification with Greedy Search,''
+  \textit{Journal of Machine Learning Research},
+  vol. 3, pp. 507--554, 2002.
+
+  \bibitem{chickering2003}
+  D. M. Chickering,
+  ``Optimal Structure Identification with Greedy Search: Proof of Correctness,''
+  in \textit{Proceedings of the Nineteenth Conference on Uncertainty in Artificial Intelligence (UAI)}, 2003, pp. 139--146.
+
+  \bibitem{zheng2018}
+  X. Zheng, B. Aragam, P. Ravikumar, and E. P. Xing,
+  ``DAGs with NO TEARS: Continuous Optimization for Structure Learning,''
+  in \textit{Advances in Neural Information Processing Systems (NeurIPS)}, vol. 31, 2018.
+
 \end{thebibliography}
 \end{document}
