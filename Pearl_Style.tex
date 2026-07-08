@@ -2742,7 +2742,7 @@ $i, j, k \in \{0, 1\}$ として，
 
 第6章まではDAGが与えられている下での因果推論の理論を展開してきた。しかし，多くの場合DAGは未知である。本章ではデータからDAGを推定する手法について扱う。しかし，データからのDAGの探索は，後に述べる理由で困難であり，実務としては分析対象のドメイン知識に大きく依存する。
 
-\begin{prop}
+\begin{prop}{DAGの総数}
   頂点の数が $n$ のDAGの総数を $a_n$ とすると，
   \[
     \log_2 a_n=\Theta(n^2)
@@ -2777,7 +2777,7 @@ $i, j, k \in \{0, 1\}$ として，
 
 この命題の結果より，頂点の個数 $n$ についてDAGの総数は超指数的に増加することが分かる。したがって，計算機による全探索は実質的に不可能である。
 
-一方で，無限の計算資源があったとしても因果探索は困難である。
+一方で，無限の計算資源があったとしても因果探索は次のマルコフ等価性の影響で困難である。
 
 \begin{defn}{マルコフ等価性}
   $V=\{X_1,\ldots,X_n\}$ を頂点とするベイジアンネットワーク
@@ -2845,6 +2845,8 @@ $i, j, k \in \{0, 1\}$ として，
   と表す。
 \end{defn}
 
+次のCPDAGは，マルコフ等価類と一対一対応する部分有向グラフである。
+
 \begin{defn}{CPDAG}
   頂点を $V=\{X_1,\ldots,X_n\}$ とするDAG全体の集合 $\mathcal{D}$ について考える。
   一つのマルコフ等価類 $[D]$ について，$[D]$ の元を
@@ -2878,6 +2880,8 @@ $i, j, k \in \{0, 1\}$ として，
   である。
 \end{exm}
 
+マルコフ等価性の必要十分条件として次の定理が知られている。
+
 \begin{thm}{Verma-Pearlの定理}
   頂点を $V$ とする2つのDAG $G_1,G_2$ がマルコフ等価であることの必要十分条件は，次の二つを同時に満たすことである。
   \begin{enumerate}
@@ -2891,7 +2895,8 @@ $i, j, k \in \{0, 1\}$ として，
 \begin{proof}
   参考文献\cite{verma1990}を参照せよ。
 \end{proof}
-因果探索では，次の仮定が置かれることが多い。
+
+次の\textbf{忠実性}の仮定は因果探索分野における中心的な仮定である。以下のアルゴリズムでは暗に忠実性を仮定する
 
 \begin{defn}{忠実性}
   頂点を $V=\{X_1,\ldots,X_n\}$ とするDAGが忠実性を持つとは，
@@ -2902,6 +2907,10 @@ $i, j, k \in \{0, 1\}$ として，
     S\text{ は }X_i\text{ と }X_j\text{ を有向分離する}
   \]
 \end{defn}
+
+\subsubsection*{制約ベース}
+最初に制約ベースのアルゴリズムとしてPCアルゴリズムを紹介する.
+制約ベースとは条件付き独立性の構造からDAGを復元する方法である.
 
 \begin{defn}{PCアルゴリズム}
   頂点を $V=\{X_1,\ldots,X_n\}$ として，次の手順でグラフ $G_c$ を構成する。
@@ -2978,7 +2987,7 @@ $i, j, k \in \{0, 1\}$ として，
     $X,Y,Z,W\in G_1$ とする。
 
     \begin{description}
-      \item[(R1)]
+      \item[$(R1)$]
         $X\to Y-Z$ かつ $X$ と $Z$ が非隣接のとき，
         \[
           Y-Z
@@ -2987,7 +2996,7 @@ $i, j, k \in \{0, 1\}$ として，
           \quad\text{と書き直す。}
         \]
 
-      \item[(R2)]
+      \item[$(R2)$]
         $X\to Y\to Z$ かつ $X-Z$ のとき，
         \[
           X-Z
@@ -2996,7 +3005,7 @@ $i, j, k \in \{0, 1\}$ として，
           \quad\text{と書き直す。}
         \]
 
-      \item[(R3)]
+      \item[$(R3)$]
         $X-Y\to W,\ X-Z\to W,\ X-W$ かつ $Y$ と $Z$ が非隣接のとき，
         \[
           X-W
@@ -3011,6 +3020,7 @@ $i, j, k \in \{0, 1\}$ として，
 
 \[
 \begin{tikzpicture}[>=stealth, node distance=1.5cm]
+  \node (R1) at (-3,0.5) {$(R1)$};
   \node (X1) at (0,1) {$X$};
   \node (Y1) at (-1,0) {$Y$};
   \node (Z1) at (1,0) {$Z$};
@@ -3031,6 +3041,7 @@ $i, j, k \in \{0, 1\}$ として，
 
 \[
 \begin{tikzpicture}[>=stealth, node distance=1.5cm]
+  \node (R2) at (-3,0.5) {$(R2)$};
   \node (X1) at (0,1) {$X$};
   \node (Y1) at (-1,0) {$Y$};
   \node (Z1) at (1,0) {$Z$};
@@ -3053,6 +3064,7 @@ $i, j, k \in \{0, 1\}$ として，
 
 \[
 \begin{tikzpicture}[>=stealth, node distance=1.7cm]
+  \node (R3) at (-3,0.5) {$(R3)$};
   \node (X1) at (0,1.5) {$X$};
   \node (Y1) at (-1.2,0.4) {$Y$};
   \node (Z1) at (1.2,0.4) {$Z$};
@@ -3290,13 +3302,13 @@ PCアルゴリズムは，1,2,3でスケルトン構造を確定し，
   Meek則は次の性質を持つ。
 
   \begin{enumerate}
-    \item[(i) \textbf{健全性}] 
+    \item[(i)] \textbf{健全性}
     
     Meek則によって決定される辺の向きは，
     そのマルコフ等価類のすべてのDAGで
     同じ向きとなる。
 
-    \item[(ii) \textbf{完全性}] 
+    \item[(ii)] \textbf{完全性}
 
     $R_1\sim R_3$を適用し尽くすと，
     それ以上論理的に辺の向きを決めることはできない。
@@ -3305,6 +3317,29 @@ PCアルゴリズムは，1,2,3でスケルトン構造を確定し，
 \begin{proof}
   参考文献\cite{meek1995}を参照せよ。
 \end{proof}
+
+\underbar{\textbf{課題}}
+
+制約ベースのアルゴリズムはのメリット・デメリットは次の通りである。
+\begin{itemize}
+  \item メリット
+    \begin{itemize}
+      \item 直感的である。
+      \item 独立性検定の手法に自由度があり、パラメトリック、ノンパラメトリックなど柔軟な設計ができる。
+    \end{itemize}
+
+  \item デメリット
+    \begin{itemize}
+      \item 独立性検定を繰り返すため、多重検定問題が生じる。
+      \item 計算時間は指数的であり、疎なデータでなければ計算時間が大きい。
+      \item 1回でも独立性検定の結果が誤っていると全体のグラフに大きく影響する。
+      \item マルコフ等価なグラフを識別できない。
+    \end{itemize}
+  \end{itemize}  
+
+\subsubsection*{スコアベース}
+ここでは，スコアベースのアルゴリズムとしてGESを紹介する。
+スコアベースのアルゴリズムは，DAGについての適合度を評価するスコアを定義し，そのスコアが最大となるDAGを探索する手法である。
 
 \begin{defn}{GES}
   頂点を$V$とするDAG全体の集合を$\mathcal D$とする。
@@ -3315,15 +3350,15 @@ PCアルゴリズムは，1,2,3でスケルトン構造を確定し，
   \]
   が次の性質を満たすとする。
 
-  \begin{enumerate}
-    \item
+  \begin{enumerate}[label=(\arabic*)]
+    \item スコア等価性
+    
     $G_1,G_2\in\mathcal D$がマルコフ等価ならば
     \[
       S(G_1)=S(G_2).
     \]
 
-    \item
-    （分解可能性）
+    \item 分解可能性
 
     ある関数$s$が存在して，任意のDAG
     $G\in\mathcal D$について
@@ -3367,20 +3402,17 @@ PCアルゴリズムは，1,2,3でスケルトン構造を確定し，
     更新する。
 
     スコアの改善がなくなるまで
-    これを繰り返す。
+    これを繰り返し，最終的に得られたCPDAGを出力する。
   \end{enumerate}
+\end{defn}
 
-  最後に得られたグラフを出力する。
-
-  なお，GESにおける辺の追加・削除は，
-  CPDAGの制約の下で行われ，
-  その妥当性も検証する必要がある。
-  具体的な基準については省略する。
+ なお，GESにおける辺の追加・削除は，
+  CPDAGの制約の下で行われるため、辺の追加・削除の妥当性を確認する必要がある。
+  具体的な基準については参考文献\cite{chickering2002lec}を参照せよ。
 
   さて，GESはスコアが次の性質を満たせば，
   大標本で真のCPDAGを出力することが
-  知られている。(参考文献\cite{chickering2003})
-\end{defn}
+  知られている。(参考文献\cite{chickering2002})
 
 \begin{defn}{局所一貫性}
   $G$を任意のDAGとし，
@@ -3414,12 +3446,33 @@ PCアルゴリズムは，1,2,3でスケルトン構造を確定し，
       S(G')<S(G).
     \]
   \end{enumerate}
-
-  また，具体的にはBICについては，
-  (1),(2)および分解可能性を満たすことが
-  知られている。
 \end{defn}
 
+\begin{thm}{}
+  BICはスコア等価性，分解可能性，局所一貫性を満たす.
+\end{thm}
+\begin{proof}
+  参考文献\cite{chickering2002}を参照せよ。
+\end{proof}    
+
+\underbar{\textbf{課題}}
+
+GESのメリット・デメリットは次の通りである。
+\begin{itemize}
+  \item メリット
+    \begin{itemize}
+      \item 貪欲探索であるため，計算時間が比較的短い。
+      \item 大標本極限において真のCPDAGを出力することが知られている。
+    \end{itemize}
+
+  \item デメリット
+    \begin{itemize}
+      \item スコアの設計が難しく、ノンパラメトリックな設定が困難である。
+      \item マルコフ等価なグラフを識別できない。
+    \end{itemize}
+  \end{itemize}
+
+\subsubsection*{勾配ベース}
 次にNOTEARSを紹介しよう。
 NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である。
 次の命題は離散と連続をつなぐ命題である。
@@ -3448,7 +3501,7 @@ NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である�
 
 \begin{proof}
   グラフがDAGであるための必要十分条件は，
-  重み付き隣接行列$W$について
+  重み付き隣接行列$W=(w_{ij})$について
   \[
     H=W\circ W
   \]
@@ -3461,20 +3514,13 @@ NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である�
 
   実際，
   \[
-    (H^k)_{ii}
-    =
-    \sum_{\ell_1,\ldots,\ell_{k-1}=1}^{n}
-    W_{i\ell_1}^{\,2}
-    W_{\ell_1\ell_2}^{\,2}
-    \cdots
-    W_{\ell_{k-1}i}^{\,2}.
+    (H^k)_{ii} = \sum_{\ell_1,\ldots,\ell_{k-1}=1}^{n} w_{i\ell_1}^{\,2} w_{\ell_1\ell_2}^{\,2} \cdots w_{\ell_{k-1}i}^{\,2}
   \]
 
   重み付き隣接行列の定義より，
   隣接行列$A=(a_{ij})$を用いて
   \[
-    W_{ij}=c_{ij}a_{ij}
-    \qquad(c_{ij}\neq0)
+    w_{ij}=c_{ij}a_{ij} \qquad(c_{ij}\neq0)
   \]
   と書ける。
 
@@ -3496,10 +3542,7 @@ NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である�
     a_{i\ell_1}\cdots a_{\ell_{k-1}i}=0.
   \]
 
-  これは
-  $A^k$の$(i,i)$成分である。
-
-  したがって
+  これは$A^k$の$(i,i)$成分である。したがって
   \[
     (H^k)_{ii}=0
     \iff
@@ -3574,19 +3617,17 @@ NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である�
   $W$の推定値を次の制約付き最適化問題の
   解として求める。
 
-  \[
-    \begin{aligned}
-      \min_{W\in\mathbb{R}^{n\times n}}
-      \quad&
-      \frac{1}{2n}
-      \|X-WX\|_F^2
-      +
-      \lambda\|W\|_1 \\
-      \text{subject to}
-      \quad&
-      h(W)=0.
-    \end{aligned}
-  \]
+  \begin{align}
+    \min_{W\in\mathbb{R}^{n\times n}}
+    \quad&
+    \frac{1}{2n}
+    \|X-WX\|_F^2
+    +
+    \lambda\|W\|_1 \notag\\
+    \text{subject to}
+    \quad&
+    h(W)=0.
+  \end{align}
 
   ただし，
   行列$A=(a_{ij})$について
@@ -3605,6 +3646,450 @@ NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である�
   および$\ell_1$ノルムである。
 \end{defn}
 
+\underbar{\textbf{課題}}
+
+NOTEARSのメリット・デメリットは次の通りである。
+\begin{itemize}
+  \item メリット
+    \begin{itemize}
+      \item 連続最適化であるため組み合わせ爆発を避けることができる。
+   \end{itemize}
+
+  \item デメリット
+    \begin{itemize}
+      \item 非凸最適化問題であるため，局所解に陥る可能性がある。
+      \item マルコフ等価なグラフを識別できない。
+    \end{itemize}
+  \end{itemize}
+
+\subsubsection*{関数ベース}
+
+データの生成過程に具体的な関数系を仮定して因果探索を行う方法である。
+代表的な方法が次のLiNGAM（Linear Non-Gaussian Acyclic Model）である。
+
+LiNGAMは誤差に非ガウス性を要求するが，次の定理はその根拠となる定理である。
+
+\begin{thm}{Darmois--Skitovichの定理}
+2つの確率変数 $Y_1,Y_2$ を独立な確率変数
+$S_1,\ldots,S_p$ の線形結合として
+\[
+Y_1=\sum_{i=1}^{p}\alpha_iS_i,
+\]
+\[
+Y_2=\sum_{i=1}^{p}\beta_iS_i
+\]
+と定義する。
+
+このとき，$Y_1$ と $Y_2$ が独立ならば，
+$\alpha_i\beta_i\neq0$ となるような確率変数 $S_i$ は
+すべて正規分布に従う。
+\end{thm}
+
+\begin{thm}{}
+確率変数 $X_1,\ldots,X_n$ は外生変数
+$\varepsilon_1,\ldots,\varepsilon_n$ を用いて
+次の構造方程式で生成されるとする。
+\[
+X=BX+\varepsilon
+\]
+ここで，$B$ は狭義下三角行列である。
+ここで各誤差 $\varepsilon_i$ は平均0，分散 $\sigma_i^2$ の非ガウス分布に従うとする。
+
+このとき，$X_i$ を $X_j$ で回帰したときの残差を
+$r_i^{(j)}$ とおく。すなわち，
+\[
+r_i^{(j)}
+=
+X_i-
+\frac{\operatorname{Cov}(X_i,X_j)}
+{\operatorname{Var}(X_j)}
+X_j
+\]
+と書く。
+
+このとき，$X_j$ が外生変数であるための必要十分条件は，
+すべての残差 $r_i^{(j)}$ と $X_j$ が独立となることである。
+\end{thm}
+
+\begin{proof}
+$X_j$ が外生変数とする。
+
+構造方程式は
+\[
+X=(I-B)^{-1}\varepsilon
+\]
+と書けるため，各 $X_i$ は $\varepsilon$ の線形結合で書ける。
+ゆえに，
+\[
+X_i
+=
+\sum_{k=1}^{n}\alpha_k\varepsilon_k
+\]
+とおく。
+
+$X_j=\varepsilon_j$ となるため，
+\[
+\operatorname{Cov}(X_i,X_j)
+=
+\operatorname{Cov}(X_i,\varepsilon_j)
+=
+\sum_{k=1}^{n}\alpha_k
+\operatorname{Cov}(\varepsilon_k,\varepsilon_j)
+=
+\alpha_j\operatorname{Var}(X_j).
+\]
+
+したがって，
+\begin{align}
+  r_i^{(j)}
+  &=
+  X_i-
+  \frac{\alpha_j\operatorname{Var}(X_j)}
+  {\operatorname{Var}(X_j)}
+  X_j\\
+  &=
+  \sum_{\substack{k=1\\k\neq j}}^{n}
+  \alpha_k\varepsilon_k.
+\end{align}
+
+$\varepsilon_j$ と
+$\varepsilon_1,\ldots,\varepsilon_{j-1},
+\varepsilon_{j+1},\ldots,\varepsilon_n$
+は互いに独立であるから，
+\[
+r_i^{(j)}
+\perp
+X_j.
+\]
+
+一方，$X_j$ が外生変数でないとする。
+
+このとき，$X_j$ は少なくとも1つの親 $X_i$ を持つ。
+ここで $X_i$ は
+$\varepsilon_1,\ldots,\varepsilon_n$
+のうちいくつかの線形結合で書けるため，
+$e_1,\ldots,e_p$ を
+$\varepsilon_1,\ldots,\varepsilon_n$
+のうち $X_i$ と線形結合で表したものとする。
+\[
+X_i
+=
+\alpha_1e_1+\cdots+\alpha_pe_p,
+\qquad
+(\alpha_i\neq0)
+\]
+
+ここで，$X_i$ は $X_j$ の親であるため，
+$e_1,\ldots,e_p$ は $X_j$ を線形結合で表したときに
+係数が非ゼロとなる変数である。よって，基底を延長して
+
+\[
+X_j
+=
+\beta_1e_1+\cdots+\beta_pe_p
++\beta_{p+1}e_{p+1}
++\cdots+
+\beta_qe_q,
+\qquad
+(\beta_i\neq0)
+\]
+
+と書く。
+
+ここで $r_i^{(j)}$ を計算すると，
+
+\[
+\operatorname{Cov}(X_i,X_j)
+=
+\sum_{k=1}^{p}
+\alpha_k\beta_k\sigma_k^2,
+\]
+
+\[
+\operatorname{Var}(X_j)
+=
+\sum_{k=1}^{q}
+\beta_k^2\sigma_k^2
+\]
+
+であるから，
+
+\[
+\gamma
+=
+\frac{\displaystyle
+\sum_{k=1}^{p}
+\alpha_k\beta_k\sigma_k^2}
+{\displaystyle
+\sum_{k=1}^{q}
+\beta_k^2\sigma_k^2}
+\]
+
+とおけば，
+
+\begin{align}
+  r_i^{(j)}
+  &=
+  X_i-\gamma X_j\\
+  &=
+  \sum_{k=1}^{p}
+  (\alpha_k-\gamma\beta_k)e_k
+  -
+  \sum_{k=p+1}^{q}
+  \gamma\beta_ke_k.
+\end{align}
+
+ここで少なくとも1つの
+$k=1,\ldots,p$ について
+
+\[
+\alpha_k-\gamma\beta_k\neq0
+\]
+
+である。
+
+実際，もしすべての
+$k=1,\ldots,p$ に対して
+
+\[
+\alpha_k-\gamma\beta_k=0
+\]
+
+ならば，
+
+\[
+\gamma
+=
+\frac{\displaystyle
+\sum_{k=1}^{p}
+\alpha_k\beta_k\sigma_k^2}
+{\displaystyle
+\sum_{k=1}^{q}
+\beta_k^2\sigma_k^2}
+\]
+
+となるが，これは一般には矛盾する。
+
+したがって，
+
+\[
+\beta_\ell-\gamma\alpha_\ell\neq0
+\]
+
+となる $\ell$ が存在し，
+
+\[
+\beta_\ell
+(\beta_\ell-\gamma\alpha_\ell)
+\neq0
+\]
+
+となる。
+
+$e_\ell$ は非ガウス分布に従うので，
+Darmois--Skitovich の定理の対偶より，
+
+\[
+r_i^{(j)}
+\not\!\perp
+X_j.
+\]
+
+以上より，
+
+\[
+X_j
+\text{ が外生変数}
+\iff
+r_i^{(j)}
+\perp
+X_j
+\]
+
+が成り立つ。
+\end{proof}
+
+\begin{defn}{LiNGAM}
+$X_1,\ldots,X_n$ を確率変数とする。
+標準化した確率変数を
+$\tilde X_1,\ldots,\tilde X_n$
+とする。
+
+$i$ を1つ固定して，各 $j$ について
+
+\[
+\tilde X_j
+=
+\beta_{ji}\tilde X_i
++
+\tilde\varepsilon_j^{(i)}
+\]
+
+という線形回帰を考える。
+
+ここで
+
+\[
+\beta_{ji}
+=
+\frac{\operatorname{Cov}(\tilde X_i,\tilde X_j)}
+{\operatorname{Var}(\tilde X_i)}
+=
+\operatorname{Corr}(\tilde X_i,\tilde X_j),
+\]
+
+\[
+\tilde r_j^{(i)}
+=
+\tilde X_j
+-
+\beta_{ji}\tilde X_i
+\]
+
+とする。
+
+これをすべての $i,j$ について行い，
+残差
+$\tilde r_j^{(i)}$
+を得る。
+
+ここで，相互情報量を用いて
+
+\[
+m(X_i,X_j)
+=
+I(\tilde X_j,\tilde r_j^{(i)})
+-
+I(\tilde X_i,\tilde r_i^{(j)})
+\]
+
+と定義する。
+
+さらに，
+
+\[
+M(X_i)
+=
+\sum_{j\neq i}
+\min\{0,m(X_i,X_j)\}^2
+\]
+
+とする。
+
+$M(X_1),\ldots,M(X_n)$
+の中で最小となる変数を
+$X^{(1)}$
+とする。
+
+続いて，
+$n-1$ 個の残差
+
+\[
+r_1^{(p)},\ldots,
+r_{p-1}^{(p)},
+r_{p+1}^{(p)},\ldots,
+r_n^{(p)}
+\]
+
+について同様の手順を繰り返し，
+その中で最小となる変数を
+$X^{(2)}$
+とする。
+
+これを繰り返すことで，
+
+\[
+X^{(1)},\ldots,X^{(n)}
+\]
+
+というトポロジカル順序を推定する。
+\end{defn}
+
+\underbar{\textbf{課題}}
+
+LiNGAMのメリット・デメリットは次の通りである。
+\begin{itemize}
+  \item メリット
+    \begin{itemize}
+      \item マルコフ等価なグラフを識別できる。  
+    \end{itemize}
+
+  \item デメリット
+    \begin{itemize}
+      \item 制約が強く、LiNGAMの仮定が成り立たない場合は適用できない。
+    \end{itemize}
+\end{itemize}
+
+\begin{exm}{}
+  World BankやV-Dem (Varieties of Democracy) Project
+  が公開している国際比較データを用いて，各国の制度や経済指標
+  の因果構造を推定することを考える。
+
+  例えば，次の変数を用いる。
+
+  \begin{center}
+\begin{tabular}{ll}
+\hline
+変数 & 内容\\
+\hline
+GDP (log) & 一人当たりGDP（対数変換）\\
+Internet\_Users & インターネット利用率（人口に占めるインターネット利用者割合）\\
+Democracy & 民主主義指数\\
+Corruption & 汚職の少なさ（腐敗認識・統治の健全性を表す指標）\\
+Property\_Rights & 財産権保護指数\\
+Education\_Equality & 教育機会均等指数\\
+Physical\_Freedom & 身体的自由指数（生命・身体の安全や移動の自由など）\\
+Resource\_Rent (log) & 天然資源レント（GDP比，対数変換）\\
+Social\_Equality & 社会的平等指数\\
+\hline
+\end{tabular}
+\end{center}
+
+  LiNGAMを適用することで，例えば
+
+  \begin{itemize}
+    \item 経済発展は民主主義を促進するのか。
+    \item 民主主義は汚職を減少させるのか。
+    \item 財産権の保護は経済成長を促進するのか。
+    \item インターネット普及は民主主義の発展に寄与するのか。
+  \end{itemize}
+
+  といった政治・経済学上の仮説をデータから探索的に検討できる。
+  
+  \begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[node distance=1.4cm, auto, >=latex, thick]
+    \node (internet) {Internet\_Users};
+    \node (gdp) [below=of internet] {GDP(log)};
+
+    \node (physical) [right=2.0cm of internet] {Physical\_Freedom};
+    \node (corrupt) [below=of physical] {Corruption};
+    \node (demo) [below=of corrupt] {Democracy};
+
+    \node (property) [right=2.0cm of corrupt] {Property\_Rights};
+    \node (social) [below=of property] {Social\_Equality};
+    \node (resource) [above=of property] {Resource\_Rent(log)};
+
+    \node (edu) [right=2.0cm of resource] {Education\_Equality};
+
+    \draw[->] (internet) -- node[left] {$0.80$} (gdp);
+    \draw[->] (internet) -- node[above] {$-0.21$} (corrupt);
+
+    \draw[->] (physical) -- node[right] {$-0.39$} (corrupt);
+    \draw[->] (physical) -- node[above] {$0.49$} (property);
+    \draw[->] (physical) -- node[left] {$0.37$} (demo);
+    \draw[->] (physical) -- node[right] {$0.28$} (social);
+
+    \draw[->] (corrupt) -- node[right] {$-0.32$} (demo);
+
+    \draw[->] (property) -- node[above] {$0.36$} (demo);
+    \draw[->] (property) -- node[right] {$0.25$} (social);
+  \end{tikzpicture}
+  \caption{LiNGAMによる政治経済指標の因果探索結果}
+\end{figure}
+\end{exm}
+
+
 \newpage
 \begin{thebibliography}{9}
   \bibitem{Pearl2009}
@@ -3615,6 +4100,9 @@ NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である�
 
   \bibitem{Miyakawa1998}
   宮川雅巳著，『グラフィカルモデル』，朝倉書店，1997.
+
+  \bibitem{Shimizu2023}
+  清水 昌平，『因果探索入門』，講談社，2023.
 
   \bibitem{PearlMackenzie2022}
   J. Pearl, D. Mackenzie著，夏目大訳，『因果推論の科学 「なぜ？」の問いにどう答えるか』，文藝春秋，2022.
@@ -3647,17 +4135,21 @@ NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である�
   ``Causal Inference and Causal Explanation with Background Knowledge,''
   in \textit{Proceedings of the Eleventh Conference on Uncertainty in Artificial Intelligence (UAI)}, 1995, pp. 403--410.
 
+  \bibitem{chickering2002lec}
+  D. M. Chickering,
+  ``Learning Equivalence Classes of Bayesian-Network Structures,''
+  \textit{Journal of Machine Learning Research},
+  vol. 2,
+  pp. 445--498,
+  2002.
+
   \bibitem{chickering2002}
   D. M. Chickering,
   ``Optimal Structure Identification with Greedy Search,''
   \textit{Journal of Machine Learning Research},
   vol. 3, pp. 507--554, 2002.
 
-  \bibitem{chickering2003}
-  D. M. Chickering,
-  ``Optimal Structure Identification with Greedy Search: Proof of Correctness,''
-  in \textit{Proceedings of the Nineteenth Conference on Uncertainty in Artificial Intelligence (UAI)}, 2003, pp. 139--146.
-
+  
   \bibitem{zheng2018}
   X. Zheng, B. Aragam, P. Ravikumar, and E. P. Xing,
   ``DAGs with NO TEARS: Continuous Optimization for Structure Learning,''
