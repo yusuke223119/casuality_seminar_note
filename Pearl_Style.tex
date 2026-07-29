@@ -341,24 +341,47 @@ $Y$と他の変数の関係は線形であるため，$Y$を説明変数とし�
   \item 強く無視できる割り当て条件を満足する変数の集合はどんな集合か？
 \end{itemize}
 Pearl流はこれらすべての疑問に(適切な仮定の下で)答えてくれる理論である.
-本ゼミでは2章以降で以下の流れで章立てして進める(ことを目標にする).
+本ゼミでは2章以降で以下の流れで章立てして進める.
 
-第2章では，古典的な構造方程式モデリングを扱う.
-第1章で見たようにDAGに基づいて，外生変数に正規分布を，変数間に線形性を仮定して解析を進める枠組みである.
-構造方程式モデリングは，Pearl流因果推論における特殊な場合を扱っているに過ぎない.
-しかし，グラフ構造と因果効果が綺麗に一対一対応する点，後の理論の基礎になっている点，歴史的経緯や第6章で扱うLiNGAMの理論において不可欠である点を鑑み取り上げることにした.
-また，この章では第3章以降のグラフ理論の用語や定理が時々顔を覗かせるになるが，その点はご容赦願いたい.
+\begin{itemize}
+  \item 第2章 : 構造方程式モデリング
+  
+  この章では，第1章で例として見たようにDAGに基づいて，変数間が線形の関係にある場合の解析方法を扱う.
+  Wrightのパス解析を基にした理論であり，Pearlの因果推論の特別な場合である.
+  DAGとパス係数が綺麗に対応する点や三角行列の扱いなど，グラフ理論と因果効果の推定の基礎となる理論である.
+  また，この章では第3章以降のグラフ理論の用語や定理が時々顔を覗かせるになるが，その点はご容赦願いたい.
+  
+  \item 第3章 : 非巡回有向グラフ(DAG)
+  
+  この章では，DAGの定義や性質を与える.親子関係や有向道，トポロジカルソートなど，DAGの基本的な定義や性質を扱う.
+  グラフ理論に心得のある方はこの章を飛ばしても構わない.
 
-第3章では，本ゼミで取り扱う範囲のグラフ理論の基礎を取り上げる.この章によってDAGの定義や性質が与えられる.
+  \item 第4章 : ベイジアンネットワーク
+  
+  この章では，ベイジアンネットワークを取り扱う.この理論の提唱者はJudeaPearl先生であり，グラフ構造に確率分布を対応させた理論である.
+  Pearl流因果推論における中心的な道具である有向分離の定義や性質を与える.
+  章の後半では，有向分離と条件付き独立性についての性質である大域マルコフ性との関係について証明を行う.
+  この性質はその後の章での因果効果の推定理論において重要な役割を果たす.
+  
+  \item 第5章 : 介入・因果効果
+  
+  この章では，介入及び因果効果の定義を与える.
+  Pearl先生が与えた$P(Y \mid do(X=x))$の概念は因果という概念を数学的に定義したものであり，この定義こそが「因果効果とはなにか？」という問いに対するPearl流における数学的な答えである.
+  また，この章で示されるバックドア基準によって選択される変数集合こそがその他の疑問に対する現代的な答えであることも示される.
 
-第4章では，ベイジアンネットワークを取り扱う.この理論の提唱者はJudeaPearl先生であり，グラフ構造に確率分布を対応させた理論である.
-本章によって条件付き独立性とグラフ構造が対応することが分かる.
+  \item 第6章 : 反事実
+  
+  この章では，反事実という概念について考える.
+  この章で与えられるポテンシャルアウトカムの概念は，Rubin流におけるポテンシャルアウトカムの概念と同等でありPearl流はRubin流の概念を実質的に包含することが示される.
+  また反事実は，観測されなかった事象についての確率分布を考えるものであり，Pearl流因果推論における最も高度な概念である.
+  数学的であると同時に哲学的な概念であり，因果推論の最終的な目標である.
 
-第5章では介入を取り扱う.
-この章で与えられる介入及び因果効果の定義こそ「因果効果とはなにか？」という問いに対するPearl流における数学的な答えである.
-また，この章で示されるバックドア基準によって選択される変数集合こそがその他の疑問に対する現代的な答えである.
-
-第6章では因果探索について取り扱う.ここまでの議論はDAGが既知のものであるとしてきたが，因果探索は手元のデータからDAGの復元を試みる分野である.
+  \item 第7章 : 因果探索
+  
+  この章では，DAGが与えられていない場合に，観測データからDAGを推定する方法について考える.
+  多くの手法が提案されており，現代でも活発に研究が行われている分野である.
+  なお，この章では理論的な証明は最低限にとどめ，実際の手法の紹介に重点を置く.
+\end{itemize}
 
 \newpage
 
@@ -665,7 +688,7 @@ $X_1, \dots, X_n$ について，構造方程式の右辺の変数から左辺�
 
 \newpage
 
-\section{DAG}
+\section{非巡回有向グラフ(DAG)}
 
 \begin{defn}{有向グラフ}
   \begin{enumerate}
@@ -715,7 +738,8 @@ $V = \{X_1, \dots, X_n\}$, $E \subset V \times V$, $G = (V, E)$ を有向グラ�
       \end{equation}
       と定義する.
       \item 頂点の列 $\{Y_i\}_{i=1}^m$ で，各 $i$ について， $Y_i$ から $Y_{i+1}$ または $Y_{i+1}$ から $Y_i$ への矢線が存在するとき， $\{Y_i\}_{i=1}^m$ を長さ $m$ の\textbf{道}という.とくに， $Y_i$ から $Y_{i+1}$ への矢線のみが存在する場合， $\{Y_i\}_{i=1}^m$ を\textbf{有向道}という.
-      \item ある有向道 $\{Y_i\}_{i=1}^m$ が存在して， $Y_1 = Y_m$ となるとき，グラフ $G$ を\textbf{巡回グラフ}という.巡回グラフでない有向グラフを\textbf{非巡回有向グラフ}という.以下，非巡回有向グラフを \textbf{DAG} と表記する.
+      \item ある有向道 $\{Y_i\}_{i=1}^m$ が存在して， $Y_1 = Y_m$ となるとき，グラフ $G$ を\textbf{巡回グラフ}という.巡回グラフでない有向グラフを\textbf{非巡回有向グラフ(Direct Acyclic Graph)}という.以下，非巡回有向グラフを \textbf{DAG} と表記する.
+      \item DAG $G$ において，有向辺をすべて無向辺に置き換えたグラフを$G$の\textbf{スケルトン構造}という.
   \end{enumerate}
 \end{defn}
 
@@ -1358,6 +1382,7 @@ $V = \{X_1, \dots, X_n\}$, $E \subset V \times V$, $G = (V, E)$ は DAG であ�
             \node[draw=none, below=0.5cm of m3] {$G^m$: モラルグラフ};
         \end{scope}
     \end{tikzpicture}
+    \caption{グラフのモラル化}
 \end{figure}
 
 \begin{thm}[label={thm:MoralMarkov}]{大域マルコフ性とモラルグラフ}
@@ -1427,31 +1452,36 @@ $V = \{X_1, \dots, X_n\}$, $E \subset V \times V$, $G = (V, E)$ は DAG であ�
   特に $p'$ に合流点が存在しない場合，$p'$ は $S$ によってブロックされない．これは $S$ が $X_i$ と $X_j$ を有向分離することに矛盾する．
 
   さて，すべての $Z_k$ は $An(\{X_i\} \cup \{X_j\} \cup S)$ の元であるから，$p'$ の任意の合流点 $\gamma$ について次のいずれかが成り立つ．
-  \begin{itemize}
-    \item[a)] $\gamma \in An(S)$
-    \item[b)] $\gamma \notin An(S)$
-  \end{itemize}
+  \begin{enumerate}[label={(\roman*)}]
+    \item $\gamma \in An(S)$
+    \item $\gamma \notin An(S)$
+  \end{enumerate}
 
-  \noindent\textbf{a) となる合流点が $p'$ に存在する場合：}
+  \begin{itemize}
+  
+  \item $p'$ に$(\mathrm{i})$の合流点が存在する場合：
+  
   $S$ は合流点の子孫を含むため，定義~\ref{defn:d-separation}の条件 II により $p'$ は $S$ によってブロックされない．これは $S$ が $X_i$ と $X_j$ を有向分離することに矛盾する．
 
-  \noindent\textbf{$p'$ のすべての合流点が b) の場合：}
-  道 $p'$ の合流点を $\gamma_1, \dots, \gamma_u$ とおく．このとき $\gamma_1, \dots, \gamma_u \in An(\{X_i, X_j\})$ である．
+  \item $p'$ の少なくとも1つの合流点が $(\mathrm{ii})$ の場合：
+  
+  道 $p'$ の $(\mathrm{ii})$ の合流点を $\gamma_1, \dots, \gamma_u$ とおく．このとき $\gamma_1, \dots, \gamma_u \in An(\{X_i, X_j\})$ である．
   $\gamma_1, \dots, \gamma_u$ の中で $An(X_i)$ に属するものの最大番号のものを $\gamma = Z_r$ とおく．
 
-  $Z_r \in An(X_i)$ より，$Z_r$ から $X_i = Z_1$ への有向道 $\{W_k\}_{k=1}^t$（$W_1 = X_i$，$W_t = Z_r$）が存在する：
+  $Z_r \in An(X_i)$ より，$Z_r$ から $X_i = Z_1$ への有向道 $\{W_k\}_{k=1}^t$（$W_1 = X_i$，$W_t = Z_r$）が存在する
   \[
     W_1 \leftarrow W_2 \leftarrow \cdots \leftarrow W_t \leftarrow Z_{r+1} - \cdots - Z_l.
   \]
-  $W_t = Z_r \notin An(S)$ より $W_1, \dots, W_t \notin S$ である．$Z_r$ の最大性により，$Z_{r+1}, \dots, Z_l$ に含まれる合流点はすべて $An(X_j)$ に属する．
-  そのうち最小番号のものを $\gamma'' = Z_g$ とおく．$Z_g \in An(X_j)$ より，$Z_g$ から $X_j = Z_l$ への有向道 $\{W'_k\}_{k=1}^u$（$W'_1 = Z_g$，$W'_u = X_j$）が存在する：
+  $W_t = Z_r \notin An(S)$ より $W_1, \dots, W_t \notin S$ である．$Z_r$ の最大性により，$Z_{r+1}, \dots, Z_l$ に含まれる $(\mathrm{ii})$ の合流点はすべて $An(X_j)$ に属する．
+  そのうち最小番号のものを $\gamma'' = Z_g$ とおく．$Z_g \in An(X_j)$ より，$Z_g$ から $X_j = Z_l$ への有向道 $\{W'_k\}_{k=1}^u$（$W'_1 = Z_g$，$W'_u = X_j$）が存在する
   \[
     W_1 \leftarrow \cdots \leftarrow W_t \leftarrow Z_{r+1} - \cdots - Z_{g-1} \to W'_1 \to \cdots \to W'_u.
   \]
   $W'_1 = Z_g \notin An(S)$ より $W'_1, \dots, W'_u \notin S$．
-  また，$Z_{r+1}, \dots, Z_{g-1}$ は $p'$ の非合流点であるから $S$ に属さない．
-  道 $p'' = W_1, \dots, W_t, Z_{r+1}, \dots, Z_{g-1}, W'_1, \dots, W'_u$ においては，すべての頂点は $S$ に属さず，合流点も存在しない．
+  また，$Z_{r+1}, \dots, Z_{g-1}$ は $p'$ の非合流点は $S$ に属さず，また合流点はすべて $(\mathrm{i})$ の合流点である．
+  道 $p'' = W_1, \dots, W_t, Z_{r+1}, \dots, Z_{g-1}, W'_1, \dots, W'_u$ においては，すべての非合流点は $S$ に属さず，合流点は全て $S$ の祖先である．
   ゆえに $S$ は道 $p''$ をブロックしない．
+  \end{itemize}
 
   以上のように，$S$ は $X_i$ と $X_j$ を有向分離することに矛盾する．
 \end{proof}
@@ -1486,7 +1516,7 @@ $V = \{X_1, \dots, X_n\}$, $E \subset V \times V$, $G = (V, E)$ は DAG であ�
 が成り立つ.
 
 \begin{proof}
-  定理~\ref{thm:LauritzenForward}, \ref{thm:LauritzenBackward}により，$S$ は無向グラフ $G^m_{An(S \cup \{X_i, X_j\})}$ を（そのときに限り）分離する.
+  定理~\ref{thm:LauritzenForward}, \ref{thm:LauritzenBackward}により，$S$ は無向グラフ $G^m_{An(S \cup \{X_i, X_j\})}$ を分離する.
   ゆえに，系~\ref{cor:Markov}により，
   \begin{equation}
       X_i \perp X_j \mid S
@@ -1497,6 +1527,7 @@ $V = \{X_1, \dots, X_n\}$, $E \subset V \times V$, $G = (V, E)$ は DAG であ�
 \newpage
 
 \section{介入・因果効果}
+本章では介入と因果効果について取り扱う.これらの概念はPearl流因果推論の中心的概念であり，「因果とは何か？」という問いに対して数学的な答えを与える.
 
 \begin{defn}{構造的因果モデル}
   $X_1, \dots, X_n$ を確率変数，$V = \{X_1, \dots, X_n\}$ を頂点集合とした DAG $G = (V, E)$ を考える.
@@ -1649,6 +1680,7 @@ $G_{\overline{X_i}}$ は，$X_i$ と $pa(X_i)$ が独立，つまり，グラフ
             \node[draw=none, below=0.5cm of m3] {$G_{\overline{X_1}}$: 介入後のグラフ};
         \end{scope}
     \end{tikzpicture}
+    \caption{介入によるグラフの変化}
 \end{figure}
   介入 $do(X_1 = x_1)$ を行った $G_{\overline{X_1}}$ を考える.
   $G$ と $G_{\overline{X_1}}$ を比較すれば，$X_2 \to X_1$ の矢線が消えていることが分かる.つまり，$G_{\overline{X_1}}$ の分布においては，$X_1$ と $X_4$ に共通の祖先は存在せず，交絡は存在しないことが分かる.
@@ -1745,7 +1777,7 @@ $G'$ は定義から，$F_i = idle$ であれば $G$ に，$F_i = x_i$ であれ
   \begin{equation}
     F_X \perp Y \mid X, Z
   \end{equation}
-  が成り立つ.ため，
+  が成り立つため，
   \begin{equation}
     P(Y \mid F_X=x, X=x, Z) = P(Y \mid F_X=idle, X=x, Z)
   \end{equation}
@@ -1862,7 +1894,7 @@ $G'$ は定義から，$F_i = idle$ であれば $G$ に，$F_i = x_i$ であれ
     \end{tikzpicture}
     \caption{データの生成過程(再掲)}
   \end{figure}
-  このとき、バックドア基準を満足する変数${Z_2, Z_6}$を説明変数として線形回帰を行う.
+  このとき，バックドア基準を満足する変数${Z_2, Z_6}$を説明変数として線形回帰を行う.
   \begin{table}[H]
     \centering
     \caption{バックドア変数集合によるシミュレーション結果(n=10000)}
@@ -1872,7 +1904,7 @@ $G'$ は定義から，$F_i = idle$ であれば $G$ に，$F_i = x_i$ であれ
       偏回帰係数 & 1.3004 & 0.5703 & 0.5983 \\ \hline
     \end{tabular}
   \end{table}
-  この結果は1.2で見たシミュレーションの結果(図\ref{fig:picture_2})と一致しており、$X$ の回帰係数が真の平均因果効果である$1.3$に近い値を与えていることが分かる.
+  この結果は1.2で見たシミュレーションの結果(図\ref{fig:picture_2})と一致しており，$X$ の回帰係数が真の平均因果効果である$1.3$に近い値を与えていることが分かる.
 \end{exm}
 
 バックドア基準は，必要な変数がすべて観測されている場合には，介入後分布は識別可能であることを保証する.
@@ -2025,9 +2057,9 @@ do計算法により次のフロントドア基準が導かれる.
 \end{proof}
 
 \begin{exm}{喫煙と肺がん}
-  喫煙と肺がんの因果関係は、かつて医学界および統計学界で大きな論争を引き起こした。
-  当時の観測データからは、喫煙と肺がんの間に強い正の相関があることが知られていた。
-  しかし、R.A. Fisherは、タバコを好む性質と肺がんの罹りやすさの双方を支配する「未観測の共通遺伝子」という交絡因子が存在する可能性を指摘し、喫煙そのものの因果効果を否定しようとした。
+  喫煙と肺がんの因果関係は，かつて医学界および統計学界で大きな論争を引き起こした.
+  当時の観測データからは，喫煙と肺がんの間に強い正の相関があることが知られていた.
+  しかし，R.A. Fisherは，タバコを好む性質と肺がんの罹りやすさの双方を支配する「未観測の共通遺伝子」という交絡因子が存在する可能性を指摘し，喫煙そのものの因果効果を否定しようとした.
 
   この未観測の交絡因子の問題について，フロントドア基準を用いることで，因果関係を識別できると考えらえている．
   喫煙の有無 $X$，肺がんの患者であること $Y$，未観測の遺伝子 $U$，さらに，肺へのタールの蓄積 $C$ が次のような関係にあると考えられる．
@@ -2113,7 +2145,7 @@ do計算法により次のフロントドア基準が導かれる.
   と求められる．この方法を操作変数法といい，この $Z$ を $X$ と $Y$ の操作変数という．
 \end{exm}
 
-識別可能性については、次の定理が知られている．
+識別可能性については，次の定理が知られている．
 
 \begin{thm}{完全性定理}
   構造的因果モデル $G$ と，頂点 $X, Y \in V$ を考える．
@@ -2127,8 +2159,9 @@ do計算法により次のフロントドア基準が導かれる.
 \newpage
 
 \section{反事実}
-本章ではポテンシャルアウトカムを用いて因果推論を考察する.
-これは起こりえなかったこと，反事実を扱う枠組みであり，Pearl流とRubin流との統合以上の意味を持つ.
+本章ではポテンシャルアウトカムという概念を用いて因果推論を考察する.
+これは起こりえなかったこと，反事実を扱う枠組みであり，Pearl流とRubin流を統合することができる枠組みである.
+しかし，反事実の議論は流派の違いの統合以上に因果推論における重要な役割を果たす.
 
 \begin{defn}{ポテンシャルアウトカム}
   $G = (V, E)$, $V = \{X_1, \dots, X_n\}$ を DAG として，各 $X_i$ は外生変数 $\varepsilon_1, \dots, \varepsilon_n$ を用いて，
@@ -2210,16 +2243,16 @@ do計算法により次のフロントドア基準が導かれる.
   が成り立つ．
 \end{proof}
 
-これは，因果推論の根本問題そのものである． $X$ は写像であるから， 0 と 1 を同時にとることはなく、また， $Y_1(u)$ と $Y_0(u)$ を同時に観察されない．そして、我々が観察できるポテンシャルアウトカムは， $X(u)=x$ が観察されたときの $Y_x(u)$ であって， $Y_x(u)$ そのものではない．
+これは，因果推論の根本問題そのものである． $X$ は写像であるから， 0 と 1 を同時にとることはなく，また， $Y_1(u)$ と $Y_0(u)$ を同時に観察されない．そして，我々が観察できるポテンシャルアウトカムは， $X(u)=x$ が観察されたときの $Y_x(u)$ であって， $Y_x(u)$ そのものではない．
 
 $X$ と $Y_x$ が独立である（RCT）とき，
 \begin{equation}
   P(Y_x(u) \mid X(u)=x) = P(Y_x(u))
 \end{equation}
-となるため，容易に $P(Y_x(u))$ のデータを観察できる．しかし、現実的に RCT の仮定は厳しくて，一般的に少し緩い仮定を置く．それが次の強く無視できる割当て条件（SITA）である．
+となるため，容易に $P(Y_x(u))$ のデータを観察できる．しかし，現実的に RCT の仮定は厳しくて，一般的に少し緩い仮定を置く．それが次の強く無視できる割当て条件（SITA）である．
 
 \begin{defn}{強く無視できる割当て}
-  確率変数 $X$ とポテンシャルアウトカム $Y_x$ が確率変数の集合 $Z$ を与えたときに条件付き独立、つまり，
+  確率変数 $X$ とポテンシャルアウトカム $Y_x$ が確率変数の集合 $Z$ を与えたときに条件付き独立，つまり，
   \begin{equation}
     X \perp Y_x \mid Z
   \end{equation}
@@ -2424,7 +2457,7 @@ $X$ と $Y_x$ が独立である（RCT）とき，
   が成り立つ．
 \end{proof}
 
-\subsubsection*{因果の梯子}
+\subsection*{因果の梯子}
 
 因果の梯子は物事の因果関係を理解する能力を3つの段階に分けて分類した，思考のフレームワークである．
 Judea Pearlが提唱し，解きたい問いがどの段階の能力を必要とするか分類することができる．
@@ -2450,22 +2483,48 @@ Judea Pearlが提唱し，解きたい問いがどの段階の能力を必要と
     \item 数学的表現：$P(Y_x=y \mid X=x', Y=y')$
 \end{itemize}
 
-次の反事実についての確率は因果の梯子の第3段を記述する確率である．
+\begin{exm}{処置群に対する処置効果}
+2値$\{0,1\}$を取る処置変数$X$と，$Y$のポテンシャルアウトカム$Y_1,Y_0$を考える.
+このとき処置群に対する処置効果(Average Treatment Effect on the Treated; ATT)を
+\[
+  ATT=E[Y_1-Y_0 \mid X=1]
+\]
+で定義する．
+ここで，第1項について一致性より
+\[
+  Y_1=Y \qquad (X=1)
+\]
+が成り立つため，
+\[ 
+  ATT=E[Y \mid X=1] - E[Y_0 \mid X=1]
+\]
+となる．
+この第2項
+\[
+  E[Y_0\mid X=1]
+\]
+は，「実際には処置を受けた人が，もし処置を受けていなかったらどうなっていたか」という観測できない反事実である.
+
+したがって，ATTは介入効果を表す指標である一方，その評価には反事実を含んでいる.
+\end{exm}
+
+このような反事実は平均だけでなく，個人レベルの確率としても定義できる.
+その代表例が必要性確率（PN），十分性確率（PS），必要十分性確率（PNS）である.
 
 \begin{defn}{必要性・十分性・必要十分性}
   $X, Y$ をともに二値 $\{0, 1\}$ をとる確率変数，$Y_x$ をポテンシャルアウトカムとする．
   \begin{enumerate}[label={(\roman*)}, leftmargin=*]
-  \item PN
+  \item PN (Probability of Necessity)
   \begin{equation}
     PN = P(Y_0=0 \mid Y=1, X=1)
   \end{equation}
   この PN を必要性の確率という．
-  \item PS
+  \item PS (Probability of Sufficiency)
   \begin{equation}
     PS = P(Y_1=1 \mid Y=0, X=0)
   \end{equation}
   この PS を十分性の確率という．
-  \item PNS
+  \item PNS (Probability of Necessity and Sufficiency)
   \begin{equation}
     PNS = P(Y_1=1, Y_0=0)
   \end{equation}
@@ -2622,18 +2681,17 @@ $i, j, k \in \{0, 1\}$ として，
   \[
     Y_1(u)\ge Y_0(u)
   \]
-  を満たす（単調性が成り立つ）とする。このとき
+  を満たす（単調性が成り立つ）とする.このとき
   \[
     \mathrm{PNS} = P(Y_1=1)-P(Y_0=1)
   \]
-  である。
-
+  である.
   さらに，
   \begin{align*}
     \mathrm{PN} &= \frac{P(X=0,Y=1)+P(X=1,Y=1)-P(Y_0=1)}{P(X=1,Y=1)} \\
     \mathrm{PS} &= \frac{P(X=0,Y=0)+P(X=1,Y=0)-P(Y_1=0)}{P(X=0,Y=0)}
   \end{align*}
-  が成り立つ。
+  が成り立つ.
 \end{thm}
 
 \begin{proof}
@@ -2641,14 +2699,12 @@ $i, j, k \in \{0, 1\}$ として，
   \[
     P(Y_1=0,Y_0=1)=0
   \]
-  である。
-
+  である.
   したがって
   \[
     p_{101}=p_{100}=0
   \]
-  となる。
-
+  となる.
   よって，各確率は
   \begin{align*}
     P(X=0,Y=0) &= p_{010}+p_{000},\\
@@ -2658,7 +2714,6 @@ $i, j, k \in \{0, 1\}$ として，
     P(Y_0=1) &= p_{110}+p_{111},\\
     P(Y_1=0)&= p_{000}+p_{001}.
   \end{align*}
-
   これらをまとめると
   \[
     \begin{pmatrix}
@@ -2687,7 +2742,6 @@ $i, j, k \in \{0, 1\}$ として，
       p_{111}
     \end{pmatrix}.
   \]
-
   係数行列の逆行列を計算すると
   \[
     \begin{pmatrix}
@@ -2699,14 +2753,12 @@ $i, j, k \in \{0, 1\}$ として，
       0&-1&0&0&1&0
     \end{pmatrix}
   \]
-  となる。
-
+  となる.
   したがって
   \begin{align*}
   p_{011} & =P(X=0,Y=1) + P(X=1,Y=1) - P(Y_0=1),\\
   p_{010} &= P(X=0,Y=0) + P(X=1,Y=0) - P(Y_1=0)
   \end{align*}
-
   一方，
   \[
   \mathrm{PN}
@@ -2722,8 +2774,7 @@ $i, j, k \in \{0, 1\}$ として，
     \mathrm{PN} &= \frac{P(X=0,Y=1) + P(X=1,Y=1) - P(Y_0=1)}{P(X=1,Y=1)}\\
     \mathrm{PS} &= \frac{P(X=0,Y=0) + P(X=1,Y=0) - P(Y_1=0)}{P(X=0,Y=0)}
   \end{align*}
-  を得る。
-
+  を得る.
   さらに
   \[
     \mathrm{PNS} = p_{011}+p_{010}
@@ -2736,18 +2787,43 @@ $i, j, k \in \{0, 1\}$ として，
   \end{align*}
 \end{proof}
 
+\subsubsection*{因果推論とAI}
+Judea Pearl先生はもともと人工知能の研究者であり，知識表現や推論の研究を通じてベイジアンネットワークを提案した.
+その後，現在の人工知能は大量の観測データから相関関係を学習することには優れている一方で，「介入したらどうなるか」や「もし別の選択をしていたらどうなっていたか」といった因果的な推論を行うことは本質的にできないことを指摘した.
+そこで Pearl 先生は，介入および反事実を数学的に扱う因果推論の枠組みを構築し，人間のような推論能力を持つ人工知能の基盤を与えることを目指した.
+
+現代の深層学習や Transformer，大規模言語モデルは，基本的には観測データから
+\[
+  P(Y \mid X)
+\]
+を学習するモデルであり，因果の梯子では第1段階である「関連付け」に位置付けられる.
+一方，「もし薬を投与したらどうなるか」という介入
+\[
+  P(Y \mid do(X=x))
+\]
+や，「もし別の行動を選択していたらどうなっていたか」という反事実推論
+\[
+  P(Y_x = y \mid X=x', Y=y')
+\]
+は第2・第3段階に対応し，現在の AI にとって依然として大きな課題である.
+
+Pearl 先生は，真に知的な人工知能を実現するためには，因果の梯子を登る能力が必要であると主張している.
+近年では，因果推論と深層学習，大規模言語モデルを融合する研究が活発に進められており，因果推論は次世代 AI を支える重要な理論として期待されている.
+
 \newpage
 
 \section{因果探索}
 
-第6章まではDAGが与えられている下での因果推論の理論を展開してきた。しかし，多くの場合DAGは未知である。本章ではデータからDAGを推定する手法について扱う。しかし，データからのDAGの探索は，後に述べる理由で困難であり，実務としては分析対象のドメイン知識に大きく依存する。
+第6章まではDAGが与えられている下での因果推論の理論を展開してきた.
+しかし，多くの場合DAGは未知である.本章ではデータからDAGを推定する手法について扱う.
+しかし，データからのDAGの探索は，後に述べる理由で困難であり，実務としては分析対象のドメイン知識に大きく依存する.
 
 \begin{prop}{DAGの総数}
   頂点の数が $n$ のDAGの総数を $a_n$ とすると，
   \[
     \log_2 a_n=\Theta(n^2)
   \]
-  が成り立つ。ただし，数列 $\{x_n\}$ について，$\Theta(n^2)$ とは，
+  が成り立つ.ただし，数列 $\{x_n\}$ について，$\Theta(n^2)$ とは，
   \[
     y_n=O(n^2),\quad
     z_n=O(n^2)
@@ -2756,28 +2832,28 @@ $i, j, k \in \{0, 1\}$ として，
   \[
     y_n\le x_n\le z_n
   \]
-  となる数列 $\{y_n\},\{z_n\}$ が存在することである。
+  となる数列 $\{y_n\},\{z_n\}$ が存在することである.
 \end{prop}
 
 \begin{proof}
-  グラフの個数は，考えられる隣接行列の個数を考えることと同等である。
+  グラフの個数は，考えられる隣接行列の個数を考えることと同等である.
 
-  上界を導出しよう。有向・無向に関係なく，考えられる隣接行列の総数は，対角以外の成分の $0,1$ の2通りを考えればよく，
+  上界を導出しよう.有向・無向に関係なく，考えられる隣接行列の総数は，対角以外の成分の $0,1$ の2通りを考えればよく，
   \[
     2^{n(n-1)}
   \]
-  と求められる。
+  と求められる.
 
-  下界を導出しよう。今，頂点のトポロジカルな順序を固定したDAGのみを考えると，隣接行列は狭義三角行列に制限されるため，下三角成分の $0,1$ の2通りのみ考えればよく，
+  下界を導出しよう.今，頂点のトポロジカルな順序を固定したDAGのみを考えると，隣接行列は狭義三角行列に制限されるため，下三角成分の $0,1$ の2通りのみ考えればよく，
   \[
     2^{\frac{n(n-1)}{2}}
   \]
-  と求められる。
+  と求められる.
 \end{proof}
 
-この命題の結果より，頂点の個数 $n$ についてDAGの総数は超指数的に増加することが分かる。したがって，計算機による全探索は実質的に不可能である。
+この命題の結果より，頂点の個数 $n$ についてDAGの総数は超指数的に増加することが分かる.したがって，計算機による全探索は実質的に不可能である.
 
-一方で，無限の計算資源があったとしても因果探索は次のマルコフ等価性の影響で困難である。
+一方で，無限の計算資源があったとしても因果探索は次のマルコフ等価性の影響で困難である.
 
 \begin{defn}{マルコフ等価性}
   $V=\{X_1,\ldots,X_n\}$ を頂点とするベイジアンネットワーク
@@ -2788,13 +2864,13 @@ $i, j, k \in \{0, 1\}$ として，
     \iff
     G_2\text{で }S\text{ は }X_i\text{ と }X_j\text{ を有向分離する}
   \]
-  が成り立つとき，$G_1$ と $G_2$ はマルコフ等価であるという。
+  が成り立つとき，$G_1$ と $G_2$ はマルコフ等価であるという.
 \end{defn}
 
 \begin{exm}{}
   \begin{enumerate}
     \item
-      次の2つのDAGはマルコフ等価である。
+      次の2つのDAGはマルコフ等価である.
       \[
         X \to Y
       \]
@@ -2803,7 +2879,7 @@ $i, j, k \in \{0, 1\}$ として，
       \]
 
     \item
-      次の3つのDAGは互いにマルコフ等価である。
+      次の3つのDAGは互いにマルコフ等価である.
       \[
         X\to Z\to Y,
       \]
@@ -2817,18 +2893,18 @@ $i, j, k \in \{0, 1\}$ として，
       \[
         X \perp Y \mid Z
       \]
-      が成り立つ。
+      が成り立つ.
   \end{enumerate}
 \end{exm}
 
-このマルコフ等価性は因果探索の難しさを象徴する性質である。確率分布からは因果構造を特定することは難しい。そこで，マルコフ等価性を持つグラフの同値類であるマルコフ等価類を識別する手法が開発されてきた。
+このマルコフ等価性は因果探索の難しさを象徴する性質である.確率分布からは因果構造を特定することは難しい.そこで，マルコフ等価性を持つグラフの同値類であるマルコフ等価類を識別する手法が開発されてきた.
 
 \begin{defn}{マルコフ等価類}
   頂点を
   \[
     V=\{X_1,\ldots,X_n\}
   \]
-  とするDAG全体の集合を $\mathcal{D}$ とおく。
+  とするDAG全体の集合を $\mathcal{D}$ とおく.
 
   $\mathcal{D}$ 上の同値関係 $\sim$ を
   \[
@@ -2836,24 +2912,24 @@ $i, j, k \in \{0, 1\}$ として，
     \iff
     G_1\text{ と }G_2\text{ がマルコフ等価}
   \]
-  により定義する。
+  により定義する.
 
-  このとき，商集合 $\mathcal{D}/\sim$ の元をマルコフ等価類という。代表元を $D$ とするとき，対応するマルコフ等価類を
+  このとき，商集合 $\mathcal{D}/\sim$ の元をマルコフ等価類という.代表元を $D$ とするとき，対応するマルコフ等価類を
   \[
     [D]
   \]
-  と表す。
+  と表す.
 \end{defn}
 
-次のCPDAGは，マルコフ等価類と一対一対応する部分有向グラフである。
+次のCPDAGは，マルコフ等価類と一対一対応する部分有向グラフである.
 
 \begin{defn}{CPDAG}
-  頂点を $V=\{X_1,\ldots,X_n\}$ とするDAG全体の集合 $\mathcal{D}$ について考える。
+  頂点を $V=\{X_1,\ldots,X_n\}$ とするDAG全体の集合 $\mathcal{D}$ について考える.
   一つのマルコフ等価類 $[D]$ について，$[D]$ の元を
   \[
     D'=(V,E')
   \]
-  とおく。
+  とおく.
 
   \[
     D^*=
@@ -2862,7 +2938,7 @@ $i, j, k \in \{0, 1\}$ として，
       \bigcup_{D'\in [D]} E'
     \right)
   \]
-  としたとき，$D^*$ をCPDAG（complete partial DAG）という。
+  としたとき，$D^*$ をCPDAG（complete partial DAG）という.
 \end{defn}
 
 \begin{exm}{}
@@ -2877,30 +2953,30 @@ $i, j, k \in \{0, 1\}$ として，
   \[
     X_1\to X_2\leftarrow X_3 - X_4
   \]
-  である。
+  である.
 \end{exm}
 
-マルコフ等価性の必要十分条件として次の定理が知られている。
+マルコフ等価性の必要十分条件として次の定理が知られている.
 
 \begin{thm}{Verma-Pearlの定理}
-  頂点を $V$ とする2つのDAG $G_1,G_2$ がマルコフ等価であることの必要十分条件は，次の二つを同時に満たすことである。
+  頂点を $V$ とする2つのDAG $G_1,G_2$ がマルコフ等価であることの必要十分条件は，次の二つを同時に満たすことである.
   \begin{enumerate}
     \item
-      $G_1$ と $G_2$ のスケルトン構造が等しい。
+      $G_1$ と $G_2$ のスケルトン構造が等しい.
 
     \item
-      $G_1$ と $G_2$ は同一の $V$ 字合流点を持つ。
+      $G_1$ と $G_2$ は同一の $V$ 字合流点を持つ.
   \end{enumerate}
 \end{thm}
 \begin{proof}
-  参考文献\cite{verma1990}を参照せよ。
+  参考文献\cite{verma1990}を参照せよ.
 \end{proof}
 
-次の\textbf{忠実性}の仮定は因果探索分野における中心的な仮定である。以下のアルゴリズムでは暗に忠実性を仮定する
+次の\textbf{忠実性}の仮定は因果探索分野における中心的な仮定である.以下のアルゴリズムでは暗に忠実性を仮定する
 
 \begin{defn}{忠実性}
   頂点を $V=\{X_1,\ldots,X_n\}$ とするDAGが忠実性を持つとは，
-  $X_i,X_j\in V$ と $S\subset V$ について，次が成り立つことである。
+  $X_i,X_j\in V$ と $S\subset V$ について，次が成り立つことである.
   \[
     X_i\perp X_j\mid S
     \quad\Rightarrow\quad
@@ -2913,22 +2989,22 @@ $i, j, k \in \{0, 1\}$ として，
 制約ベースとは条件付き独立性の構造からDAGを復元する方法である.
 
 \begin{defn}{PCアルゴリズム}
-  頂点を $V=\{X_1,\ldots,X_n\}$ として，次の手順でグラフ $G_c$ を構成する。
+  頂点を $V=\{X_1,\ldots,X_n\}$ として，次の手順でグラフ $G_c$ を構成する.
 
   \begin{enumerate}
     \item
-      初期状態 $G$ はすべての頂点がつながった無向の完全グラフである。
+      初期状態 $G$ はすべての頂点がつながった無向の完全グラフである.
 
     \item
       スケルトン構造の検出
 
       $X_i,X_j$ の組について独立性検定を行い，独立と判定されれば，
-      $G$ から辺 $X_i-X_j$ を削除する。
+      $G$ から辺 $X_i-X_j$ を削除する.
       これをすべての $i,j$ の組で行い，終了後に完成したグラフを
       \[
         G_0=(V,E_0)
       \]
-      とおく。
+      とおく.
 
     \item
       分離集合の検出とスケルトン構造の確定
@@ -2939,16 +3015,16 @@ $i, j, k \in \{0, 1\}$ として，
         \{X_j\in V\setminus\{X_i\}\mid (X_i,X_j)\in E_0
         \text{ または }(X_j,X_i)\in E_0\}
       \]
-      とする。
+      とする.
 
-      $X_i,X_j$ を隣接している頂点，すなわち $X_j\in \mathrm{Adj}(X_i)$ とする。
-      $k\ge 1$ を整数とする。
+      $X_i,X_j$ を隣接している頂点，すなわち $X_j\in \mathrm{Adj}(X_i)$ とする.
+      $k\ge 1$ を整数とする.
 
-      $S$ を $\mathrm{Adj}(X_i)$ の要素数 $k$ の部分集合とする。ここで条件付き独立性
+      $S$ を $\mathrm{Adj}(X_i)$ の要素数 $k$ の部分集合とする.ここで条件付き独立性
       \[
         X_i\perp X_j\mid S
       \]
-      についての検定を行う。
+      についての検定を行う.
 
       もし独立と判定されれば，$S$ を
       \[
@@ -2958,33 +3034,33 @@ $i, j, k \in \{0, 1\}$ として，
       \[
         X_i-X_j
       \]
-      を削除する。
+      を削除する.
 
-      これをすべての $\mathrm{Adj}(X_i)$ の要素数 $k$ の部分集合について行う。
-      さらに，これを $k=1$ から順に行う。
+      これをすべての $\mathrm{Adj}(X_i)$ の要素数 $k$ の部分集合について行う.
+      さらに，これを $k=1$ から順に行う.
 
       そして，すべての隣接する頂点について $\mathrm{Sep}(X_i,X_j)$ の計算と辺の削除を行い，
-      グラフを $G_1$ に更新する。
+      グラフを $G_1$ に更新する.
 
   \item
     $V$ 字合流点の検出
 
     $G_1$ において，$X_i$ と $X_j$，$X_j$ と $X_k$ が隣接し，
-    $X_i$ と $X_k$ が隣接していない $X_i,X_j,X_k$ の組を考える。
+    $X_i$ と $X_k$ が隣接していない $X_i,X_j,X_k$ の組を考える.
 
     もし，
     \[
       \{X_j\}\notin \mathrm{Sep}(X_i,X_k)
     \]
-    であれば，$X_j$ を合流点とするように矢線を引く。
+    であれば，$X_j$ を合流点とするように矢線を引く.
 
-    これをすべての $X_i,X_j,X_k$ の組で行う。
+    これをすべての $X_i,X_j,X_k$ の組で行う.
 
   \item
     Meek則
 
-    次の $(R1),(R2),(R3)$ をすべての条件を満たす組にくり返し適用する。
-    $X,Y,Z,W\in G_1$ とする。
+    次の $(R1),(R2),(R3)$ をすべての条件を満たす組にくり返し適用する.
+    $X,Y,Z,W\in G_1$ とする.
 
     \begin{description}
       \item[$(R1)$]
@@ -2993,7 +3069,7 @@ $i, j, k \in \{0, 1\}$ として，
           Y-Z
           \quad\text{を}\quad
           Y\to Z
-          \quad\text{と書き直す。}
+          \quad\text{と書き直す.}
         \]
 
       \item[$(R2)$]
@@ -3002,7 +3078,7 @@ $i, j, k \in \{0, 1\}$ として，
           X-Z
           \quad\text{を}\quad
           X\to Z
-          \quad\text{と書き直す。}
+          \quad\text{と書き直す.}
         \]
 
       \item[$(R3)$]
@@ -3011,11 +3087,11 @@ $i, j, k \in \{0, 1\}$ として，
           X-W
           \quad\text{を}\quad
           X\to W
-          \quad\text{と書き直す。}
+          \quad\text{と書き直す.}
         \]
     \end{description}
 
-    以上によって得られるグラフを $G_c$ として出力する。
+    以上によって得られるグラフを $G_c$ として出力する.
 \end{enumerate}
 
 \[
@@ -3093,7 +3169,7 @@ $i, j, k \in \{0, 1\}$ として，
 \end{defn}
 
 \begin{exm}{}
-  次のDAGを考える。
+  次のDAGを考える.
   \[
     \begin{tikzpicture}[>=stealth, node distance=1.6cm]
       \node (X1) at (0,1) {$X_1$};
@@ -3107,8 +3183,8 @@ $i, j, k \in \{0, 1\}$ として，
     \end{tikzpicture}
   \]
 
-  このDAGを持つ $X_1,\ldots,X_4$ についてPCアルゴリズムを適用する。
-  以下，図で示す。
+  このDAGを持つ $X_1,\ldots,X_4$ についてPCアルゴリズムを適用する.
+  以下，図で示す.
 
   \[
     \begin{tikzpicture}[>=stealth, node distance=1.7cm]
@@ -3196,13 +3272,13 @@ $i, j, k \in \{0, 1\}$ として，
     \end{tikzpicture}
   \]
 
-  次のDAGを考える。
+  次のDAGを考える.
   \[
     X_1\to X_2\leftarrow X_3\to X_4
   \]
 
-  このDAGを持つ $X_1,\ldots,X_4$ についてPCアルゴリズムを適用する。
-  以下，図で示す。
+  このDAGを持つ $X_1,\ldots,X_4$ についてPCアルゴリズムを適用する.
+  以下，図で示す.
 
   \[
     \begin{tikzpicture}[>=stealth, node distance=1.7cm]
@@ -3276,7 +3352,7 @@ $i, j, k \in \{0, 1\}$ として，
     \end{tikzpicture}
   \]
 
-  このグラフは，マルコフ等価類におけるCPDAGである。実際，
+  このグラフは，マルコフ等価類におけるCPDAGである.実際，
   \[
     X_1\to X_2\leftarrow X_3\to X_4
   \]
@@ -3287,68 +3363,68 @@ $i, j, k \in \{0, 1\}$ として，
   \[
     X_1\to X_2\leftarrow X_3 - X_4
   \]
-  である。
+  である.
 \end{exm}
 
 
 PCアルゴリズムは，1,2,3でスケルトン構造を確定し，
-4でV字合流点を確定させる。定理7.7より，
+4でV字合流点を確定させる.定理7.7より，
 この時点でマルコフ等価類は確定するが，矛盾のない
-構造を得るために，5のMeek則が適用される。
+構造を得るために，5のMeek則が適用される.
 
-なお，Meek則は次の定理が証明されている。
+なお，Meek則は次の定理が証明されている.
 
 \begin{thm}{}
-  Meek則は次の性質を持つ。
+  Meek則は次の性質を持つ.
 
   \begin{enumerate}
     \item[(i)] \textbf{健全性}
     
     Meek則によって決定される辺の向きは，
     そのマルコフ等価類のすべてのDAGで
-    同じ向きとなる。
+    同じ向きとなる.
 
     \item[(ii)] \textbf{完全性}
 
     $R_1\sim R_3$を適用し尽くすと，
-    それ以上論理的に辺の向きを決めることはできない。
+    それ以上論理的に辺の向きを決めることはできない.
   \end{enumerate}
 \end{thm}
 \begin{proof}
-  参考文献\cite{meek1995}を参照せよ。
+  参考文献\cite{meek1995}を参照せよ.
 \end{proof}
 
 \underbar{\textbf{課題}}
 
-制約ベースのアルゴリズムはのメリット・デメリットは次の通りである。
+制約ベースのアルゴリズムのメリット・デメリットは次の通りである.
 \begin{itemize}
   \item メリット
     \begin{itemize}
-      \item 直感的である。
-      \item 独立性検定の手法に自由度があり、パラメトリック、ノンパラメトリックなど柔軟な設計ができる。
+      \item 直感的である.
+      \item 独立性検定の手法に自由度があり，パラメトリック，ノンパラメトリックなど柔軟な設計ができる.
     \end{itemize}
 
   \item デメリット
     \begin{itemize}
-      \item 独立性検定を繰り返すため、多重検定問題が生じる。
-      \item 計算時間は指数的であり、疎なデータでなければ計算時間が大きい。
-      \item 1回でも独立性検定の結果が誤っていると全体のグラフに大きく影響する。
-      \item マルコフ等価なグラフを識別できない。
+      \item 独立性検定を繰り返すため，多重検定問題が生じる.
+      \item 計算時間は指数的であり，疎なデータでなければ計算時間が大きい.
+      \item 1回でも独立性検定の結果が誤っていると全体のグラフに大きく影響する.
+      \item マルコフ等価なグラフを識別できない.
     \end{itemize}
   \end{itemize}  
 
 \subsubsection*{スコアベース}
-ここでは，スコアベースのアルゴリズムとしてGESを紹介する。
-スコアベースのアルゴリズムは，DAGについての適合度を評価するスコアを定義し，そのスコアが最大となるDAGを探索する手法である。
+ここでは，スコアベースのアルゴリズムとしてGESを紹介する.
+スコアベースのアルゴリズムは，DAGについての適合度を評価するスコアを定義し，そのスコアが最大となるDAGを探索する手法である.
 
 \begin{defn}{GES}
-  頂点を$V$とするDAG全体の集合を$\mathcal D$とする。
+  頂点を$V$とするDAG全体の集合を$\mathcal D$とする.
 
   このとき，スコア
   \[
     S:\mathcal D\longrightarrow\mathbb R
   \]
-  が次の性質を満たすとする。
+  が次の性質を満たすとする.
 
   \begin{enumerate}[label=(\arabic*)]
     \item スコア等価性
@@ -3368,64 +3444,64 @@ PCアルゴリズムは，1,2,3でスケルトン構造を確定し，
       \sum_{i=1}^{n}
       s(X_i,\mathrm{pa}(X_i))
     \]
-    が成り立つ。
+    が成り立つ.
   \end{enumerate}
 
   さて，(1)より，$S$は頂点を$V$とする
   マルコフ等価類の集合$\mathcal C$から
-  $\mathbb R$への写像と見なせる。
+  $\mathbb R$への写像と見なせる.
 
   このスコア$S$を用いて次の手順で探索する
   アルゴリズムを
   GES（Greedy Equivalence Search）
-  という。
+  という.
 
   \begin{enumerate}
     \item
     辺を全く持たない唯一のDAGに対応する
-    CPDAGを初期状態$G_0$とする。
+    CPDAGを初期状態$G_0$とする.
 
     \item
     CPDAG $G_0$に辺を1本追加して得られる
     CPDAG $G^+$のうち，
     最もスコア$S(G^+)$が大きいものを選び，
-    $G_0$を更新する。
+    $G_0$を更新する.
 
     スコアの改善がなくなるまで
-    これを繰り返す。
+    これを繰り返す.
 
     \item
     (2)で得られたCPDAGから
     辺を1本削除して得られる
     CPDAG $G^-$のうち，
     最もスコア$S(G^-)$が大きいものを選び，
-    更新する。
+    更新する.
 
     スコアの改善がなくなるまで
-    これを繰り返し，最終的に得られたCPDAGを出力する。
+    これを繰り返し，最終的に得られたCPDAGを出力する.
   \end{enumerate}
 \end{defn}
 
  なお，GESにおける辺の追加・削除は，
-  CPDAGの制約の下で行われるため、辺の追加・削除の妥当性を確認する必要がある。
-  具体的な基準については参考文献\cite{chickering2002lec}を参照せよ。
+  CPDAGの制約の下で行われるため，辺の追加・削除の妥当性を確認する必要がある.
+  具体的な基準については参考文献\cite{chickering2002lec}を参照せよ.
 
   さて，GESはスコアが次の性質を満たせば，
   大標本で真のCPDAGを出力することが
-  知られている。(参考文献\cite{chickering2002})
+  知られている.(参考文献\cite{chickering2002})
 
 \begin{defn}{局所一貫性}
   $G$を任意のDAGとし，
   $G'$を$G$に辺
   $X_i\rightarrow X_j$
-  を1本追加して得られるDAGとする。
+  を1本追加して得られるDAGとする.
 
   スコア$S$が局所一貫性を持つとは，
-  大標本極限において次の2条件を満たすことである。
+  大標本極限において次の2条件を満たすことである.
 
   ただし，
   $\mathrm{pa}(X_j)$は
-  $G$における$X_j$の親集合とする。
+  $G$における$X_j$の親集合とする.
 
   \begin{enumerate}
     \item
@@ -3452,41 +3528,41 @@ PCアルゴリズムは，1,2,3でスケルトン構造を確定し，
   BICはスコア等価性，分解可能性，局所一貫性を満たす.
 \end{thm}
 \begin{proof}
-  参考文献\cite{chickering2002}を参照せよ。
+  参考文献\cite{chickering2002}を参照せよ.
 \end{proof}    
 
 \underbar{\textbf{課題}}
 
-GESのメリット・デメリットは次の通りである。
+GESのメリット・デメリットは次の通りである.
 \begin{itemize}
   \item メリット
     \begin{itemize}
-      \item 貪欲探索であるため，計算時間が比較的短い。
-      \item 大標本極限において真のCPDAGを出力することが知られている。
+      \item 貪欲探索であるため，計算時間が比較的短い.
+      \item 大標本極限において真のCPDAGを出力することが知られている.
     \end{itemize}
 
   \item デメリット
     \begin{itemize}
-      \item スコアの設計が難しく、ノンパラメトリックな設定が困難である。
-      \item マルコフ等価なグラフを識別できない。
+      \item スコアの設計が難しく，ノンパラメトリックな設定が困難である.
+      \item マルコフ等価なグラフを識別できない.
     \end{itemize}
   \end{itemize}
 
 \subsubsection*{勾配ベース}
-次にNOTEARSを紹介しよう。
-NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である。
-次の命題は離散と連続をつなぐ命題である。
+次にNOTEARSを紹介しよう.
+NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である.
+次の命題は離散と連続をつなぐ命題である.
 
 \begin{thm}{}
   頂点集合を$V$とするグラフの重み付き隣接行列を
-  $W$とする。
+  $W$とする.
 
   $V$を頂点とするグラフがDAGであるための
   必要十分条件は
   \[
     \operatorname{tr}\!\left(e^{W\circ W}\right)=n
   \]
-  である。
+  である.
 
   ただし，
   $n\times n$行列
@@ -3496,7 +3572,7 @@ NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である�
   \[
     A\circ B=(a_{ij}b_{ij})
   \]
-  と定義する。
+  と定義する.
 \end{thm}
 
 \begin{proof}
@@ -3510,11 +3586,11 @@ NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である�
   \[
     (H^k)_{ii}=0
   \]
-  となることである。
+  となることである.
 
   実際，
   \[
-    (H^k)_{ii} = \sum_{\ell_1,\ldots,\ell_{k-1}=1}^{n} w_{i\ell_1}^{\,2} w_{\ell_1\ell_2}^{\,2} \cdots w_{\ell_{k-1}i}^{\,2}
+    (H^k)_{ii} = \sum_{l_1,\ldots,l_{k-1}=1}^{n} w_{il_1}^{\,2} w_{l_1l_2}^{\,2} \cdots w_{l_{k-1}i}^{\,2}
   \]
 
   重み付き隣接行列の定義より，
@@ -3522,27 +3598,27 @@ NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である�
   \[
     w_{ij}=c_{ij}a_{ij} \qquad(c_{ij}\neq0)
   \]
-  と書ける。
+  と書ける.
 
   よって
   \[
-    \sum_{\ell_1,\ldots,\ell_{k-1}=1}^{n}
-    c_{i\ell_1}^{\,2}
-    c_{\ell_1\ell_2}^{\,2}
+    \sum_{l_1,\ldots,l_{k-1}=1}^{n}
+    c_{i l_1}^{\,2}
+    c_{l_1 l_2}^{\,2}
     \cdots
-    c_{\ell_{k-1}i}^{\,2}
-    a_{i\ell_1}\cdots a_{\ell_{k-1}i}
+    c_{l_{k-1}i}^{\,2}
+    a_{i l_1}\cdots a_{l_{k-1}i}
     =0.
   \]
 
   全ての$c_{ij}$について
   $c_{ij}^2>0$であるから，
   \[
-    \sum_{\ell_1,\ldots,\ell_{k-1}=1}^{n}
-    a_{i\ell_1}\cdots a_{\ell_{k-1}i}=0.
+    \sum_{l_1,\ldots,l_{k-1}=1}^{n}
+    a_{i l_1}\cdots a_{l_{k-1}i}=0.
   \]
 
-  これは$A^k$の$(i,i)$成分である。したがって
+  これは$A^k$の$(i,i)$成分である.したがって
   \[
     (H^k)_{ii}=0
     \iff
@@ -3550,7 +3626,7 @@ NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である�
     \iff
     \text{グラフはDAG}
   \]
-  となる。
+  となる.
 
   また，
   \begin{align*}
@@ -3576,7 +3652,7 @@ NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である�
     \frac{\operatorname{tr}(H^k)}{k!}
     \ge0
   \]
-  である。
+  である.
 
   よって
   \[
@@ -3595,13 +3671,13 @@ NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である�
     \iff
     \text{グラフはDAG}
   \]
-  が従う。
+  が従う.
 \end{proof}
 
 \begin{defn}{NOTEARS}
   $V=\{X_1,\ldots,X_n\}$を頂点とする
   グラフ$G$の重み付き隣接行列を
-  $W\in\mathbb{R}^{n\times n}$とする。
+  $W\in\mathbb{R}^{n\times n}$とする.
 
   \[
     h(W)
@@ -3611,11 +3687,11 @@ NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である�
       e^{W\circ W}
     \right)-n
   \]
-  とおく。
+  とおく.
 
   NOTEARSでは，
   $W$の推定値を次の制約付き最適化問題の
-  解として求める。
+  解として求める.
 
   \begin{align}
     \min_{W\in\mathbb{R}^{n\times n}}
@@ -3643,450 +3719,389 @@ NOTEARSはDAGの離散探索を連続最適化に置き換えた手法である�
   \]
 
   はそれぞれFrobeniusノルム，
-  および$\ell_1$ノルムである。
+  および$\ell_1$ノルムである.
 \end{defn}
 
 \underbar{\textbf{課題}}
 
-NOTEARSのメリット・デメリットは次の通りである。
+NOTEARSのメリット・デメリットは次の通りである.
 \begin{itemize}
   \item メリット
     \begin{itemize}
-      \item 連続最適化であるため組み合わせ爆発を避けることができる。
+      \item 連続最適化であるため組み合わせ爆発を避けることができる.
    \end{itemize}
 
   \item デメリット
     \begin{itemize}
-      \item 非凸最適化問題であるため，局所解に陥る可能性がある。
-      \item マルコフ等価なグラフを識別できない。
+      \item 非凸最適化問題であるため，局所解に陥る可能性がある.
+      \item マルコフ等価なグラフを識別できない.
     \end{itemize}
   \end{itemize}
 
 \subsubsection*{関数ベース}
 
-データの生成過程に具体的な関数系を仮定して因果探索を行う方法である。
-代表的な方法が次のLiNGAM（Linear Non-Gaussian Acyclic Model）である。
+データの生成過程に具体的な関数系を仮定して因果探索を行う方法である.
+代表的な方法が次のLiNGAM（Linear Non-Gaussian Acyclic Model）である.
 
-LiNGAMは誤差に非ガウス性を要求するが，次の定理はその根拠となる定理である。
+LiNGAMは誤差に非ガウス性を要求するが，次の定理はその根拠となる定理である.
 
 \begin{thm}{Darmois--Skitovichの定理}
-2つの確率変数 $Y_1,Y_2$ を独立な確率変数
-$S_1,\ldots,S_p$ の線形結合として
-\[
-Y_1=\sum_{i=1}^{p}\alpha_iS_i,
-\]
-\[
-Y_2=\sum_{i=1}^{p}\beta_iS_i
-\]
-と定義する。
+  2つの確率変数 $Y_1,Y_2$ を独立な確率変数
+  $e_1, \dots ,e_p$ の線形結合として
+  \begin{align}
+    Y_1 &= \sum_{i=1}^{p} \alpha_i e_i \\
+    Y_2 &= \sum_{i=1}^{p} \beta_i e_i
+  \end{align}
+  と定義する.
 
-このとき，$Y_1$ と $Y_2$ が独立ならば，
-$\alpha_i\beta_i\neq0$ となるような確率変数 $S_i$ は
-すべて正規分布に従う。
+  このとき，$Y_1$ と $Y_2$ が独立ならば，
+  $\alpha_i \beta_i \neq 0$ となるような確率変数 $e_i$ は
+  すべて正規分布に従う.
 \end{thm}
 
 \begin{thm}{}
-確率変数 $X_1,\ldots,X_n$ は外生変数
-$\varepsilon_1,\ldots,\varepsilon_n$ を用いて
-次の構造方程式で生成されるとする。
-\[
-X=BX+\varepsilon
-\]
-ここで，$B$ は狭義下三角行列である。
-ここで各誤差 $\varepsilon_i$ は平均0，分散 $\sigma_i^2$ の非ガウス分布に従うとする。
+  確率変数 $X_1,\ldots,X_n$ は外生変数 $\varepsilon_1, \dots ,\varepsilon_n$ を用いて
+  次の構造方程式で生成されるとする.
+  \[
+    X=BX+\varepsilon
+  \]
+  ここで，$B$ は狭義下三角行列である.
+  ここで各誤差 $\varepsilon_i$ は平均0，分散 $\sigma_i^2$ の非ガウス分布に従うとする.
 
-このとき，$X_i$ を $X_j$ で回帰したときの残差を
-$r_i^{(j)}$ とおく。すなわち，
-\[
-r_i^{(j)}
-=
-X_i-
-\frac{\operatorname{Cov}(X_i,X_j)}
-{\operatorname{Var}(X_j)}
-X_j
-\]
-と書く。
+  このとき，$X_i$ を $X_j$ で回帰したときの残差を
+  $r_i^{(j)}$ とおく.すなわち，
+  \[
+    r_i^{(j)} = X_i - \frac{\operatorname{Cov}(X_i,X_j)} {\operatorname{Var}(X_j)} X_j
+  \]
+  と書く.
 
-このとき，$X_j$ が外生変数であるための必要十分条件は，
-すべての残差 $r_i^{(j)}$ と $X_j$ が独立となることである。
+  このとき，$X_j$ が外生変数であるための必要十分条件は，
+  すべての残差 $r_i^{(j)}$ と $X_j$ が独立となることである.
 \end{thm}
 
-\begin{proof}
-$X_j$ が外生変数とする。
+\begin{proof} \quad
 
-構造方程式は
-\[
-X=(I-B)^{-1}\varepsilon
-\]
-と書けるため，各 $X_i$ は $\varepsilon$ の線形結合で書ける。
-ゆえに，
-\[
-X_i
-=
-\sum_{k=1}^{n}\alpha_k\varepsilon_k
-\]
-とおく。
+  \begin{itemize}
+    \item 必要性
+    
+    $X_j$ が外生変数とする.
+    構造方程式は
+    \[
+      X=(I-B)^{-1}\varepsilon
+    \]
+    と書けるため，各 $X_i$ は $\varepsilon$ の線形結合で書ける.
+    ゆえに，
+    \[
+      X_i = \sum_{k=1}^{n} \alpha_k \varepsilon_k
+    \]
+    とおく.$X_j=\varepsilon_j$ となるため，
+    \begin{align}
+      \operatorname{Cov}(X_i,X_j) &= \operatorname{Cov}(X_i,\varepsilon_j) \\
+      &= \sum_{k=1}^{n} \alpha_k \operatorname{Cov}(\varepsilon_k,\varepsilon_j) \\
+      &= \alpha_j \operatorname{Var}(X_j).
+    \end{align}
+    したがって，
+    \begin{align}
+      r_i^{(j)} &= X_i - \frac{\alpha_j \operatorname{Var}(X_j)} {\operatorname{Var}(X_j)} X_j \\
+      &= \sum_{\substack{k=1\\k\neq j}}^{n} \alpha_k \varepsilon_k.
+    \end{align}
 
-$X_j=\varepsilon_j$ となるため，
-\[
-\operatorname{Cov}(X_i,X_j)
-=
-\operatorname{Cov}(X_i,\varepsilon_j)
-=
-\sum_{k=1}^{n}\alpha_k
-\operatorname{Cov}(\varepsilon_k,\varepsilon_j)
-=
-\alpha_j\operatorname{Var}(X_j).
-\]
+    $\varepsilon_j$ と $\varepsilon_1, \dots ,\varepsilon_{j-1},\varepsilon_{j+1}, \dots ,\varepsilon_n$ は互いに独立であるから，
+    \[
+    r_i^{(j)} \perp X_j
+    \]
 
-したがって，
-\begin{align}
-  r_i^{(j)}
-  &=
-  X_i-
-  \frac{\alpha_j\operatorname{Var}(X_j)}
-  {\operatorname{Var}(X_j)}
-  X_j\\
-  &=
-  \sum_{\substack{k=1\\k\neq j}}^{n}
-  \alpha_k\varepsilon_k.
-\end{align}
+    \item 十分性 
 
-$\varepsilon_j$ と
-$\varepsilon_1,\ldots,\varepsilon_{j-1},
-\varepsilon_{j+1},\ldots,\varepsilon_n$
-は互いに独立であるから，
-\[
-r_i^{(j)}
-\perp
-X_j.
-\]
+    $X_j$ が外生変数でないとする.
 
-一方，$X_j$ が外生変数でないとする。
+    このとき，$X_j$ は少なくとも1つの親 $X_i$ を持つ.
+    ここで $X_i$ は $\varepsilon_1,\ldots,\varepsilon_n$ のうちいくつかの線形結合で書け，$e_1,\ldots,e_p$ を $\varepsilon_1,\ldots,\varepsilon_n$ のうち $X_i$ と線形結合で表したときに係数が非ゼロの変数とする.
+    \[
+      X_i = \alpha_1 e_1 + \cdots + \alpha_p e_p \qquad (\alpha_i\neq0)
+    \]
 
-このとき，$X_j$ は少なくとも1つの親 $X_i$ を持つ。
-ここで $X_i$ は
-$\varepsilon_1,\ldots,\varepsilon_n$
-のうちいくつかの線形結合で書けるため，
-$e_1,\ldots,e_p$ を
-$\varepsilon_1,\ldots,\varepsilon_n$
-のうち $X_i$ と線形結合で表したものとする。
-\[
-X_i
-=
-\alpha_1e_1+\cdots+\alpha_pe_p,
-\qquad
-(\alpha_i\neq0)
-\]
+    ここで，$X_i$ は $X_j$ の親であるため，
+    $e_1,\ldots,e_p$ は $X_j$ を線形結合で表したときに
+    係数が非ゼロとなる変数である.よって，$e_1, \dots, e_p, e_{p+1}, \dots ,e_q$に基底を延長して
+    \[
+      X_j = \beta_1 e_1 + \cdots + \beta_pe_p + \beta_{p+1} e_{p+1} + \cdots + \beta_q e_q \qquad (\beta_i\neq0)
+    \]
+    と書ける.ここで $r_i^{(j)}$ を計算すると，
+    \begin{align}
+      \operatorname{Cov}(X_i,X_j) = \sum_{k=1}^{p} \alpha_k \beta_k \sigma_k^2 \\
+      \operatorname{Var}(X_j) = \sum_{k=1}^{q} \beta_k^2 \sigma_k^2
+    \end{align}
+    であるから，
+    \[
+      \gamma = \frac{\sum_{k=1}^{p} \alpha_k \beta_k \sigma_k^2}{\sum_{k=1}^{q} \beta_k^2 \sigma_k^2}
+    \]
+    とおけば，
+    \begin{align}
+      r_i^{(j)} &= X_i - \gamma X_j\\
+      &=\sum_{k=1}^{p} (\alpha_k - \gamma \beta_k) e_k - \sum_{k=p+1}^{q} \gamma \beta_k e_k
+    \end{align}
+    ここで少なくとも1つの $k=1,\ldots,p$ について
+    \[
+      \alpha_k - \gamma \beta_k \neq 0
+    \]
+    である.実際，もしすべての $k=1,\ldots ,p$ に対して
+    \[
+      \alpha_k-\gamma\beta_k=0
+    \]
+    ならば，
+    \[
+      \gamma = \frac{\sum_{k=1}^{p} \alpha_k \beta_k \sigma_k^2}{\sum_{k=1}^{q} \beta_k^2 \sigma_k^2}
+    \]
+    となるが，これは一般には矛盾する.したがって，
+    \[
+      \beta_l - \gamma \alpha_l \neq 0
+    \]
+    となる $l$ が存在し，
+    \[
+      \beta_l (\beta_l - \gamma \alpha_l) \neq 0
+    \]
+    となる.
+    $e_l$ は非ガウス分布に従うので，
+    Darmois--Skitovich の定理の対偶より，
+    \[
+      r_i^{(j)} \not \! \perp X_j
+    \]
+  \end{itemize}  
 
-ここで，$X_i$ は $X_j$ の親であるため，
-$e_1,\ldots,e_p$ は $X_j$ を線形結合で表したときに
-係数が非ゼロとなる変数である。よって，基底を延長して
-
-\[
-X_j
-=
-\beta_1e_1+\cdots+\beta_pe_p
-+\beta_{p+1}e_{p+1}
-+\cdots+
-\beta_qe_q,
-\qquad
-(\beta_i\neq0)
-\]
-
-と書く。
-
-ここで $r_i^{(j)}$ を計算すると，
-
-\[
-\operatorname{Cov}(X_i,X_j)
-=
-\sum_{k=1}^{p}
-\alpha_k\beta_k\sigma_k^2,
-\]
-
-\[
-\operatorname{Var}(X_j)
-=
-\sum_{k=1}^{q}
-\beta_k^2\sigma_k^2
-\]
-
-であるから，
-
-\[
-\gamma
-=
-\frac{\displaystyle
-\sum_{k=1}^{p}
-\alpha_k\beta_k\sigma_k^2}
-{\displaystyle
-\sum_{k=1}^{q}
-\beta_k^2\sigma_k^2}
-\]
-
-とおけば，
-
-\begin{align}
-  r_i^{(j)}
-  &=
-  X_i-\gamma X_j\\
-  &=
-  \sum_{k=1}^{p}
-  (\alpha_k-\gamma\beta_k)e_k
-  -
-  \sum_{k=p+1}^{q}
-  \gamma\beta_ke_k.
-\end{align}
-
-ここで少なくとも1つの
-$k=1,\ldots,p$ について
-
-\[
-\alpha_k-\gamma\beta_k\neq0
-\]
-
-である。
-
-実際，もしすべての
-$k=1,\ldots,p$ に対して
-
-\[
-\alpha_k-\gamma\beta_k=0
-\]
-
-ならば，
-
-\[
-\gamma
-=
-\frac{\displaystyle
-\sum_{k=1}^{p}
-\alpha_k\beta_k\sigma_k^2}
-{\displaystyle
-\sum_{k=1}^{q}
-\beta_k^2\sigma_k^2}
-\]
-
-となるが，これは一般には矛盾する。
-
-したがって，
-
-\[
-\beta_\ell-\gamma\alpha_\ell\neq0
-\]
-
-となる $\ell$ が存在し，
-
-\[
-\beta_\ell
-(\beta_\ell-\gamma\alpha_\ell)
-\neq0
-\]
-
-となる。
-
-$e_\ell$ は非ガウス分布に従うので，
-Darmois--Skitovich の定理の対偶より，
-
-\[
-r_i^{(j)}
-\not\!\perp
-X_j.
-\]
-
-以上より，
-
-\[
-X_j
-\text{ が外生変数}
-\iff
-r_i^{(j)}
-\perp
-X_j
-\]
-
-が成り立つ。
+  以上より，$X_j$ が外生変数であることと $r_i^{(j)} \perp X_j$ は同値である.
 \end{proof}
 
 \begin{defn}{LiNGAM}
-$X_1,\ldots,X_n$ を確率変数とする。
-標準化した確率変数を
-$\tilde X_1,\ldots,\tilde X_n$
-とする。
+  $X_1,\ldots,X_n$ を確率変数とする.標準化した確率変数を $\tilde X_1, \dots ,\tilde X_n$ とする.
 
-$i$ を1つ固定して，各 $j$ について
+  $i$ を1つ固定して，各 $j$ について
+  \[
+    \tilde X_j = \beta_{ji} \tilde X_i + \tilde \varepsilon_j^{(i)}
+  \]
+  という線形回帰を考える.ここで
+  \begin{align}
+    \beta_{ji} &= \frac{\operatorname{Cov}(\tilde X_i,\tilde X_j)}{\operatorname{Var}(\tilde X_i)} \\
+    \tilde r_j^{(i)} &= \tilde X_j - \beta_{ji}\tilde X_i
+  \end{align}
 
-\[
-\tilde X_j
-=
-\beta_{ji}\tilde X_i
-+
-\tilde\varepsilon_j^{(i)}
-\]
+  とする.これをすべての $i,j$ について行い，残差 $\tilde r_j^{(i)}$ を得る.
 
-という線形回帰を考える。
+  ここで，
+  \[
+    m(X_i,X_j) = I(\tilde X_j,\tilde r_j^{(i)}) - I(\tilde X_i,\tilde r_i^{(j)})
+  \]
 
-ここで
+  と定義する.ただし確率変数$X,Y$について$I(X,Y)$は$X$と$Y$の相互情報量である.
 
-\[
-\beta_{ji}
-=
-\frac{\operatorname{Cov}(\tilde X_i,\tilde X_j)}
-{\operatorname{Var}(\tilde X_i)}
-=
-\operatorname{Corr}(\tilde X_i,\tilde X_j),
-\]
+  さらに，
 
-\[
-\tilde r_j^{(i)}
-=
-\tilde X_j
--
-\beta_{ji}\tilde X_i
-\]
+  \[
+    M(X_i) = \sum_{j \neq i} \min \{0,m(X_i,X_j)\}^2
+  \]
 
-とする。
+  とする.
 
-これをすべての $i,j$ について行い，
-残差
-$\tilde r_j^{(i)}$
-を得る。
+  ここで$M(X_1),\ldots,M(X_n)$の中で最小となる変数 $X_p$ を $X^{(1)}$ と置きなおす.
+  続いて，$n-1$ 個の残差
+  \[
+    r_1^{(p)}, \ldots, r_{p-1}^{(p)}, r_{p+1}^{(p)}, \ldots, r_n^{(p)}
+  \]
+  について同様の手順を繰り返し，その中で最小となる変数を$X^{(2)}$とする.
 
-ここで，相互情報量を用いて
-
-\[
-m(X_i,X_j)
-=
-I(\tilde X_j,\tilde r_j^{(i)})
--
-I(\tilde X_i,\tilde r_i^{(j)})
-\]
-
-と定義する。
-
-さらに，
-
-\[
-M(X_i)
-=
-\sum_{j\neq i}
-\min\{0,m(X_i,X_j)\}^2
-\]
-
-とする。
-
-$M(X_1),\ldots,M(X_n)$
-の中で最小となる変数を
-$X^{(1)}$
-とする。
-
-続いて，
-$n-1$ 個の残差
-
-\[
-r_1^{(p)},\ldots,
-r_{p-1}^{(p)},
-r_{p+1}^{(p)},\ldots,
-r_n^{(p)}
-\]
-
-について同様の手順を繰り返し，
-その中で最小となる変数を
-$X^{(2)}$
-とする。
-
-これを繰り返すことで，
-
-\[
-X^{(1)},\ldots,X^{(n)}
-\]
-
-というトポロジカル順序を推定する。
+  これを繰り返すことで，
+  \[
+    X^{(1)}, \ldots, X^{(n)}
+  \]
+  というトポロジカル順序を推定する.
 \end{defn}
 
 \underbar{\textbf{課題}}
 
-LiNGAMのメリット・デメリットは次の通りである。
+LiNGAMのメリット・デメリットは次の通りである.
 \begin{itemize}
   \item メリット
     \begin{itemize}
-      \item マルコフ等価なグラフを識別できる。  
+      \item マルコフ等価なグラフを識別できる.  
     \end{itemize}
 
   \item デメリット
     \begin{itemize}
-      \item 制約が強く、LiNGAMの仮定が成り立たない場合は適用できない。
+      \item 制約が強く，LiNGAMの仮定が成り立たない場合は適用できない.
     \end{itemize}
 \end{itemize}
 
-\begin{exm}{}
+\begin{exm}{LiNGAMの政治経済データへの適用例}
   World BankやV-Dem (Varieties of Democracy) Project
   が公開している国際比較データを用いて，各国の制度や経済指標
-  の因果構造を推定することを考える。
-
-  例えば，次の変数を用いる。
+  の因果構造を推定することを考える.解析には次の変数を用いる.
 
   \begin{center}
-\begin{tabular}{ll}
-\hline
-変数 & 内容\\
-\hline
-GDP (log) & 一人当たりGDP（対数変換）\\
-Internet\_Users & インターネット利用率（人口に占めるインターネット利用者割合）\\
-Democracy & 民主主義指数\\
-Corruption & 汚職の少なさ（腐敗認識・統治の健全性を表す指標）\\
-Property\_Rights & 財産権保護指数\\
-Education\_Equality & 教育機会均等指数\\
-Physical\_Freedom & 身体的自由指数（生命・身体の安全や移動の自由など）\\
-Resource\_Rent (log) & 天然資源レント（GDP比，対数変換）\\
-Social\_Equality & 社会的平等指数\\
-\hline
-\end{tabular}
-\end{center}
+    \begin{tabular}{ll}
+    \hline
+    変数 & 内容\\
+    \hline
+    GDP (log) & 一人当たりGDP（対数変換）\\
+    Internet\_Users & インターネット利用率（人口に占めるインターネット利用者割合）\\
+    Democracy & 民主主義指数\\
+    Corruption & 汚職の少なさ（腐敗認識・統治の健全性を表す指標）\\
+    Property\_Rights & 財産権保護指数\\
+    Education\_Equality & 教育機会均等指数\\
+    Physical\_Freedom & 身体的自由指数（生命・身体の安全や移動の自由など）\\
+    Resource\_Rent (log) & 天然資源レント（GDP比，対数変換）\\
+    Social\_Equality & 社会的平等指数\\
+    \hline
+    \end{tabular}
+  \end{center}
 
   LiNGAMを適用することで，例えば
 
   \begin{itemize}
-    \item 経済発展は民主主義を促進するのか。
-    \item 民主主義は汚職を減少させるのか。
-    \item 財産権の保護は経済成長を促進するのか。
-    \item インターネット普及は民主主義の発展に寄与するのか。
+    \item 経済発展は民主主義を促進するのか.
+    \item 民主主義は汚職を減少させるのか.
+    \item 財産権の保護は経済成長を促進するのか.
+    \item インターネット普及は民主主義の発展に寄与するのか.
   \end{itemize}
 
-  といった政治・経済学上の仮説をデータから探索的に検討できる。
-  
+  といった政治・経済学上の仮説をデータから探索的に検討できる.
+
+  \noindent \underbar{\textbf{解析手順}}
+
+  本解析では，2021年の世界銀行（World Bank）およびV-Demの国別横断面データを用いる.
+
+  \begin{enumerate}
+    \item \textbf{データの取得・結合}
+
+    世界銀行より以下の3変数を取得した.
+
+    \begin{itemize}
+        \item 一人当たりGDP（PPP）
+        \item 天然資源レント（GDP比）
+        \item インターネット利用率
+    \end{itemize}
+
+    また，V-Demより以下の政治・制度指標を取得した.
+
+    \begin{itemize}
+        \item Social Equality
+        \item Democracy
+        \item Property Rights
+        \item Physical Freedom
+        \item Political Corruption
+        \item Education Equality
+    \end{itemize}
+
+    両データを国コードで結合し，欠損値を含む国を除外した158ヶ国で解析を行う.
+
+    \item \textbf{前処理}
+
+    一人当たりGDPおよび天然資源レントについては右裾の長い分布を持つため，
+
+    \[
+    x'=\log(1+x)
+    \]
+
+    により対数変換を行った.
+
+    その後，各変数について平均0，標準偏差1となるよう標準化を行った.
+
+    \item \textbf{DirectLiNGAMによる因果探索}
+
+    前処理後のデータに対してDirectLiNGAMを適用する.
+
+    DirectLiNGAMでは
+
+    \[
+    \mathbf{x}=B\mathbf{x}+\mathbf{e}
+    \]
+
+    を仮定し，非ガウス独立誤差の仮定の下で因果順序および隣接行列
+    \(B=(b_{ij})\) を推定する.
+
+    \item \textbf{ブートストラップによる安定性評価}
+
+    推定された因果グラフの頑健性を評価するため，
+    国を単位としたノンパラメトリック・ブートストラップを100回実施した.
+
+    各反復では，元のデータと同数の国を復元抽出し，
+    DirectLiNGAMを再度推定した.
+
+    \item \textbf{辺の出現確率の算出}
+
+    各ブートストラップ標本において，
+
+    \[
+      |b_{ij}|>0.05
+    \]
+
+    を満たす場合に辺\(j\rightarrow i\)が存在すると判定した.
+
+    100回の反復に対し，
+
+    \[
+    \hat{P}_{ij} = \frac{\text{辺 }j\rightarrow i\text{ が出現した回数}}{100}
+    \]
+
+    を辺の出現確率とした.
+
+    \item \textbf{安定辺の抽出}
+
+    辺の出現確率が
+    \[
+      \hat{P}_{ij}\ge0.70
+    \]
+    を満たす辺のみを安定辺として採用した.
+
+    また，安定辺の係数は，
+    辺が出現したブートストラップ標本における係数の平均値を用いた.
+  \end{enumerate}
+
+  解析結果を図\ref{fig:LiNGAM_res}に示す.
+
   \begin{figure}[H]
-  \centering
-  \begin{tikzpicture}[node distance=1.4cm, auto, >=latex, thick]
-    \node (internet) {Internet\_Users};
-    \node (gdp) [below=of internet] {GDP(log)};
+    \centering
+    \begin{tikzpicture}[node distance=1.4cm, auto, >=latex, thick]
+      \node (internet) {Internet\_Users};
+      \node (gdp) [below=of internet] {GDP(log)};
 
-    \node (physical) [right=2.0cm of internet] {Physical\_Freedom};
-    \node (corrupt) [below=of physical] {Corruption};
-    \node (demo) [below=of corrupt] {Democracy};
+      \node (physical) [right=3.0cm of internet] {Physical\_Freedom};
+      \node (corrupt) [right=of gdp] {Corruption};
+      \node (demo) [below=of corrupt] {Democracy};
 
-    \node (property) [right=2.0cm of corrupt] {Property\_Rights};
-    \node (social) [below=of property] {Social\_Equality};
-    \node (resource) [above=of property] {Resource\_Rent(log)};
+      \node (property) [right=2.8cm of corrupt] {Property\_Rights};
+      \node (social) [below=of property] {Social\_Equality};
+      \node (resource) [left=0.5cm of internet] {Resource\_Rent(log)};
 
-    \node (edu) [right=2.0cm of resource] {Education\_Equality};
+      \node (edu) [below=0.7cm of resource] {Education\_Equality};
 
-    \draw[->] (internet) -- node[left] {$0.80$} (gdp);
-    \draw[->] (internet) -- node[above] {$-0.21$} (corrupt);
+      \draw[->] (internet) -- node[left] {$0.80$} (gdp);
+      \draw[->] (internet) -- node[above] {$-0.21$} (corrupt);
 
-    \draw[->] (physical) -- node[right] {$-0.39$} (corrupt);
-    \draw[->] (physical) -- node[above] {$0.49$} (property);
-    \draw[->] (physical) -- node[left] {$0.37$} (demo);
-    \draw[->] (physical) -- node[right] {$0.28$} (social);
+      \draw[->] (physical) -- node[above left] {$-0.39$} (corrupt);
+      \draw[->] (physical) -- node[above right] {$0.49$} (property);
+      \draw[->] (physical) -- node[right] {$0.37$} (demo);
+      \draw[->] (physical) -- node[left] {$0.28$} (social);
 
-    \draw[->] (corrupt) -- node[right] {$-0.32$} (demo);
+      \draw[->] (corrupt) -- node[left] {$-0.32$} (demo);
 
-    \draw[->] (property) -- node[above] {$0.36$} (demo);
-    \draw[->] (property) -- node[right] {$0.25$} (social);
-  \end{tikzpicture}
-  \caption{LiNGAMによる政治経済指標の因果探索結果}
-\end{figure}
+      \draw[->] (property) -- node[above] {$0.36$} (demo);
+      \draw[->] (property) -- node[right] {$0.25$} (social);
+    \end{tikzpicture}
+    \caption{LiNGAMによる政治経済指標の因果探索結果}
+    \label{fig:LiNGAM_res}
+  \end{figure}
+
+  ブートストラップによる安定性評価の結果，身体的自由，財産権，民主主義，政治的腐敗，社会的平等といった政治・制度に関する変数間には安定した因果辺が多く検出された.
+  一方，経済指標との直接的な因果辺は比較的少なく，制度変数同士が一つのネットワークを形成する構造が示唆された.
+
+  政治経済学では，経済発展が民主化を促す近代化論や，民主主義が経済成長を促進する制度論が提案されている.
+  しかし，本分析ではGDPと民主主義を直接結ぶ安定した因果辺は検出されなかった.
+  
+  一方で，政治的腐敗とGDPを結ぶ辺はブートストラップ出現率0.67と閾値に近い値を示した.
+  したがって，経済要因と制度要因との関連性が完全に否定されたわけではなく，サンプルやモデル仕様の違いによっては検出される可能性がある.
+
+  また，LiNGAMモデルは非ガウス性や線形性，未観測交絡の不在など様々な仮定をする.
+  本解析で得られた結果は必ずしも変数間の因果関係を決定するものではなく，モデルの適合度において改善の余地が大きいことに注意する.
 \end{exm}
 
 
@@ -4102,7 +4117,7 @@ Social\_Equality & 社会的平等指数\\
   宮川雅巳著，『グラフィカルモデル』，朝倉書店，1997.
 
   \bibitem{Shimizu2023}
-  清水 昌平，『因果探索入門』，講談社，2023.
+  清水昌平著，『因果探索入門』，講談社，2023.
 
   \bibitem{PearlMackenzie2022}
   J. Pearl, D. Mackenzie著，夏目大訳，『因果推論の科学 「なぜ？」の問いにどう答えるか』，文藝春秋，2022.
